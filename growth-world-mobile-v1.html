@@ -1,0 +1,1098 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Growth World Mobile V1</title>
+  <style>
+    :root {
+      --bg: #080f0d;
+      --space: #0c1714;
+      --space-2: #11241f;
+      --card: rgba(255, 255, 255, 0.075);
+      --card-2: rgba(255, 255, 255, 0.105);
+      --line: rgba(211, 238, 228, 0.14);
+      --line-2: rgba(211, 238, 228, 0.24);
+      --white: #f6fffb;
+      --ink: #dcebe6;
+      --muted: #91aaa2;
+      --soft: #6f8981;
+      --mint: #9ed8c9;
+      --mint-2: #5ca797;
+      --deep: #1b564c;
+      --gold: #d6bc76;
+      --gold-2: #a88c4b;
+      --danger: #dd8f72;
+      --shadow: 0 30px 90px rgba(0, 0, 0, 0.36);
+      --phone-w: 390px;
+      --phone-h: 844px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 16% 4%, rgba(92, 167, 151, 0.2), transparent 28rem),
+        radial-gradient(circle at 88% 12%, rgba(214, 188, 118, 0.14), transparent 28rem),
+        linear-gradient(180deg, #0a100f, #121d19 44%, #070b0a);
+      letter-spacing: 0;
+    }
+
+    .stage {
+      width: min(100% - 24px, 1320px);
+      margin: 0 auto;
+      padding: 34px 0 58px;
+    }
+
+    .board-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 22px;
+      margin: 0 0 26px;
+    }
+
+    .board-title h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    .board-title p {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .screens {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(300px, 1fr));
+      gap: 30px;
+      align-items: start;
+    }
+
+    .screen-wrap {
+      display: grid;
+      gap: 12px;
+      justify-items: center;
+    }
+
+    .screen-label {
+      width: var(--phone-w);
+      color: #a9beb7;
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    .phone {
+      position: relative;
+      width: var(--phone-w);
+      height: var(--phone-h);
+      overflow: hidden;
+      border: 1px solid rgba(231, 255, 247, 0.16);
+      border-radius: 42px;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 50% -12%, rgba(158, 216, 201, 0.26), transparent 18rem),
+        radial-gradient(circle at 92% 18%, rgba(214, 188, 118, 0.16), transparent 13rem),
+        linear-gradient(180deg, #14251f 0%, #0c1714 48%, #08100e 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 10px;
+      width: 118px;
+      height: 28px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.34);
+      z-index: 20;
+    }
+
+    .phone::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,0.032) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.026) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(circle at 50% 28%, black 0%, transparent 76%);
+      opacity: 0.42;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(20px);
+      opacity: 0.36;
+      pointer-events: none;
+    }
+
+    .orb.a {
+      width: 210px;
+      height: 210px;
+      left: -72px;
+      top: 170px;
+      background: rgba(92, 167, 151, 0.36);
+    }
+
+    .orb.b {
+      width: 190px;
+      height: 190px;
+      right: -88px;
+      bottom: 80px;
+      background: rgba(214, 188, 118, 0.2);
+    }
+
+    .status {
+      position: relative;
+      z-index: 21;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 26px 8px;
+      font-size: 12px;
+      font-weight: 760;
+      color: rgba(246, 255, 251, 0.75);
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      height: calc(100% - 44px);
+      padding: 22px 22px 28px;
+      overflow: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 35px;
+      height: 35px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, rgba(158,216,201,0.22), rgba(255,255,255,0.06));
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.12;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .chip, .pill {
+      width: max-content;
+      max-width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      color: #cde8df;
+      font-size: 11px;
+      font-weight: 760;
+      padding: 7px 10px;
+      white-space: nowrap;
+      backdrop-filter: blur(18px);
+    }
+
+    .menu {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.07);
+      color: #dff7ef;
+      font-weight: 900;
+    }
+
+    h2, h3, p { margin: 0; }
+
+    .hero h2 {
+      margin-top: 16px;
+      font-size: 46px;
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+    }
+
+    .hero p {
+      margin-top: 16px;
+      color: #b8cbc5;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 9px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 12px 15px;
+      background: rgba(255,255,255,0.09);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 820;
+      text-decoration: none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+    }
+
+    .btn.primary {
+      border-color: rgba(158,216,201,0.44);
+      background: linear-gradient(135deg, rgba(158,216,201,0.95), rgba(79,155,139,0.96));
+      color: #07110f;
+      box-shadow: 0 18px 42px rgba(62, 151, 133, 0.22);
+    }
+
+    .path-card {
+      position: relative;
+      margin-top: 36px;
+      height: 260px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 28% 20%, rgba(158,216,201,0.18), transparent 9rem),
+        rgba(255,255,255,0.06);
+      overflow: hidden;
+      backdrop-filter: blur(26px);
+    }
+
+    .path-card svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .node {
+      position: absolute;
+      width: 64px;
+      min-height: 58px;
+      border: 1px solid rgba(232,255,247,0.18);
+      border-radius: 18px;
+      padding: 9px;
+      background: rgba(255,255,255,0.105);
+      box-shadow: 0 18px 38px rgba(0,0,0,0.15);
+    }
+
+    .node b {
+      display: grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #eafff7;
+      color: #11382f;
+      font-size: 11px;
+      margin-bottom: 7px;
+    }
+
+    .node strong {
+      display: block;
+      font-size: 12px;
+      line-height: 1.1;
+    }
+
+    .node span {
+      display: block;
+      margin-top: 4px;
+      color: #abc0ba;
+      font-size: 9px;
+      line-height: 1.25;
+    }
+
+    .rank-panel {
+      margin-top: 20px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .rank {
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      gap: 11px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.07);
+    }
+
+    .badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: rgba(158,216,201,0.14);
+      color: #dcfff4;
+      font-weight: 900;
+    }
+
+    .badge.gold {
+      background: linear-gradient(145deg, rgba(214,188,118,0.92), rgba(168,140,75,0.78));
+      color: #1c1608;
+    }
+
+    .rank strong, .task strong, .lesson strong, .profile-line strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .rank span, .task span, .lesson span, .profile-line span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .progress {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #eafff7;
+      font-size: 11px;
+      font-weight: 850;
+      background:
+        conic-gradient(var(--mint) 0 64%, rgba(255,255,255,0.12) 64% 100%);
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: end;
+      margin: 14px 0 14px;
+    }
+
+    .section-title h2 {
+      font-size: 28px;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+    }
+
+    .section-title p {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .daily-card {
+      border: 1px solid var(--line-2);
+      border-radius: 28px;
+      padding: 18px;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(158,216,201,0.16), transparent 10rem),
+        rgba(255,255,255,0.075);
+      backdrop-filter: blur(24px);
+    }
+
+    .daily-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .daily-head h3 {
+      font-size: 20px;
+      line-height: 1.18;
+      letter-spacing: -0.015em;
+    }
+
+    .task-list, .lesson-list, .agent-list, .cert-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .task, .lesson, .profile-line, .agent {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.066);
+    }
+
+    .check {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(158,216,201,0.16);
+      color: #c8fff0;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .time, .mini-tag {
+      color: #cfe5dd;
+      font-size: 10px;
+      font-weight: 760;
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .coach-card {
+      margin-top: 14px;
+      border: 1px solid rgba(158,216,201,0.28);
+      border-radius: 26px;
+      padding: 16px;
+      background:
+        radial-gradient(circle at 80% 6%, rgba(214,188,118,0.18), transparent 9rem),
+        linear-gradient(145deg, rgba(158,216,201,0.12), rgba(255,255,255,0.06));
+    }
+
+    .coach-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.09);
+      font-weight: 900;
+      color: #eafff7;
+    }
+
+    .coach-row strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .coach-row span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .quote {
+      margin-top: 14px;
+      color: #d7eee6;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .map {
+      position: relative;
+      margin-top: 18px;
+      height: 316px;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 42% 40%, rgba(158,216,201,0.18), transparent 11rem),
+        rgba(255,255,255,0.055);
+      overflow: hidden;
+    }
+
+    .map svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .station {
+      position: absolute;
+      width: 68px;
+      padding: 9px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.09);
+      backdrop-filter: blur(18px);
+    }
+
+    .station b {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(234,255,247,0.92);
+      color: #0d2a24;
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+
+    .station strong {
+      display: block;
+      font-size: 12px;
+    }
+
+    .station span {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+      margin-top: 3px;
+    }
+
+    .locked {
+      opacity: 0.56;
+    }
+
+    .lesson-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .lesson {
+      grid-template-columns: 1fr;
+      min-height: 124px;
+      align-content: space-between;
+      padding: 14px;
+    }
+
+    .lesson .mini-tag {
+      width: max-content;
+    }
+
+    .cert-card {
+      margin-top: 12px;
+      padding: 18px;
+      border: 1px solid rgba(214,188,118,0.3);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 82% 0%, rgba(214,188,118,0.18), transparent 9rem),
+        rgba(255,255,255,0.07);
+    }
+
+    .medal-row {
+      display: flex;
+      gap: 10px;
+      margin: 16px 0 12px;
+    }
+
+    .medal {
+      width: 50px;
+      height: 58px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, rgba(214,188,118,0.95), rgba(116,92,43,0.8));
+      color: #1c1608;
+      font-weight: 950;
+      box-shadow: 0 18px 36px rgba(0,0,0,0.2);
+    }
+
+    .cert-card h3 {
+      font-size: 22px;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+    }
+
+    .cert-card p {
+      margin-top: 10px;
+      color: #bcd0ca;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .profile {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 16px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .profile-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .profile-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, rgba(158,216,201,0.24), rgba(255,255,255,0.08));
+      border: 1px solid rgba(255,255,255,0.16);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .profile h3 {
+      font-size: 18px;
+      letter-spacing: -0.01em;
+    }
+
+    .profile p {
+      color: var(--muted);
+      margin-top: 5px;
+      font-size: 11px;
+    }
+
+    .bar {
+      height: 9px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.1);
+      margin: 11px 0 14px;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--mint), var(--gold));
+    }
+
+    .enterprise {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .enterprise-card {
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.065);
+    }
+
+    .enterprise-card strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .enterprise-card p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 20px;
+      z-index: 8;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(5, 12, 10, 0.72);
+      backdrop-filter: blur(22px);
+    }
+
+    .nav-item {
+      display: grid;
+      place-items: center;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 760;
+    }
+
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.07);
+      color: #cce9df;
+      font-size: 11px;
+    }
+
+    .nav-item.active {
+      color: #eafff7;
+    }
+
+    .nav-item.active .nav-icon {
+      background: rgba(158,216,201,0.18);
+      color: #eafff7;
+    }
+
+    @media (max-width: 1100px) {
+      .screens { grid-template-columns: repeat(2, minmax(300px, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .board-title { display: block; }
+      .screens { grid-template-columns: 1fr; }
+      .screen-label, .phone { width: min(var(--phone-w), calc(100vw - 28px)); }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <header class="board-title">
+      <div>
+        <h1>Growth World Mobile V1</h1>
+        <p>金牌管家成长世界手机端高保真概念稿。深色、成长、进阶、荣耀感，与 Trust World 形成明确区分。</p>
+      </div>
+      <div class="chip">Visual System B · Growth World</div>
+    </header>
+
+    <section class="screens">
+      <div class="screen-wrap">
+        <div class="screen-label">01 / 进入成长世界</div>
+        <article class="phone">
+          <div class="orb a"></div><div class="orb b"></div>
+          <div class="status"><span>9:41</span><span>5G 100%</span></div>
+          <div class="content">
+            <div class="topbar">
+              <div class="brand">
+                <div class="mark">金</div>
+                <div><strong>金牌管家成长世界</strong><span>Trust-based Growth OS</span></div>
+              </div>
+              <div class="menu">··</div>
+            </div>
+            <div class="hero">
+              <span class="pill">从信托制认知，进入专业成长</span>
+              <h2>把治理问题，变成你的职业能力。</h2>
+              <p>这里不是课程商城，而是信托制物业行业成长操作系统。完成任务、接受 AI 陪练、通过认证，逐步成为真正能解决问题的金牌管家。</p>
+              <div class="cta-row">
+                <a class="btn primary" href="#">开始成长路径</a>
+                <a class="btn" href="#">查看认证体系</a>
+              </div>
+            </div>
+            <div class="path-card">
+              <svg viewBox="0 0 346 260" fill="none">
+                <path d="M37 199 C80 110 129 214 173 124 C216 37 243 149 310 58" stroke="rgba(158,216,201,.34)" stroke-width="1.2"/>
+                <path d="M35 205 C97 155 121 181 175 142 C231 101 260 95 312 64" stroke="rgba(214,188,118,.28)" stroke-width="1"/>
+                <circle cx="37" cy="199" r="4" fill="#9ed8c9"/>
+                <circle cx="122" cy="180" r="4" fill="#9ed8c9"/>
+                <circle cx="173" cy="124" r="4" fill="#d6bc76"/>
+                <circle cx="244" cy="104" r="4" fill="#9ed8c9"/>
+                <circle cx="310" cy="58" r="4" fill="#d6bc76"/>
+              </svg>
+              <div class="node" style="left:18px;bottom:26px"><b>新</b><strong>新手村</strong><span>理解信托制</span></div>
+              <div class="node" style="left:108px;bottom:74px"><b>1</b><strong>一星</strong><span>掌握基础任务</span></div>
+              <div class="node" style="left:179px;top:70px"><b>3</b><strong>三星</strong><span>处理复杂场景</span></div>
+              <div class="node" style="right:22px;top:28px"><b>5</b><strong>五星</strong><span>成为实践标杆</span></div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="screen-wrap">
+        <div class="screen-label">02 / 今日成长任务</div>
+        <article class="phone">
+          <div class="orb a"></div><div class="orb b"></div>
+          <div class="status"><span>9:41</span><span>5G 100%</span></div>
+          <div class="content">
+            <div class="topbar">
+              <div class="brand">
+                <div class="mark">任</div>
+                <div><strong>今日成长任务</strong><span>Daily Growth Mission</span></div>
+              </div>
+              <div class="pill">连续 12 天</div>
+            </div>
+            <div class="section-title">
+              <h2>今天先解决一个真实问题。</h2>
+              <p>系统会把案例、制度和训练任务组织成一条成长路径。</p>
+            </div>
+            <div class="daily-card">
+              <div class="daily-head">
+                <div>
+                  <span class="chip">推荐任务</span>
+                  <h3 style="margin-top:12px;">公共收益透明说明训练</h3>
+                </div>
+                <div class="progress">64%</div>
+              </div>
+              <div class="task-list">
+                <div class="task">
+                  <div class="check">1</div>
+                  <div><strong>阅读制度说明</strong><span>理解公共收益公开的基本边界</span></div>
+                  <div class="time">6 分钟</div>
+                </div>
+                <div class="task">
+                  <div class="check">2</div>
+                  <div><strong>拆解真实案例</strong><span>学习一次业主质疑如何被回应</span></div>
+                  <div class="time">12 分钟</div>
+                </div>
+                <div class="task">
+                  <div class="check">3</div>
+                  <div><strong>完成 AI 陪练</strong><span>模拟一次小区沟通会说明</span></div>
+                  <div class="time">8 分钟</div>
+                </div>
+              </div>
+            </div>
+            <div class="coach-card">
+              <div class="coach-row">
+                <div class="avatar">AI</div>
+                <div><strong>AI教练建议</strong><span>基于你的成长档案生成</span></div>
+              </div>
+              <p class="quote">“你已经掌握收费说明，但在居民质疑追问时容易回到物业视角。今天建议练习：用业主能理解的话解释公共收益流向。”</p>
+            </div>
+            <nav class="bottom-nav">
+              <div class="nav-item active"><div class="nav-icon">任</div><span>任务</span></div>
+              <div class="nav-item"><div class="nav-icon">路</div><span>路径</span></div>
+              <div class="nav-item"><div class="nav-icon">AI</div><span>陪练</span></div>
+              <div class="nav-item"><div class="nav-icon">档</div><span>档案</span></div>
+            </nav>
+          </div>
+        </article>
+      </div>
+
+      <div class="screen-wrap">
+        <div class="screen-label">03 / 五星成长地图</div>
+        <article class="phone">
+          <div class="orb a"></div><div class="orb b"></div>
+          <div class="status"><span>9:41</span><span>5G 100%</span></div>
+          <div class="content">
+            <div class="topbar">
+              <div class="brand">
+                <div class="mark">路</div>
+                <div><strong>金牌管家成长地图</strong><span>Five-Star Path</span></div>
+              </div>
+              <div class="pill">二星 · 进行中</div>
+            </div>
+            <div class="section-title">
+              <h2>从新手村，到五星管家。</h2>
+              <p>每一星都对应真实治理能力，而不是看完课程。</p>
+            </div>
+            <div class="map">
+              <svg viewBox="0 0 346 316" fill="none">
+                <path d="M49 267 C66 212 111 226 125 174 C145 98 219 132 235 72 C245 32 282 43 305 25" stroke="rgba(158,216,201,.34)" stroke-width="1.5"/>
+                <path d="M51 269 C101 249 129 222 159 187 C189 152 217 119 236 76 C251 46 279 36 303 25" stroke="rgba(214,188,118,.18)" stroke-width="1"/>
+              </svg>
+              <div class="station" style="left:22px;bottom:20px"><b>新</b><strong>新手村</strong><span>理念入门</span></div>
+              <div class="station" style="left:103px;bottom:102px"><b>1</b><strong>一星</strong><span>基础服务</span></div>
+              <div class="station" style="right:98px;bottom:132px"><b>2</b><strong>二星</strong><span>协同能力</span></div>
+              <div class="station locked" style="right:28px;top:104px"><b>3</b><strong>三星</strong><span>风险处理</span></div>
+              <div class="station locked" style="left:118px;top:38px"><b>4</b><strong>四星</strong><span>项目经营</span></div>
+              <div class="station locked" style="right:24px;top:18px"><b>5</b><strong>五星</strong><span>行业标杆</span></div>
+            </div>
+            <div class="rank-panel">
+              <div class="rank">
+                <div class="badge gold">2</div>
+                <div><strong>二星管家认证路径</strong><span>当前需完成：停车治理协同训练、公开说明模拟、AI考官测评。</span></div>
+                <div class="progress">48%</div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="screen-wrap">
+        <div class="screen-label">04 / AI陪练与AI考官</div>
+        <article class="phone">
+          <div class="orb a"></div><div class="orb b"></div>
+          <div class="status"><span>9:41</span><span>5G 100%</span></div>
+          <div class="content">
+            <div class="topbar">
+              <div class="brand">
+                <div class="mark">AI</div>
+                <div><strong>AI成长陪练</strong><span>Coach & Examiner</span></div>
+              </div>
+              <div class="pill">训练中</div>
+            </div>
+            <div class="section-title">
+              <h2>不是答题，是模拟真实治理现场。</h2>
+              <p>AI 会扮演业主、社区、街道和业委会，训练你的表达与判断。</p>
+            </div>
+            <div class="coach-card" style="margin-top:18px;">
+              <div class="coach-row">
+                <div class="avatar">练</div>
+                <div><strong>AI教练</strong><span>今日场景：停车收费调整沟通会</span></div>
+              </div>
+              <p class="quote">“请用 90 秒向业主解释：为什么收费规则需要重新公示，以及公共收益如何进入公开透明流程。”</p>
+              <div class="cta-row">
+                <a class="btn primary" href="#">开始模拟</a>
+                <a class="btn" href="#">查看提示</a>
+              </div>
+            </div>
+            <div class="agent-list" style="margin-top:14px;">
+              <div class="agent">
+                <div class="check">主</div>
+                <div><strong>业主追问</strong><span>“为什么以前没说清楚，现在才公开？”</span></div>
+                <div class="mini-tag">待回应</div>
+              </div>
+              <div class="agent">
+                <div class="check">委</div>
+                <div><strong>业委会关注</strong><span>收益归属、公示口径、议事流程</span></div>
+                <div class="mini-tag">准备中</div>
+              </div>
+              <div class="agent">
+                <div class="check">考</div>
+                <div><strong>AI考官</strong><span>将从清晰度、可信度、规则意识评分</span></div>
+                <div class="mini-tag">未开始</div>
+              </div>
+            </div>
+            <div class="cert-card">
+              <h3>下一次测评：公共收益说明能力</h3>
+              <p>通过后将点亮“公开说明”能力徽章，并计入二星管家认证档案。</p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="screen-wrap">
+        <div class="screen-label">05 / 成长档案与徽章</div>
+        <article class="phone">
+          <div class="orb a"></div><div class="orb b"></div>
+          <div class="status"><span>9:41</span><span>5G 100%</span></div>
+          <div class="content">
+            <div class="topbar">
+              <div class="brand">
+                <div class="mark">档</div>
+                <div><strong>成长档案</strong><span>Capability Profile</span></div>
+              </div>
+              <div class="pill">可认证</div>
+            </div>
+            <div class="profile">
+              <div class="profile-head">
+                <div class="profile-avatar">林</div>
+                <div>
+                  <h3>林知远</h3>
+                  <p>物业项目经理 · 二星管家成长中</p>
+                </div>
+              </div>
+              <div class="bar"><span style="width:68%"></span></div>
+              <div class="profile-line">
+                <div class="check">1</div>
+                <div><strong>信托制理解</strong><span>已完成 8 个主题学习，掌握公开透明基础逻辑。</span></div>
+                <div class="mini-tag">A-</div>
+              </div>
+              <div class="profile-line" style="margin-top:10px;">
+                <div class="check">2</div>
+                <div><strong>协同沟通能力</strong><span>AI陪练 13 次，真实场景表达稳定性提升。</span></div>
+                <div class="mini-tag">B+</div>
+              </div>
+              <div class="profile-line" style="margin-top:10px;">
+                <div class="check">3</div>
+                <div><strong>案例复用能力</strong><span>已能从停车治理案例中提取可执行动作。</span></div>
+                <div class="mini-tag">A</div>
+              </div>
+            </div>
+            <div class="cert-card">
+              <span class="chip">已获得徽章</span>
+              <div class="medal-row">
+                <div class="medal">公</div>
+                <div class="medal">停</div>
+                <div class="medal">沟</div>
+                <div class="medal" style="opacity:.42;">议</div>
+                <div class="medal" style="opacity:.28;">营</div>
+              </div>
+              <h3>距离二星认证还差 2 个任务</h3>
+              <p>完成“停车治理协同训练”和“业主沟通模拟测评”后，可申请二星管家认证。</p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="screen-wrap">
+        <div class="screen-label">06 / 企业成长路径</div>
+        <article class="phone">
+          <div class="orb a"></div><div class="orb b"></div>
+          <div class="status"><span>9:41</span><span>5G 100%</span></div>
+          <div class="content">
+            <div class="topbar">
+              <div class="brand">
+                <div class="mark">企</div>
+                <div><strong>企业成长路径</strong><span>Team Growth Program</span></div>
+              </div>
+              <div class="pill">负责人入口</div>
+            </div>
+            <div class="section-title">
+              <h2>把一个人培养成管家，把一支队伍带进信托制。</h2>
+              <p>面向物业企业负责人和创业者，形成团队训练、认证与项目转型路径。</p>
+            </div>
+            <div class="daily-card">
+              <div class="daily-head">
+                <div>
+                  <span class="chip">企业推荐路径</span>
+                  <h3 style="margin-top:12px;">信托制经营成长计划</h3>
+                </div>
+                <div class="badge gold">企</div>
+              </div>
+              <div class="enterprise">
+                <div class="enterprise-card">
+                  <strong>01 人才盘点</strong>
+                  <p>识别项目经理、客服、财务和片区负责人当前能力结构。</p>
+                </div>
+                <div class="enterprise-card">
+                  <strong>02 标准训练</strong>
+                  <p>围绕收费率、公共收益、停车治理、业主沟通建立任务制训练。</p>
+                </div>
+                <div class="enterprise-card">
+                  <strong>03 认证与项目试点</strong>
+                  <p>沉淀认证人才，连接试点项目与顾问服务，推动企业转型。</p>
+                </div>
+              </div>
+              <div class="cta-row">
+                <a class="btn primary" href="#">查看企业成长方案</a>
+                <a class="btn" href="#">预约诊断</a>
+              </div>
+            </div>
+            <div class="rank-panel">
+              <div class="rank">
+                <div class="badge">队</div>
+                <div><strong>团队成长看板</strong><span>12 名成员进入新手村，4 名成员进入一星路径，1 名成员可申请二星认证。</span></div>
+                <div class="mini-tag">Mock</div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

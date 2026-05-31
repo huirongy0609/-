@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>全国信托制社区治理协同平台｜首页预览</title>
+    <style>
+      :root {
+        --bg: #0b1110;
+        --surface: #151c1a;
+        --ink: #f3f6f4;
+        --muted: #b8c4bf;
+        --soft: #7e8d88;
+        --line: rgba(184, 196, 191, 0.1);
+        --civic: #4fbda8;
+        --civic-muted: #6fafa2;
+        --amber: #b88945;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+          sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 50% 0%, rgba(79, 189, 168, 0.09), transparent 34%),
+          linear-gradient(180deg, #080d0c 0%, #0b1110 44%, #101513 100%);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .siteHeader {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 14px max(20px, calc((100vw - 1180px) / 2));
+        border-bottom: 1px solid var(--line);
+        background: rgba(11, 17, 16, 0.82);
+        backdrop-filter: blur(18px);
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--ink);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .brandMark {
+        display: grid;
+        width: 30px;
+        height: 30px;
+        place-items: center;
+        border-radius: 8px;
+        background: rgba(79, 189, 168, 0.14);
+        color: var(--civic);
+      }
+
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 18px;
+        color: rgba(184, 196, 191, 0.72);
+        font-size: 13px;
+        font-weight: 650;
+      }
+
+      nav a:first-child,
+      nav a:hover {
+        color: var(--civic);
+      }
+
+      .platform-home {
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      .platform-hero {
+        position: relative;
+        overflow: hidden;
+        border-bottom: 1px solid rgba(184, 196, 191, 0.08);
+      }
+
+      .platform-atmosphere {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 24% 18%, rgba(79, 189, 168, 0.12), transparent 30%),
+          radial-gradient(circle at 80% 24%, rgba(184, 137, 69, 0.055), transparent 28%),
+          linear-gradient(90deg, transparent, rgba(184, 196, 191, 0.04), transparent);
+      }
+
+      .platform-atmosphere::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0.08;
+        background-image:
+          linear-gradient(rgba(184, 196, 191, 0.22) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(184, 196, 191, 0.16) 1px, transparent 1px);
+        background-size: 72px 72px;
+        mask-image: linear-gradient(180deg, #000 0%, transparent 78%);
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        min-height: calc(100vh - 68px);
+        width: min(1360px, calc(100vw - 40px));
+        margin: 0 auto;
+        flex-direction: column;
+        justify-content: center;
+        padding: 64px 0;
+      }
+
+      .eyebrow,
+      .platform-section-heading p,
+      .platform-stat span,
+      .ai-center-item span,
+      .loop-step span {
+        display: block;
+        color: rgba(111, 175, 162, 0.9);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .hero-title {
+        max-width: 980px;
+        margin: 20px 0 0;
+        color: rgba(243, 246, 244, 0.98);
+        font-size: clamp(52px, 8vw, 104px);
+        font-weight: 650;
+        letter-spacing: 0;
+        line-height: 1.04;
+      }
+
+      .hero-copy {
+        max-width: 780px;
+        margin: 24px 0 0;
+        color: rgba(184, 196, 191, 0.78);
+        font-size: 18px;
+        line-height: 1.9;
+      }
+
+      .hero-status-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 56px;
+      }
+
+      .hero-status-heading h2,
+      .platform-section-heading h2 {
+        margin: 10px 0 0;
+        color: rgba(243, 246, 244, 0.96);
+        font-size: clamp(30px, 4vw, 54px);
+        font-weight: 650;
+        letter-spacing: 0;
+      }
+
+      .platform-primary-link {
+        display: inline-flex;
+        min-height: 42px;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-radius: 8px;
+        background: rgba(79, 189, 168, 0.92);
+        padding: 0 15px;
+        color: #07110f;
+        font-size: 13px;
+        font-weight: 750;
+      }
+
+      .platform-stat-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        margin-top: 20px;
+      }
+
+      .platform-stat {
+        min-height: 172px;
+        border-radius: 8px;
+        padding: 20px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.052), rgba(255, 255, 255, 0.012)),
+          rgba(21, 28, 26, 0.48);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.055),
+          0 24px 70px rgba(0, 0, 0, 0.18);
+        backdrop-filter: blur(22px);
+      }
+
+      .platform-stat strong {
+        display: block;
+        margin-top: 32px;
+        color: rgba(243, 246, 244, 0.96);
+        font-family: "SF Mono", "IBM Plex Mono", ui-monospace, monospace;
+        font-size: clamp(52px, 7vw, 92px);
+        font-weight: 650;
+        line-height: 0.9;
+      }
+
+      .platform-section {
+        width: min(1360px, calc(100vw - 40px));
+        margin: 0 auto;
+        padding: 70px 0 0;
+      }
+
+      .platform-section.two-column {
+        display: grid;
+        gap: 44px;
+        grid-template-columns: 0.82fr 1.18fr;
+        align-items: center;
+      }
+
+      .platform-section-heading {
+        margin-bottom: 24px;
+      }
+
+      .platform-copy {
+        max-width: 560px;
+        margin: 22px 0 0;
+        color: rgba(184, 196, 191, 0.74);
+        font-size: 16px;
+        line-height: 1.9;
+      }
+
+      .platform-event-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .platform-event {
+        display: block;
+        min-height: 238px;
+        border-radius: 8px;
+        padding: 20px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01)),
+          rgba(21, 28, 26, 0.42);
+      }
+
+      .platform-event.featured {
+        background:
+          radial-gradient(circle at 18% 16%, rgba(184, 137, 69, 0.105), transparent 44%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.012)),
+          rgba(21, 28, 26, 0.48);
+      }
+
+      .event-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .platform-event h3,
+      .platform-center h3 {
+        margin: 0;
+        color: rgba(243, 246, 244, 0.94);
+        font-size: 20px;
+        font-weight: 650;
+      }
+
+      .platform-event span {
+        white-space: nowrap;
+        border-radius: 999px;
+        padding: 5px 8px;
+        background: rgba(79, 189, 168, 0.08);
+        color: rgba(111, 175, 162, 0.92);
+        font-size: 11px;
+        font-weight: 750;
+      }
+
+      .platform-event p,
+      .platform-center p {
+        margin: 26px 0 0;
+        color: rgba(184, 196, 191, 0.68);
+        font-size: 14px;
+        line-height: 1.8;
+      }
+
+      .platform-event em {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 30px;
+        color: rgba(79, 189, 168, 0.94);
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 750;
+      }
+
+      .collaboration-network {
+        position: relative;
+        min-height: 430px;
+        overflow: hidden;
+        border-radius: 8px;
+        background:
+          radial-gradient(circle at 50% 46%, rgba(79, 189, 168, 0.115), transparent 38%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.038), rgba(255, 255, 255, 0.01)),
+          rgba(21, 28, 26, 0.42);
+      }
+
+      .collaboration-network::before {
+        content: "";
+        position: absolute;
+        inset: 18%;
+        border-radius: 50%;
+        border: 1px solid rgba(184, 196, 191, 0.08);
+        transform: perspective(900px) rotateX(62deg);
+      }
+
+      .network-line {
+        position: absolute;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(79, 189, 168, 0.34), transparent);
+        transform-origin: left center;
+      }
+
+      .line-a {
+        left: 18%;
+        top: 46%;
+        width: 64%;
+        transform: rotate(8deg);
+      }
+
+      .line-b {
+        left: 24%;
+        top: 62%;
+        width: 48%;
+        transform: rotate(-23deg);
+      }
+
+      .line-c {
+        left: 34%;
+        top: 30%;
+        width: 44%;
+        transform: rotate(42deg);
+      }
+
+      .network-city {
+        position: absolute;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        border-radius: 999px;
+        padding: 8px 11px;
+        background: rgba(11, 17, 16, 0.58);
+        color: rgba(243, 246, 244, 0.9);
+        font-size: 14px;
+        font-weight: 650;
+        box-shadow: 0 0 34px rgba(79, 189, 168, 0.08);
+        backdrop-filter: blur(16px);
+      }
+
+      .network-city::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(79, 189, 168, 0.9);
+      }
+
+      .node-1 { left: 18%; top: 48%; }
+      .node-2 { left: 32%; top: 28%; }
+      .node-3 { left: 48%; top: 58%; }
+      .node-4 { left: 58%; top: 36%; }
+      .node-5 { left: 70%; top: 62%; }
+      .node-6 { left: 76%; top: 24%; }
+      .node-7 { left: 42%; top: 42%; }
+
+      .ai-center-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .ai-center-item,
+      .loop-step,
+      .platform-center {
+        border-radius: 8px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.044), rgba(255, 255, 255, 0.01)),
+          rgba(21, 28, 26, 0.42);
+      }
+
+      .ai-center-item {
+        min-height: 172px;
+        padding: 18px;
+      }
+
+      .ai-center-item strong {
+        display: block;
+        margin-top: 28px;
+        color: rgba(243, 246, 244, 0.94);
+        font-family: "SF Mono", "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 44px;
+        font-weight: 650;
+      }
+
+      .ai-center-item p {
+        margin: 8px 0 0;
+        color: rgba(184, 196, 191, 0.64);
+        font-size: 12px;
+      }
+
+      .governance-loop {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+      }
+
+      .loop-step {
+        min-height: 128px;
+        padding: 16px;
+      }
+
+      .loop-step strong {
+        display: block;
+        margin-top: 34px;
+        color: rgba(243, 246, 244, 0.94);
+        font-size: 18px;
+        font-weight: 650;
+      }
+
+      .platform-center-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .platform-center {
+        min-height: 210px;
+        padding: 22px;
+      }
+
+      .platform-center .icon {
+        display: grid;
+        width: 30px;
+        height: 30px;
+        place-items: center;
+        border-radius: 8px;
+        background: rgba(79, 189, 168, 0.1);
+        color: var(--civic);
+      }
+
+      .platform-center h3 {
+        margin-top: 30px;
+      }
+
+      .platform-footer-cta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 18px;
+        border-radius: 8px;
+        padding: 18px 20px;
+        background: rgba(79, 189, 168, 0.08);
+      }
+
+      .platform-footer-cta div,
+      .platform-footer-cta a {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+      }
+
+      .platform-footer-cta div {
+        color: rgba(184, 196, 191, 0.8);
+        font-size: 14px;
+      }
+
+      .platform-footer-cta a {
+        color: rgba(79, 189, 168, 0.95);
+        font-size: 14px;
+        font-weight: 750;
+      }
+
+      @media (max-width: 1100px) {
+        .platform-stat-grid,
+        .platform-event-grid,
+        .ai-center-grid,
+        .governance-loop,
+        .platform-center-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .platform-section.two-column {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 680px) {
+        .siteHeader,
+        .hero-status-heading,
+        .platform-footer-cta {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        nav {
+          justify-content: flex-start;
+        }
+
+        .platform-stat-grid,
+        .platform-event-grid,
+        .ai-center-grid,
+        .governance-loop,
+        .platform-center-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="siteHeader">
+      <a class="brand" href="#">
+        <span class="brandMark">协</span>
+        <span>全国信托制社区治理协同平台</span>
+      </a>
+      <nav aria-label="主导航">
+        <a href="#">首页</a>
+        <a href="app/parking-conflict-demo/page.tsx">停车纠纷Demo</a>
+        <a href="#">全国地图</a>
+        <a href="#">AI情报</a>
+        <a href="#">案例库</a>
+        <a href="#">共建提交</a>
+      </nav>
+    </header>
+
+    <main class="platform-home">
+      <section class="platform-hero">
+        <div class="platform-atmosphere"></div>
+        <div class="hero-inner">
+          <div>
+            <p class="eyebrow">Trust-based Community Governance Collaborative Platform</p>
+            <h1 class="hero-title">全国信托制社区治理协同平台</h1>
+            <p class="hero-copy">
+              面向街道、社区、物业、业委会、专家与城市运营方，围绕信托制、公共收益透明、风险治理、案例复用和事件闭环，形成全国社区治理协同网络。
+            </p>
+          </div>
+
+          <section>
+            <div class="hero-status-heading">
+              <div>
+                <p class="eyebrow">Today Governance Situation</p>
+                <h2>今日治理态势</h2>
+              </div>
+              <a class="platform-primary-link" href="#">查看示例闭环 →</a>
+            </div>
+            <div class="platform-stat-grid">
+              <article class="platform-stat"><span>治理事件</span><strong>128</strong></article>
+              <article class="platform-stat"><span>治理进行中</span><strong>36</strong></article>
+              <article class="platform-stat"><span>已闭环</span><strong>82</strong></article>
+              <article class="platform-stat"><span>风险预警</span><strong>10</strong></article>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="platform-section">
+        <div class="platform-section-heading">
+          <p>Governance Events</p>
+          <h2>今日重点治理事件</h2>
+        </div>
+        <div class="platform-event-grid">
+          <a class="platform-event featured" href="#">
+            <div class="event-top"><h3>停车管理争议</h3><span>治理中</span></div>
+            <p>地下车位收费调整引发公共收益透明争议，已进入信托制协同流程。</p>
+            <em>进入治理运行空间 →</em>
+          </a>
+          <article class="platform-event">
+            <div class="event-top"><h3>公共收益公开</h3><span>已完成</span></div>
+            <p>小区广告与停车收益完成公示口径确认。</p>
+          </article>
+          <article class="platform-event">
+            <div class="event-top"><h3>物业服务评价</h3><span>处理中</span></div>
+            <p>服务评价结果进入社区、物业、业委会协同复核。</p>
+          </article>
+          <article class="platform-event">
+            <div class="event-top"><h3>维修资金申请</h3><span>待协同</span></div>
+            <p>电梯维修资金申请等待街道与业主代表共同确认。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="platform-section">
+        <div class="platform-section-heading">
+          <p>National Collaboration Network</p>
+          <h2>全国治理协同网络</h2>
+        </div>
+        <div class="collaboration-network">
+          <div class="network-line line-a"></div>
+          <div class="network-line line-b"></div>
+          <div class="network-line line-c"></div>
+          <div class="network-city node-1">深圳</div>
+          <div class="network-city node-2">杭州</div>
+          <div class="network-city node-3">青岛</div>
+          <div class="network-city node-4">潍坊</div>
+          <div class="network-city node-5">成都</div>
+          <div class="network-city node-6">北京</div>
+          <div class="network-city node-7">上海</div>
+        </div>
+      </section>
+
+      <section class="platform-section two-column">
+        <div>
+          <div class="platform-section-heading">
+            <p>AI Governance Center</p>
+            <h2>AI治理中心</h2>
+          </div>
+          <p class="platform-copy">
+            AI不是聊天机器人，而是持续整理案例、政策、风险预警与治理建议的协同中枢，为真实治理动作降低判断成本。
+          </p>
+        </div>
+        <div class="ai-center-grid">
+          <article class="ai-center-item"><span>今日新增案例</span><strong>18</strong><p>进入全国经验库</p></article>
+          <article class="ai-center-item"><span>今日新增政策</span><strong>12</strong><p>完成结构化摘要</p></article>
+          <article class="ai-center-item"><span>风险预警</span><strong>10</strong><p>等待协同研判</p></article>
+          <article class="ai-center-item"><span>治理建议</span><strong>42</strong><p>AI辅助生成</p></article>
+        </div>
+      </section>
+
+      <section class="platform-section">
+        <div class="platform-section-heading">
+          <p>Trust Governance Loop</p>
+          <h2>信托制治理闭环</h2>
+        </div>
+        <div class="governance-loop">
+          <article class="loop-step"><span>01</span><strong>问题发现</strong></article>
+          <article class="loop-step"><span>02</span><strong>AI研判</strong></article>
+          <article class="loop-step"><span>03</span><strong>规则匹配</strong></article>
+          <article class="loop-step"><span>04</span><strong>案例匹配</strong></article>
+          <article class="loop-step"><span>05</span><strong>协同治理</strong></article>
+          <article class="loop-step"><span>06</span><strong>执行监督</strong></article>
+          <article class="loop-step"><span>07</span><strong>结果公示</strong></article>
+          <article class="loop-step"><span>08</span><strong>经验沉淀</strong></article>
+        </div>
+      </section>
+
+      <section class="platform-section" style="padding-bottom: 64px">
+        <div class="platform-section-heading">
+          <p>Platform Centers</p>
+          <h2>平台六大中心</h2>
+        </div>
+        <div class="platform-center-grid">
+          <article class="platform-center">
+            <span class="icon">协</span>
+            <h3>治理协同中心</h3>
+            <p>围绕真实事件组织物业、社区、街道、业委会与专家协同。</p>
+          </article>
+          <article class="platform-center">
+            <span class="icon">案</span>
+            <h3>案例知识中心</h3>
+            <p>沉淀全国信托制治理案例，支持跨城市复用。</p>
+          </article>
+          <article class="platform-center">
+            <span class="icon">规</span>
+            <h3>规则制度中心</h3>
+            <p>整理公共收益、预算规则、权责边界与公开机制。</p>
+          </article>
+          <article class="platform-center">
+            <span class="icon">AI</span>
+            <h3>AI治理智库</h3>
+            <p>辅助风险研判、政策摘要、案例匹配和治理建议生成。</p>
+          </article>
+          <article class="platform-center">
+            <span class="icon">学</span>
+            <h3>成长认证中心</h3>
+            <p>面向社区治理参与者沉淀学习路径与能力标准。</p>
+          </article>
+          <article class="platform-center">
+            <span class="icon">城</span>
+            <h3>城市运营中心</h3>
+            <p>支持城市节点、共建机构与区域运营网络持续拓展。</p>
+          </article>
+        </div>
+
+        <div class="platform-footer-cta">
+          <div>
+            <span>已收录 326 个治理案例，正在形成全国信托制治理经验网络。</span>
+          </div>
+          <a href="#">参与共建 ✓</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

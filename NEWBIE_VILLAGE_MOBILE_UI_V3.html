@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NEWBIE_VILLAGE_MOBILE_UI_V3</title>
+  <style>
+    :root {
+      --ink: #17231f;
+      --muted: #667970;
+      --paper: #fffdf7;
+      --cream: #f5f1e8;
+      --mist: #e5f0eb;
+      --green: #3f7b6e;
+      --deep: #17463d;
+      --deep-2: #245f54;
+      --line: rgba(23, 70, 61, 0.14);
+      --line-2: rgba(23, 70, 61, 0.22);
+      --gold: #c2a15e;
+      --warm: #d58a68;
+      --shadow: 0 30px 90px rgba(26, 61, 53, 0.18);
+      --phone-w: 390px;
+      --phone-h: 844px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 4%, rgba(63, 123, 110, 0.16), transparent 28rem),
+        radial-gradient(circle at 88% 10%, rgba(194, 161, 94, 0.13), transparent 30rem),
+        linear-gradient(180deg, #fbfaf6, #eee9df 42%, #f7f4ed);
+      letter-spacing: 0;
+    }
+
+    .stage {
+      width: min(100% - 24px, 1320px);
+      margin: 0 auto;
+      padding: 34px 0 58px;
+    }
+
+    .board-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin: 0 0 26px;
+    }
+
+    .board-title h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+    }
+
+    .board-title p {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .screens {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(300px, 1fr));
+      gap: 30px;
+      align-items: start;
+    }
+
+    .screen-wrap {
+      display: grid;
+      justify-items: center;
+      gap: 12px;
+    }
+
+    .screen-label {
+      width: var(--phone-w);
+      color: #586f67;
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    .phone {
+      position: relative;
+      width: var(--phone-w);
+      height: var(--phone-h);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 42px;
+      background:
+        radial-gradient(circle at 50% -12%, rgba(229, 240, 235, 0.96), transparent 18rem),
+        linear-gradient(180deg, #fffdf8 0%, #f4efe5 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .phone.old {
+      color: #f4f0e8;
+      border-color: rgba(255,255,255,0.16);
+      background:
+        radial-gradient(circle at 50% -12%, rgba(213, 138, 104, 0.12), transparent 16rem),
+        radial-gradient(circle at 85% 18%, rgba(63, 123, 110, 0.14), transparent 12rem),
+        linear-gradient(180deg, #2b332f 0%, #1f2925 58%, #161d1a 100%);
+    }
+
+    .phone.hall {
+      color: #f7fff9;
+      border-color: rgba(255,255,255,0.2);
+      background:
+        radial-gradient(circle at 50% -12%, rgba(194, 161, 94, 0.16), transparent 16rem),
+        radial-gradient(circle at 12% 24%, rgba(63, 123, 110, 0.28), transparent 15rem),
+        linear-gradient(180deg, #2d6d61 0%, #1d5248 56%, #133a32 100%);
+    }
+
+    .phone.city {
+      background:
+        radial-gradient(circle at 50% -12%, rgba(229, 240, 235, 0.98), transparent 18rem),
+        radial-gradient(circle at 85% 16%, rgba(194, 161, 94, 0.12), transparent 12rem),
+        linear-gradient(180deg, #fffdf8 0%, #eef4ee 54%, #f8f4ea 100%);
+    }
+
+    .phone.reveal {
+      background:
+        radial-gradient(circle at 50% -10%, rgba(194, 161, 94, 0.18), transparent 17rem),
+        radial-gradient(circle at 12% 20%, rgba(63, 123, 110, 0.16), transparent 13rem),
+        linear-gradient(180deg, #fffdf8 0%, #f5efe2 58%, #f8f4ea 100%);
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 10px;
+      width: 118px;
+      height: 28px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: rgba(22, 35, 31, 0.1);
+      z-index: 20;
+    }
+
+    .phone.old::before,
+    .phone.hall::before {
+      background: rgba(0,0,0,0.24);
+    }
+
+    .grain {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.032) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.22;
+      mask-image: radial-gradient(circle at 50% 28%, black 0%, transparent 78%);
+      z-index: 1;
+    }
+
+    .status {
+      position: relative;
+      z-index: 21;
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 26px 8px;
+      color: rgba(22, 35, 31, 0.72);
+      font-size: 12px;
+      font-weight: 760;
+    }
+
+    .old .status,
+    .hall .status {
+      color: rgba(255,255,255,0.75);
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      height: calc(100% - 44px);
+      padding: 22px 22px 28px;
+      overflow: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, var(--deep), var(--green));
+      color: #f8fffb;
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
+    }
+
+    .old .mark,
+    .hall .mark {
+      background: rgba(255,255,255,0.13);
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.14;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .old .brand span,
+    .hall .brand span {
+      color: rgba(255,255,255,0.56);
+    }
+
+    .menu {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.58);
+      color: var(--deep);
+      font-weight: 900;
+    }
+
+    .old .menu,
+    .hall .menu {
+      color: #fff;
+      border-color: rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.1);
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .pill, .tag {
+      display: inline-flex;
+      align-items: center;
+      width: max-content;
+      max-width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.62);
+      color: var(--deep-2);
+      font-size: 11px;
+      font-weight: 780;
+      padding: 7px 10px;
+      white-space: nowrap;
+    }
+
+    .tag {
+      padding: 5px 8px;
+      font-size: 10px;
+    }
+
+    .old .pill,
+    .old .tag,
+    .hall .pill,
+    .hall .tag {
+      color: #f8fff9;
+      border-color: rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.1);
+    }
+
+    .headline {
+      margin-top: 16px;
+      font-size: 42px;
+      line-height: 1.02;
+      letter-spacing: -0.035em;
+    }
+
+    .lead {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.68;
+    }
+
+    .old .lead,
+    .hall .lead {
+      color: rgba(255,255,255,0.68);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 14px 0 14px;
+    }
+
+    .section-title h2 {
+      font-size: 29px;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+    }
+
+    .section-title p {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .hall .section-title p {
+      color: rgba(255,255,255,0.58);
+    }
+
+    .npc-card, .door-card, .panel, .goal-card, .station-card {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,0.62);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.62);
+      backdrop-filter: blur(18px);
+    }
+
+    .old .npc-card,
+    .hall .door-card,
+    .hall .panel {
+      border-color: rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.09);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .npc-list, .door-list, .goal-list, .station-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .npc-card, .door-card, .station-card {
+      padding: 14px;
+    }
+
+    .npc-card strong, .door-card strong, .panel strong, .goal-card strong, .station-card strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .npc-card span, .door-card span, .panel span, .goal-card span, .station-card span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .old .npc-card span,
+    .hall .door-card span,
+    .hall .panel span {
+      color: rgba(255,255,255,0.56);
+    }
+
+    .question-box {
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 26px;
+      border: 1px solid rgba(213, 138, 104, 0.24);
+      background: rgba(213, 138, 104, 0.1);
+    }
+
+    .question-box p {
+      color: rgba(255,255,255,0.78);
+      font-size: 13px;
+      line-height: 1.58;
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .summary-card {
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.1);
+    }
+
+    .summary-card p {
+      color: rgba(255,255,255,0.76);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .door-grid {
+      position: relative;
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 11px;
+    }
+
+    .door-card {
+      min-height: 112px;
+    }
+
+    .trust-door {
+      margin-top: 15px;
+      padding: 18px;
+      border-radius: 30px;
+      border: 1px solid rgba(194, 161, 94, 0.44);
+      background:
+        radial-gradient(circle at 80% 0%, rgba(194,161,94,0.18), transparent 7rem),
+        rgba(255,255,255,0.13);
+      text-align: center;
+    }
+
+    .trust-door h3 {
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .metric-card {
+      min-height: 106px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,0.72);
+    }
+
+    .metric-card strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .metric-card b {
+      display: block;
+      margin-top: 8px;
+      color: var(--deep);
+      font-size: 31px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .metric-card small {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .station-list {
+      margin-top: 18px;
+    }
+
+    .station-card {
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      gap: 11px;
+      align-items: center;
+      padding: 13px;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: var(--mist);
+      color: var(--deep);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .station-card .arrow, .goal-card .arrow {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--deep);
+      color: #f8fffb;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .reveal-card {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid rgba(194, 161, 94, 0.28);
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 80% 0%, rgba(194,161,94,0.12), transparent 8rem),
+        rgba(255,255,255,0.72);
+      text-align: center;
+    }
+
+    .reveal-card h3 {
+      font-size: 32px;
+      line-height: 1.02;
+      letter-spacing: -0.035em;
+    }
+
+    .reveal-card p {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .proof-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .proof-item {
+      display: grid;
+      grid-template-columns: 36px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.68);
+    }
+
+    .proof-item strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .proof-item span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .goal-list {
+      margin-top: 18px;
+    }
+
+    .goal-card {
+      display: grid;
+      grid-template-columns: 36px 1fr auto;
+      gap: 11px;
+      align-items: center;
+      padding: 14px;
+    }
+
+    .goal-card.primary {
+      border-color: rgba(23,70,61,0.2);
+      background: rgba(229,240,235,0.82);
+    }
+
+    @media (max-width: 1100px) {
+      .screens { grid-template-columns: repeat(2, minmax(300px, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .board-title { display: block; }
+      .screens { grid-template-columns: 1fr; }
+      .screen-label, .phone { width: min(var(--phone-w), calc(100vw - 28px)); }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <header class="board-title">
+      <div>
+        <h1>NEWBIE_VILLAGE_MOBILE_UI_V3</h1>
+        <p>新手村闭环：旧世界困境 → 治理议事厅 → 信托之城体验 → 信托制揭秘 → 使命选择。</p>
+      </div>
+      <div class="pill" style="color:#17463d;background:rgba(255,255,255,.72);border-color:rgba(23,70,61,.14)">第三关体验升级版</div>
+    </header>
+
+    <section class="screens">
+      <div class="screen-wrap">
+        <div class="screen-label">01 / 第一关：旧世界困境</div>
+        <article class="phone old">
+          <div class="grain"></div>
+          <div class="status"><span>9:41</span><span>5G 100%</span></div>
+          <div class="content">
+            <div class="topbar">
+              <div class="brand">
+                <div class="mark">1</div>
+                <div><strong>旧世界困境</strong><span>认知觉醒关</span></div>
+              </div>
+              <div class="pill">看见问题</div>
+            </div>
+            <div class="section-title">
+              <h2>每个人都不满意，但都找不到真正答案。</h2>
+              <p>先听见不同角色的困境。</p>
+            </div>
+            <div class="npc-list">
+              <div class="npc-card"><strong>NPC · 业主</strong><span>我每年都交物业费，可钱到底花到哪里去了？公共收益有多少？</span></div>
+              <div class="npc-card"><strong>NPC · 社区书记</strong><span>为什么调解物业纠纷、业主投诉、业委会矛盾，总是解决不完？</span></div>
+              <div class="npc-card"><strong>NPC · 物业项目经理</strong><span>收费越来越难，投诉越来越多，为什么认真干活的人总在背锅？</span></div>
+            </div>
+            <div class="question-box">
+              <p>玩家任务：你认为小区矛盾频发的根源是什么？</p>
+              <div class="choice-row">
+                <div class="tag">资金不透明</div>
+                <div class="tag">权责不清晰</div>
+                <div class="tag">监督缺失</div>
+              </div>
+            </div>
+            <div class="summary-card">
+              <p>系统总结：表面上是人与人的矛盾，实际上是资金不透明、权责不清晰、监督机制缺失，最终导致信任不断流失。</p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="screen-wrap">
+        <div class="screen-label">02 / 第二关：治理议事厅</div>
+        <article class="phone hall">
+          <div class="grain"></div>
+          <div class="status"><span>9:41</span><span>5G 100%</span></div>
+          <div class="content">
+            <div class="topbar">
+              <div class="brand">
+                <div class="mark">2</div>
+                <div><strong>治理议事厅</strong><span>共识探索关</span></div>
+              </div>
+              <div class="pill">寻找办法</div>
+            </div>
+            <div class="section-title">
+              <h2>旧办法行不通，新的办法在哪里？</h2>
+              <p>大厅中央出现四扇门。</p>
+            </div>
+            <div class="door-grid">
+              <div class="door-card"><strong>业主自管</strong><span>参与度提升，但专业化、连续性和责任承担困难。</span></div>
+              <div class="door-card"><strong>社区兜底</strong><span>能推动治理，但无法长期替代专业物业服务。</span></div>
+              <div class="door-card"><strong>国企接管</strong><span>主体变化不等于机制变化，成本压力仍存在。</span></div>
+              <div class="door-card"><strong>酬金制</strong><span>解决部分问题，但依赖成熟治理能力。</span></div>
+            </div>
+            <div class="trust-door">
+              <div class="tag">第五扇门缓缓升起</div>
+              <h3 style="margin-top:10px;">信托之门</h3>
+              <p class="lead">如果这些办法都不完美，真正的答案在哪里？</p>
+            </div>
+            <div class="summary-card">
+              <p>奖励：共识探索者徽章</p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="screen-wrap">
+        <div class="screen-label">03 / 第三关：信托之城</div>
+        <article class="phone city">
+          <div class="status"><span>9:41</span><span>5G 100%</span></div>
+          <div class="content">
+            <div class="topbar">
+              <div class="brand">
+                <div class="mark">3</div>
+                <div><strong>光明里社区</strong><span>信托之城体验关</span></div>
+              </div>
+              <div class="pill">先看结果</div>
+            </div>
+            <span class="pill">欢迎来到光明里社区</span>
+            <h1 class="headline" style="color:var(--ink);">你发现，这里和旧世界不一样。</h1>
+            <p class="lead">你还不知道原因。你先看到了一组真实运行结果。</p>
+            <div class="metric-grid">
+              <div class="metric-card">
+                <strong>物业费收缴率</strong>
+                <b>98%</b>
+                <small>居民更愿意支持服务。</small>
+              </div>
+              <div class="metric-card">
+                <strong>公共收益</strong>
+                <b>326,800</b>
+                <small>本年度已公开，可查询。</small>
+              </div>
+              <div class="metric-card">
+                <strong>停车争议</strong>
+                <b>-62%</b>
+                <small>收费调整争议明显下降。</small>
+              </div>
+              <div class="metric-card">
+                <strong>连续服务</strong>
+                <b>8年</b>
+                <small>规则稳定，信任持续。</small>
+              </div>
+            </div>
+            <div class="station-list">
+              <div class="station-card">
+                <div class="icon">栏</div>
+                <div><strong>第一站：公共收益公开栏</strong><span>广告收入、停车收入、场地租赁收入、维修支出、结余情况。</span></div>
+                <div class="arrow">→</div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="screen-wrap">
+        <div class="screen-label">04 / 信托之城：三站探索</div>
+        <article class="phone city">
+          <div class="status"><span>9:41</span><span>5G 100%</span></div>
+          <div class="content">
+            <div class="topbar">
+              <div class="brand">
+                <div class="mark">城</div>
+                <div><strong>继续探索光明里</strong><span>看见机制前的结果</span></div>
+              </div>
+              <div class="pill">用户自己发现</div>
+            </div>
+            <div class="section-title">
+              <h2>走完整个社区，你开始明白它为什么稳定。</h2>
+              <p>先体验，再揭晓答案。</p>
+            </div>
+            <div class="station-list">
+              <div class="station-card">
+                <div class="icon">钱</div>
+                <div><strong>公共收益公开栏</strong><span>玩家：原来钱真能看见。</span></div>
+                <div class="tag">已看</div>
+              </div>
+              <div class="station-card">
+                <div class="icon">议</div>
+                <div><strong>社区议事厅</strong><span>业主、物业、社区共同讨论停车规则。</span></div>
+                <div class="tag">进入</div>
+              </div>
+              <div class="station-card">
+                <div class="icon">服</div>
+                <div><strong>物业服务中心</strong><span>物业专心提供服务，不碰钱，不决定收益归属。</span></div>
+                <div class="tag">理解</div>
+              </div>
+            </div>
+            <div class="reveal-card" style="text-align:left;">
+              <div class="tag">玩家心声</div>
+              <h3 style="font-size:26px;margin-top:10px;">原来不是谁说了算。</h3>
+              <p>专业的人干专业的事，钱公开，规则公开，监督也公开。</p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="screen-wrap">
+        <div class="screen-label">05 / 第四关：信托制揭秘</div>
+        <article class="phone reveal">
+          <div class="status"><span>9:41</span><span>5G 100%</span></div>
+          <div class="content">
+            <div class="topbar">
+              <div class="brand">
+                <div class="mark">信</div>
+                <div><strong>信托制揭秘</strong><span>为什么做到？</span></div>
+              </div>
+              <div class="pill">答案揭晓</div>
+            </div>
+            <div class="reveal-card">
+              <div class="tag">你发现了吗？</div>
+              <h3 style="margin-top:10px;">不是换了一家物业，也不是某个人特别厉害。</h3>
+              <p>真正改变社区运行状态的，是一种新的治理机制。</p>
+            </div>
+            <h1 class="headline" style="color:var(--ink);text-align:center;margin-top:20px;">它叫<br />信托制。</h1>
+            <p class="lead" style="text-align:center;">公开透明、业主当家、专业服务、共同监督、权责清晰、长期稳定。</p>
+            <div class="proof-list">
+              <div class="proof-item">
+                <div class="icon">央</div>
+                <div><strong>央视专题报道</strong><span>了解信托制为什么进入公共视野。</span></div>
+                <div class="tag">开放</div>
+              </div>
+              <div class="proof-item">
+                <div class="icon">人</div>
+                <div><strong>人民日报专题报道</strong><span>建立权威认知与公共信任。</span></div>
+                <div class="tag">开放</div>
+              </div>
+              <div class="proof-item">
+                <div class="icon">图</div>
+                <div><strong>全国试点城市地图</strong><span>看见信托制正在从一个城市走向全国。</span></div>
+                <div class="tag">进入</div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="screen-wrap">
+        <div class="screen-label">06 / 第五关：选择你的使命</div>
+        <article class="phone city">
+          <div class="status"><span>9:41</span><span>5G 100%</span></div>
+          <div class="content">
+            <div class="topbar">
+              <div class="brand">
+                <div class="mark">目</div>
+                <div><strong>选择你的使命</strong><span>Mission First</span></div>
+              </div>
+              <div class="pill">新手村通关</div>
+            </div>
+            <span class="pill">恭喜：信托制冒险者</span>
+            <h1 class="headline" style="color:var(--ink);">现在，你想改变什么？</h1>
+            <p class="lead">不是选择功能，而是选择你接下来想推动的一件事。</p>
+            <div class="goal-list">
+              <div class="goal-card">
+                <div class="icon">主</div>
+                <div><strong>我想推动我的小区</strong><span>适合业主、热心居民、业委会成员。</span></div>
+                <div class="arrow">→</div>
+              </div>
+              <div class="goal-card">
+                <div class="icon">区</div>
+                <div><strong>我辖区有失管小区，想试试信托制</strong><span>适合社区书记、街道工作人员。</span></div>
+                <div class="arrow">→</div>
+              </div>
+              <div class="goal-card primary">
+                <div class="icon">管</div>
+                <div><strong>我想成为真正能解决问题的人</strong><span>进入金牌管家成长世界。</span></div>
+                <div class="arrow">→</div>
+              </div>
+              <div class="goal-card">
+                <div class="icon">企</div>
+                <div><strong>我想把公司升级为信托制物业</strong><span>开启信托制经营成长路径。</span></div>
+                <div class="arrow">→</div>
+              </div>
+              <div class="goal-card">
+                <div class="icon">创</div>
+                <div><strong>我想进入信托制赛道</strong><span>适合创业者、服务机构、顾问。</span></div>
+                <div class="arrow">→</div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

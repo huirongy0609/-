@@ -1,0 +1,123 @@
+{
+  "title": "《信托制物业》导读",
+  "bookTitle": "信托制物业",
+  "hook": "很多小区的问题，并不是物业公司不努力，也不是业主不讲理，而是钱、权、责长期没有被放在同一张桌面上。",
+  "coverImage": "/cover.jpg",
+  "audio": {
+    "mode": "mock",
+    "src": "/audio.mp3",
+    "voiceId": ""
+  },
+  "avatar": {
+    "mode": "none",
+    "avatarId": ""
+  },
+  "points": [
+    {
+      "id": "point-1",
+      "order": 1,
+      "title": "观点 1：先让钱透明",
+      "voiceover": "物业费不应该只是被收走的一笔钱，而应该成为全体业主可追踪、可监督、可决策的公共资金。钱的去向清楚，信任才有基础。",
+      "screenText": "钱透明，信任才有基础",
+      "quote": "钱的去向清楚，信任才有基础",
+      "durationSec": 42
+    },
+    {
+      "id": "point-2",
+      "order": 2,
+      "title": "观点 2：服务要被规则托住",
+      "voiceover": "服务质量不能只靠投诉倒逼。真正有效的治理，是把预算、服务标准和履约结果提前说清楚，让物业公司按规则交付。",
+      "screenText": "好服务来自清晰规则",
+      "quote": "真正有效的治理，是把预算、服务标准和履约结果提前说清楚",
+      "durationSec": 44
+    },
+    {
+      "id": "point-3",
+      "order": 3,
+      "title": "观点 3：业主大会不是摆设",
+      "voiceover": "业主大会不是形式，而是小区公共事务的决策系统。没有稳定的议事机制，再好的服务也会陷入反复争吵。",
+      "screenText": "公共事务需要决策系统",
+      "quote": "没有稳定的议事机制，再好的服务也会陷入反复争吵",
+      "durationSec": 42
+    },
+    {
+      "id": "point-4",
+      "order": 4,
+      "title": "观点 4：物业公司也需要边界",
+      "voiceover": "物业公司也需要被保护。边界明确、收益透明、责任清晰，专业机构才愿意长期投入。",
+      "screenText": "边界清晰，专业才能长期",
+      "quote": "边界明确、收益透明、责任清晰，专业机构才愿意长期投入",
+      "durationSec": 38
+    }
+  ],
+  "closing": "关注我，带你读懂更多管理好书。",
+  "scenes": [
+    {
+      "id": "title",
+      "type": "title",
+      "title": "《信托制物业》导读",
+      "subtitle": "《信托制物业》导读",
+      "voiceover": "很多小区的问题，并不是物业公司不努力，也不是业主不讲理，而是钱、权、责长期没有被放在同一张桌面上。",
+      "screenText": "一本书，一个关键判断",
+      "quote": "很多小区的问题，并不是物业公司不努力，也不是业主不讲理",
+      "durationSec": 24
+    },
+    {
+      "id": "point-1",
+      "type": "point",
+      "title": "观点 1：先让钱透明",
+      "subtitle": "核心观点 1",
+      "voiceover": "物业费不应该只是被收走的一笔钱，而应该成为全体业主可追踪、可监督、可决策的公共资金。钱的去向清楚，信任才有基础。",
+      "screenText": "钱透明，信任才有基础",
+      "quote": "钱的去向清楚，信任才有基础",
+      "durationSec": 42
+    },
+    {
+      "id": "point-2",
+      "type": "point",
+      "title": "观点 2：服务要被规则托住",
+      "subtitle": "核心观点 2",
+      "voiceover": "服务质量不能只靠投诉倒逼。真正有效的治理，是把预算、服务标准和履约结果提前说清楚，让物业公司按规则交付。",
+      "screenText": "好服务来自清晰规则",
+      "quote": "真正有效的治理，是把预算、服务标准和履约结果提前说清楚",
+      "durationSec": 44
+    },
+    {
+      "id": "point-3",
+      "type": "point",
+      "title": "观点 3：业主大会不是摆设",
+      "subtitle": "核心观点 3",
+      "voiceover": "业主大会不是形式，而是小区公共事务的决策系统。没有稳定的议事机制，再好的服务也会陷入反复争吵。",
+      "screenText": "公共事务需要决策系统",
+      "quote": "没有稳定的议事机制，再好的服务也会陷入反复争吵",
+      "durationSec": 42
+    },
+    {
+      "id": "point-4",
+      "type": "point",
+      "title": "观点 4：物业公司也需要边界",
+      "subtitle": "核心观点 4",
+      "voiceover": "物业公司也需要被保护。边界明确、收益透明、责任清晰，专业机构才愿意长期投入。",
+      "screenText": "边界清晰，专业才能长期",
+      "quote": "边界明确、收益透明、责任清晰，专业机构才愿意长期投入",
+      "durationSec": 38
+    },
+    {
+      "id": "closing",
+      "type": "closing",
+      "title": "读书不是记住内容",
+      "subtitle": "而是带走一个可执行的判断",
+      "voiceover": "关注我，带你读懂更多管理好书。",
+      "screenText": "关注我，带你读懂更多管理好书。",
+      "durationSec": 18
+    }
+  ],
+  "meta": {
+    "fps": 30,
+    "width": 1080,
+    "height": 1920,
+    "durationSec": 208,
+    "style": "premium-business-vertical",
+    "createdAt": "2026-05-09T00:00:00.000Z"
+  }
+}

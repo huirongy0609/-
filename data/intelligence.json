@@ -1,0 +1,80 @@
+[
+  {
+    "id": "intel_001",
+    "title": "某地发布物业治理相关政策",
+    "category": "政策动态",
+    "region": "江苏",
+    "city": "常州",
+    "source": "政府公开信息",
+    "summary": "AI摘要：该政策强调物业服务公开透明、业主参与和社区协同机制，适合纳入信托制物业与财务公开案例观察。",
+    "tags": ["政策", "物业治理", "社区协同"],
+    "publishedAt": "2026-05-24",
+    "url": "#",
+    "aiSummaryStatus": "generated"
+  },
+  {
+    "id": "intel_002",
+    "title": "成都老旧院落居民议事机制形成可复制模板",
+    "category": "城市案例",
+    "region": "四川",
+    "city": "成都",
+    "source": "城市共建提交",
+    "summary": "AI摘要：案例以居民议事、公共收益公示和多方协调为核心，可为同类老旧院落提供前期沟通路径。",
+    "tags": ["老旧小区", "居民议事", "社区营造"],
+    "publishedAt": "2026-05-24",
+    "url": "#",
+    "aiSummaryStatus": "generated"
+  },
+  {
+    "id": "intel_003",
+    "title": "上市物业企业披露基层治理协同服务新方向",
+    "category": "上市物业",
+    "region": "全国",
+    "city": "",
+    "source": "企业公告整理",
+    "summary": "AI摘要：多家企业将社区增值服务、透明账本和智慧治理列为业务方向，但仍需关注基层协同与居民信任建设。",
+    "tags": ["上市物业", "透明账本", "行业趋势"],
+    "publishedAt": "2026-05-23",
+    "url": "#",
+    "aiSummaryStatus": "generated"
+  },
+  {
+    "id": "intel_004",
+    "title": "停车收益分配不透明引发社区舆情讨论",
+    "category": "舆情风险",
+    "region": "华东",
+    "city": "杭州",
+    "source": "公开舆情线索",
+    "summary": "AI摘要：风险点集中在公共收益归属、账目披露频率与业委会沟通机制，建议纳入财务公开风险样本。",
+    "tags": ["舆情风险", "停车治理", "公共收益"],
+    "publishedAt": "2026-05-23",
+    "url": "#",
+    "aiSummaryStatus": "generated"
+  },
+  {
+    "id": "intel_005",
+    "title": "某街道社区治理数字化项目发布招标信息",
+    "category": "招投标",
+    "region": "湖北",
+    "city": "武汉",
+    "source": "公共资源交易平台",
+    "summary": "AI摘要：项目包含社区治理数据汇聚、事件协同与服务评价模块，可能与平台后续城市驾驶舱方向相关。",
+    "tags": ["招投标", "数字治理", "街道社区"],
+    "publishedAt": "2026-05-22",
+    "url": "#",
+    "aiSummaryStatus": "generated"
+  },
+  {
+    "id": "intel_006",
+    "title": "信托制物业从单点试点走向区域协同",
+    "category": "行业趋势",
+    "region": "全国",
+    "city": "",
+    "source": "平台趋势研判",
+    "summary": "AI摘要：从案例分布看，信托制物业正与老旧小区治理、财务公开和业主自治结合，平台需要强化案例共建网络。",
+    "tags": ["行业趋势", "信托制物业", "全国协同"],
+    "publishedAt": "2026-05-22",
+    "url": "#",
+    "aiSummaryStatus": "generated"
+  }
+]

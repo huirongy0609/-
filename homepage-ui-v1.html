@@ -1,0 +1,1317 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>信托制社区治理平台</title>
+  <style>
+    :root {
+      --ink: #17231f;
+      --ink-soft: #44524e;
+      --muted: #72807b;
+      --line: rgba(21, 48, 40, 0.1);
+      --line-strong: rgba(21, 48, 40, 0.18);
+      --paper: #fbfaf6;
+      --paper-warm: #f5f2ea;
+      --paper-mist: #edf3ef;
+      --green: #3f786b;
+      --green-deep: #214f45;
+      --green-soft: #dfeee8;
+      --gold: #b59b62;
+      --white: #ffffff;
+      --shadow: 0 24px 80px rgba(22, 42, 37, 0.08);
+      --shadow-soft: 0 14px 42px rgba(22, 42, 37, 0.06);
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 80% 0%, rgba(63, 120, 107, 0.13), transparent 34rem),
+        radial-gradient(circle at 8% 16%, rgba(181, 155, 98, 0.12), transparent 32rem),
+        linear-gradient(180deg, #fcfbf7 0%, #f6f3ec 48%, #fbfaf6 100%);
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      overflow: hidden;
+    }
+
+    .nav-shell {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 18px 24px 0;
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      width: min(var(--max), calc(100vw - 48px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 13px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: 0 12px 40px rgba(35, 57, 50, 0.06);
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: max-content;
+    }
+
+    .seal {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, var(--green-deep), var(--green));
+      color: #f7fff9;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+    }
+
+    .brand-text {
+      line-height: 1.1;
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .brand-text span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      color: var(--ink-soft);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .nav-links a {
+      transition: color 180ms ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--green-deep);
+    }
+
+    .nav-action {
+      min-width: max-content;
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: #f8fffb;
+      background: var(--green-deep);
+      font-size: 13px;
+      font-weight: 650;
+      box-shadow: 0 10px 28px rgba(33, 79, 69, 0.18);
+    }
+
+    .section {
+      width: min(var(--max), calc(100vw - 48px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      min-height: 760px;
+      display: grid;
+      place-items: center;
+      padding: 82px 0 62px;
+    }
+
+    .hero-inner {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1.02fr 0.98fr;
+      gap: 54px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--green-deep);
+      background: rgba(255, 255, 255, 0.62);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    h1 {
+      margin: 24px 0 0;
+      font-size: clamp(48px, 6vw, 78px);
+      line-height: 1.04;
+      font-weight: 760;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    .subtitle {
+      margin: 20px 0 0;
+      max-width: 620px;
+      color: var(--ink-soft);
+      font-size: clamp(18px, 2.2vw, 24px);
+      line-height: 1.6;
+      font-weight: 440;
+    }
+
+    .question-panel {
+      margin-top: 36px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.76);
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: var(--shadow);
+    }
+
+    .question-label {
+      padding: 10px 12px 2px;
+      color: var(--green-deep);
+      font-size: 15px;
+      font-weight: 720;
+    }
+
+    .search-box {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 16px 16px 18px;
+      border: 1px solid var(--line-strong);
+      border-radius: 22px;
+      background: linear-gradient(180deg, #ffffff, #fbfcfa);
+    }
+
+    .search-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--green-deep);
+      background: var(--green-soft);
+      font-size: 19px;
+    }
+
+    .search-placeholder {
+      flex: 1;
+      color: #8a948f;
+      font-size: 17px;
+    }
+
+    .search-button {
+      padding: 13px 18px;
+      border-radius: 999px;
+      color: #f9fffb;
+      background: var(--green-deep);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 16px 10px 4px;
+    }
+
+    .chip {
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink-soft);
+      background: rgba(246, 250, 247, 0.85);
+      font-size: 13px;
+    }
+
+    .promise-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .promise {
+      padding: 14px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.58);
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 560px;
+    }
+
+    .visual-card {
+      position: absolute;
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(20px);
+    }
+
+    .experience-book {
+      inset: 48px 10px auto 46px;
+      width: 390px;
+      padding: 24px;
+      transform: rotate(-2deg);
+    }
+
+    .book-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+    }
+
+    .book-title {
+      font-size: 20px;
+      font-weight: 760;
+    }
+
+    .book-meta {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    .doc-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .doc-item {
+      display: grid;
+      grid-template-columns: 8px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      border-radius: 17px;
+      background: rgba(246, 248, 244, 0.86);
+    }
+
+    .doc-dot {
+      width: 8px;
+      height: 8px;
+      margin-top: 5px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .doc-item strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .doc-item span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .path-card {
+      right: 0;
+      bottom: 42px;
+      width: 330px;
+      padding: 22px;
+      transform: rotate(2deg);
+    }
+
+    .path-title {
+      font-size: 16px;
+      font-weight: 760;
+    }
+
+    .path {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .path-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+
+    .path-step b {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #f8fffb;
+      background: var(--green);
+      font-size: 11px;
+    }
+
+    .people-card {
+      left: 0;
+      bottom: 16px;
+      width: 255px;
+      padding: 18px;
+    }
+
+    .people-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .avatars {
+      display: flex;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      margin-left: -8px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .avatar:first-child {
+      margin-left: 0;
+    }
+
+    .people-card strong {
+      display: block;
+      margin-top: 14px;
+      font-size: 15px;
+    }
+
+    .people-card span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .section-block {
+      padding: 86px 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 30px;
+    }
+
+    .section-kicker {
+      color: var(--green-deep);
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    h2 {
+      margin: 10px 0 0;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.14;
+      letter-spacing: -0.015em;
+    }
+
+    .section-note {
+      max-width: 430px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    .problem-card {
+      min-height: 178px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.66);
+      box-shadow: 0 10px 34px rgba(28, 52, 45, 0.04);
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .problem-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(63, 120, 107, 0.28);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .problem-card strong {
+      display: block;
+      font-size: 17px;
+      line-height: 1.35;
+    }
+
+    .problem-card p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .mini-link {
+      display: inline-flex;
+      margin-top: 18px;
+      color: var(--green-deep);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .route-panel {
+      padding: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: var(--shadow);
+    }
+
+    .route {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .route-step {
+      position: relative;
+      min-height: 132px;
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(251, 250, 246, 0.82);
+    }
+
+    .route-step::after {
+      content: "";
+      position: absolute;
+      top: 28px;
+      right: -10px;
+      width: 10px;
+      height: 1px;
+      background: rgba(63, 120, 107, 0.35);
+    }
+
+    .route-step:last-child::after {
+      display: none;
+    }
+
+    .route-step em {
+      width: 27px;
+      height: 27px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--green-deep);
+      font-style: normal;
+      font-size: 12px;
+      font-weight: 760;
+    }
+
+    .route-step strong {
+      display: block;
+      margin-top: 14px;
+      font-size: 14px;
+    }
+
+    .route-step span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .content-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
+    }
+
+    .feature-article {
+      min-height: 380px;
+      padding: 30px;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(145deg, rgba(33, 79, 69, 0.9), rgba(63, 120, 107, 0.78)),
+        linear-gradient(180deg, #fff, #fff);
+      color: #f8fffb;
+      box-shadow: var(--shadow);
+    }
+
+    .feature-article .tag {
+      color: rgba(255, 255, 255, 0.82);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .feature-article h3 {
+      margin: 68px 0 0;
+      max-width: 620px;
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-article p {
+      max-width: 620px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    .article-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .article-card,
+    .resource-card,
+    .case-card,
+    .product-card {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 10px 34px rgba(28, 52, 45, 0.035);
+    }
+
+    .tag {
+      display: inline-flex;
+      padding: 6px 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--green-deep);
+      background: rgba(223, 238, 232, 0.55);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .article-card h3,
+    .resource-card h3,
+    .case-card h3,
+    .product-card h3 {
+      margin: 14px 0 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    .article-card p,
+    .resource-card p,
+    .case-card p,
+    .product-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .resource-card {
+      min-height: 230px;
+    }
+
+    .resource-card .for {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .case-layout {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .case-card {
+      min-height: 270px;
+    }
+
+    .lab-banner {
+      margin-top: 18px;
+      padding: 28px;
+      border: 1px solid rgba(63, 120, 107, 0.2);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, rgba(223, 238, 232, 0.9), rgba(255, 255, 255, 0.72));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .growth-panel {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 24px;
+      align-items: stretch;
+      padding: 30px;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: var(--shadow);
+    }
+
+    .growth-map {
+      display: grid;
+      gap: 10px;
+    }
+
+    .level {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(251, 250, 246, 0.82);
+    }
+
+    .level b {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--green);
+      font-size: 12px;
+    }
+
+    .level strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .level span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .task-card {
+      height: 100%;
+      padding: 26px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, var(--paper-mist), rgba(255,255,255,0.8));
+      border: 1px solid rgba(63, 120, 107, 0.16);
+    }
+
+    .task-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .task {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.72);
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .profile-panel {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 20px;
+      padding: 28px;
+      border: 1px solid rgba(255,255,255,0.72);
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,0.72);
+      box-shadow: var(--shadow);
+    }
+
+    .profile-choices {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .choice {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(251, 250, 246, 0.82);
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+
+    .recommendation {
+      display: grid;
+      gap: 12px;
+    }
+
+    .rec {
+      padding: 15px;
+      border-radius: 17px;
+      background: rgba(223, 238, 232, 0.56);
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+    }
+
+    .closing {
+      padding: 78px 0 96px;
+      text-align: center;
+    }
+
+    .closing-card {
+      padding: 56px 32px;
+      border: 1px solid rgba(255,255,255,0.72);
+      border-radius: 36px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(245,242,234,0.72));
+      box-shadow: var(--shadow);
+    }
+
+    .closing-card h2 {
+      max-width: 780px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .closing-card p {
+      max-width: 660px;
+      margin: 18px auto 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .cta.primary {
+      color: #fff;
+      background: var(--green-deep);
+    }
+
+    .cta.secondary {
+      color: var(--green-deep);
+      border: 1px solid var(--line-strong);
+      background: rgba(255,255,255,0.7);
+    }
+
+    @media (max-width: 980px) {
+      .nav {
+        align-items: flex-start;
+        border-radius: 24px;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+
+      .nav-action {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 56px;
+      }
+
+      .hero-inner,
+      .content-layout,
+      .growth-panel,
+      .profile-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: 520px;
+      }
+
+      .promise-row,
+      .problem-grid,
+      .resource-grid,
+      .case-layout,
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .route {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .route-step::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-shell {
+        padding: 12px 14px 0;
+      }
+
+      .section,
+      .nav {
+        width: min(100% - 28px, var(--max));
+      }
+
+      .section-block {
+        padding: 60px 0;
+      }
+
+      .hero-inner {
+        gap: 28px;
+      }
+
+      h1 {
+        font-size: 44px;
+      }
+
+      .search-box {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .search-placeholder {
+        font-size: 15px;
+      }
+
+      .promise-row,
+      .problem-grid,
+      .resource-grid,
+      .case-layout,
+      .product-grid,
+      .profile-choices {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .hero-visual {
+        min-height: 620px;
+      }
+
+      .experience-book,
+      .path-card,
+      .people-card {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        margin-top: 14px;
+        transform: none;
+      }
+
+      .route {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="nav-shell">
+      <nav class="nav">
+        <a class="brand-lockup" href="#">
+          <span class="seal">聚</span>
+          <span class="brand-text">
+            <strong>信托制社区治理平台</strong>
+            <span>聚道研究院 出品</span>
+          </span>
+        </a>
+        <div class="nav-links" aria-label="主导航">
+          <a href="#content">内容中心</a>
+          <a href="#rules">制度中心</a>
+          <a href="#growth">成长世界</a>
+          <a href="#products">产品中心</a>
+          <a href="#connect">资源连接</a>
+          <a href="#lab">治理实验室</a>
+        </div>
+        <a class="nav-action" href="#connect">建立我的画像</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero section">
+        <div class="hero-inner">
+          <div>
+            <span class="eyebrow">聚道研究院 · 金牌管家</span>
+            <h1>信托制社区治理平台</h1>
+            <p class="subtitle">传播信托理念，沉淀治理经验，培养共治人才。让更多社区走向公开透明、共建共治与价值共享。</p>
+
+            <div class="question-panel">
+              <div class="question-label">今天你遇到什么治理问题？</div>
+              <div class="search-box">
+                <div class="search-icon">⌕</div>
+                <div class="search-placeholder">请输入你遇到的治理问题……</div>
+                <a class="search-button" href="#path">整理解决路径</a>
+              </div>
+              <div class="chips">
+                <span class="chip">停车治理</span>
+                <span class="chip">公共收益公开</span>
+                <span class="chip">业主大会召开</span>
+                <span class="chip">业委会换届</span>
+                <span class="chip">信托制转型</span>
+                <span class="chip">项目亏损治理</span>
+              </div>
+            </div>
+
+            <div class="promise-row">
+              <div class="promise">找到经验</div>
+              <div class="promise">找到制度</div>
+              <div class="promise">找到案例</div>
+              <div class="promise">找到成长路径</div>
+              <div class="promise">找到人和资源</div>
+            </div>
+          </div>
+
+          <div class="hero-visual" aria-label="平台内容与成长路径主视觉">
+            <div class="visual-card experience-book">
+              <div class="book-header">
+                <div class="book-title">治理经验册</div>
+                <div class="book-meta">内容 · 制度 · 案例<br />持续沉淀</div>
+              </div>
+              <div class="doc-list">
+                <div class="doc-item">
+                  <span class="doc-dot"></span>
+                  <div><strong>公共收益公开如何降低质疑</strong><span>案例、制度模板与沟通材料已整理</span></div>
+                </div>
+                <div class="doc-item">
+                  <span class="doc-dot"></span>
+                  <div><strong>业委会协同中的权责边界</strong><span>适合社区、业委会、物业共同阅读</span></div>
+                </div>
+                <div class="doc-item">
+                  <span class="doc-dot"></span>
+                  <div><strong>停车治理样板间</strong><span>从真实争议进入治理实验室</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="visual-card path-card">
+              <div class="path-title">从问题到解决路径</div>
+              <div class="path">
+                <div class="path-step"><b>1</b><span>识别问题与用户画像</span></div>
+                <div class="path-step"><b>2</b><span>推荐内容、制度与案例</span></div>
+                <div class="path-step"><b>3</b><span>进入成长任务与资源连接</span></div>
+              </div>
+            </div>
+
+            <div class="visual-card people-card">
+              <div class="people-row">
+                <span class="tag">共治人才</span>
+                <div class="avatars">
+                  <span class="avatar">物</span>
+                  <span class="avatar">社</span>
+                  <span class="avatar">业</span>
+                  <span class="avatar">专</span>
+                </div>
+              </div>
+              <strong>这里有经验，也有人。</strong>
+              <span>连接物业、社区、业委会、专家与同行实践者。</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-block">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">常见治理问题</div>
+            <h2>社区治理中，最常见的问题从这里开始。</h2>
+          </div>
+          <p class="section-note">不需要先理解平台结构。选择一个正在发生的问题，平台会把相关经验、制度、案例、成长任务和资源连接整理给你。</p>
+        </div>
+        <div class="problem-grid">
+          <a class="problem-card" href="#path"><strong>停车治理</strong><p>车位收费、秩序调整、居民质疑与沟通机制。</p><span class="mini-link">查看路径</span></a>
+          <a class="problem-card" href="#path"><strong>公共收益公开</strong><p>收益归属、预算说明、公开透明与信任重建。</p><span class="mini-link">查看路径</span></a>
+          <a class="problem-card" href="#path"><strong>业主大会召开</strong><p>流程组织、材料准备、投票规则与争议预防。</p><span class="mini-link">查看路径</span></a>
+          <a class="problem-card" href="#path"><strong>信托制转型</strong><p>理念说明、权责边界、预算公开与多方协同。</p><span class="mini-link">查看路径</span></a>
+          <a class="problem-card" href="#path"><strong>项目亏损治理</strong><p>成本结构、服务边界、居民沟通与可持续方案。</p><span class="mini-link">查看路径</span></a>
+        </div>
+      </section>
+
+      <section id="path" class="section section-block">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">解决路径</div>
+            <h2>从一个问题，找到一条治理路径。</h2>
+          </div>
+          <p class="section-note">平台不是功能堆叠，而是把内容、制度、案例、成长和资源连接成一条可理解、可行动的路径。</p>
+        </div>
+        <div class="route-panel">
+          <div class="route">
+            <div class="route-step"><em>1</em><strong>提出问题</strong><span>从真实治理问题进入。</span></div>
+            <div class="route-step"><em>2</em><strong>建立画像</strong><span>识别身份、城市与需求。</span></div>
+            <div class="route-step"><em>3</em><strong>找到内容</strong><span>阅读政策、观察与访谈。</span></div>
+            <div class="route-step"><em>4</em><strong>找到制度</strong><span>获取模板、规则与工具。</span></div>
+            <div class="route-step"><em>5</em><strong>学习案例</strong><span>复用真实社区经验。</span></div>
+            <div class="route-step"><em>6</em><strong>进入成长</strong><span>把问题转化为能力。</span></div>
+            <div class="route-step"><em>7</em><strong>连接资源</strong><span>找到专家、产品与服务。</span></div>
+            <div class="route-step"><em>8</em><strong>推动解决</strong><span>形成行动与沉淀。</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="content" class="section section-block">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">内容沉淀</div>
+            <h2>持续沉淀信托制社区治理经验。</h2>
+          </div>
+          <p class="section-note">政策动态、实践案例、深度观察、人物访谈、参访纪实与活动报道共同构成平台的长期内容资产。</p>
+        </div>
+        <div class="content-layout">
+          <article class="feature-article">
+            <span class="tag">编辑精选</span>
+            <h3>从公共收益公开开始，重建小区里的信任关系。</h3>
+            <p>围绕收益归属、预算说明与协同沟通，整理一线社区可复用的公开透明经验。</p>
+          </article>
+          <div class="article-list">
+            <article class="article-card"><span class="tag">政策动态</span><h3>多地推进物业服务公开透明机制</h3><p>整理近期政策要点和社区治理参与者需要关注的变化。</p></article>
+            <article class="article-card"><span class="tag">实践案例</span><h3>停车治理如何从冲突走向协同</h3><p>一个小区从收费争议到规则重建的阶段性经验。</p></article>
+            <article class="article-card"><span class="tag">人物访谈</span><h3>一位项目经理的信托制转型笔记</h3><p>从服务解释到财务公开，记录一线实践者的真实变化。</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="rules" class="section section-block">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">制度资源</div>
+            <h2>把理念变成可执行的制度和工具。</h2>
+          </div>
+          <p class="section-note">制度中心帮助用户找到法规、政策文件、制度模板和工具包，支持信托制在真实社区中落地。</p>
+        </div>
+        <div class="resource-grid">
+          <article class="resource-card"><span class="tag">制度模板</span><h3>公共收益公开模板</h3><p>用于说明收益来源、使用规则和公开周期。</p><div class="for">适合：物业 / 业委会 / 社区</div></article>
+          <article class="resource-card"><span class="tag">工具包</span><h3>预算说明工具包</h3><p>帮助项目把成本、服务与预算关系讲清楚。</p><div class="for">适合：项目经理 / 物业高管</div></article>
+          <article class="resource-card"><span class="tag">政策文件</span><h3>业主大会流程材料</h3><p>梳理会议准备、表决规则与风险提醒。</p><div class="for">适合：社区 / 业委会</div></article>
+          <article class="resource-card"><span class="tag">说明材料</span><h3>信托制转型说明</h3><p>用于居民沟通、内部培训和项目启动说明。</p><div class="for">适合：物业 / 街道 / 社区</div></article>
+        </div>
+      </section>
+
+      <section id="lab" class="section section-block">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">案例与实验室</div>
+            <h2>从真实案例中学习治理方法。</h2>
+          </div>
+          <p class="section-note">案例不是数据库条目，而是可以被学习、复盘和转化为成长任务的治理经验样本。</p>
+        </div>
+        <div class="case-layout">
+          <article class="case-card"><span class="tag">杭州</span><h3>公共收益透明公示降低冲突</h3><p>通过公示口径统一和多方说明会，逐步恢复居民对公共收益使用的信任。</p></article>
+          <article class="case-card"><span class="tag">成都</span><h3>停车规则重建与业委会参与</h3><p>从收费争议进入规则共识，形成物业、社区、业委会协同机制。</p></article>
+          <article class="case-card"><span class="tag">苏州</span><h3>街道协调形成收益共管机制</h3><p>在街道支持下明确权责边界，推动公共收益管理进入透明轨道。</p></article>
+        </div>
+        <div class="lab-banner">
+          <div>
+            <span class="tag">治理实验室</span>
+            <h3>停车治理样板间</h3>
+            <p>从真实停车争议出发，展示问题拆解、制度匹配、案例复用和多方协同。</p>
+          </div>
+          <a class="cta secondary" href="#">进入样板间</a>
+        </div>
+      </section>
+
+      <section id="growth" class="section section-block">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">金牌管家成长世界</div>
+            <h2>把治理经验转化为人才成长。</h2>
+          </div>
+          <p class="section-note">成长世界不是课程商城，而是信托制物业行业成长操作系统，帮助实践者持续训练、评价和沉淀能力。</p>
+        </div>
+        <div class="growth-panel">
+          <div>
+            <span class="tag">成长路径</span>
+            <h3>从新手村到五星管家</h3>
+            <p style="color: var(--muted); line-height: 1.75;">平台负责聚人，成长世界负责育人。每一个真实治理问题，都可以转化为一次能力训练。</p>
+            <div class="task-list">
+              <div class="task">今日推荐任务：公共收益说明模拟</div>
+              <div class="task">AI陪练场景：居民质疑停车收费依据</div>
+              <div class="task">案例复盘：停车治理样板间</div>
+            </div>
+          </div>
+          <div class="growth-map">
+            <div class="level"><b>0</b><div><strong>新手村</strong><span>理解信托制理念</span></div></div>
+            <div class="level"><b>1</b><div><strong>一星管家</strong><span>掌握服务与沟通基础</span></div></div>
+            <div class="level"><b>2</b><div><strong>二星管家</strong><span>理解公开透明与规则执行</span></div></div>
+            <div class="level"><b>3</b><div><strong>三星管家</strong><span>具备多方协同能力</span></div></div>
+            <div class="level"><b>4</b><div><strong>四星管家</strong><span>处理复杂治理问题</span></div></div>
+            <div class="level"><b>5</b><div><strong>五星管家</strong><span>输出可复制经验</span></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="products" class="section section-block">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">产品与服务</div>
+            <h2>围绕信托制落地的产品与服务。</h2>
+          </div>
+          <p class="section-note">产品中心负责产品与服务转化，但首页不做商城。这里强调每类产品解决什么问题、适合谁。</p>
+        </div>
+        <div class="product-grid">
+          <article class="product-card"><span class="tag">图书产品</span><h3>《信托制物业》</h3><p>建立信托制理念认知，适合从业者和社区治理参与者入门阅读。</p></article>
+          <article class="product-card"><span class="tag">训练营产品</span><h3>成都研学营</h3><p>面向项目经理、社区书记和物业高管的线下学习与参访。</p></article>
+          <article class="product-card"><span class="tag">工具产品</span><h3>制度模板包</h3><p>围绕公共收益、预算说明和协同治理提供可复用材料。</p></article>
+          <article class="product-card"><span class="tag">软件产品</span><h3>信托制物业管理软件</h3><p>服务制度公开、预算管理、公共收益和协同治理等落地场景。</p></article>
+          <article class="product-card"><span class="tag">专题课程</span><h3>公共收益专题课</h3><p>帮助用户围绕一个具体问题完成短周期学习。</p></article>
+          <article class="product-card"><span class="tag">未来产品</span><h3>项目诊断服务</h3><p>面向真实项目问题，提供诊断、辅导和资源连接。</p></article>
+        </div>
+      </section>
+
+      <section id="connect" class="section section-block">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">用户识别与资源连接</div>
+            <h2>告诉我们你是谁，平台帮你找到更合适的路径。</h2>
+          </div>
+          <p class="section-note">先识别用户，再推荐内容、制度、成长任务、产品服务和可连接资源。</p>
+        </div>
+        <div class="profile-panel">
+          <div>
+            <span class="tag">建立画像</span>
+            <h3>选择你的身份</h3>
+            <div class="profile-choices">
+              <div class="choice">物业从业者</div>
+              <div class="choice">社区工作者</div>
+              <div class="choice">业委会成员</div>
+              <div class="choice">街道/社区负责人</div>
+              <div class="choice">治理研究者</div>
+              <div class="choice">培训学习者</div>
+            </div>
+          </div>
+          <div>
+            <span class="tag">为你整理</span>
+            <h3>画像完成后，你会获得</h3>
+            <div class="recommendation">
+              <div class="rec">适合你的内容：政策动态、深度观察、人物访谈与实践案例。</div>
+              <div class="rec">适合你的制度：模板、工具包、流程材料与说明材料。</div>
+              <div class="rec">适合你的成长任务：新手村、一星到五星管家的训练路径。</div>
+              <div class="rec">适合你的资源连接：专家、训练营、工具产品、项目诊断与参访申请。</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section closing">
+        <div class="closing-card">
+          <span class="eyebrow">公开透明 · 共建共治 · 价值共享</span>
+          <h2>和更多社区治理参与者一起，把分散经验变成可学习、可复用、可连接的公共知识。</h2>
+          <p>这里有经验，有制度，有案例，有成长路径，也有真实的人和资源。带着一个问题进入，从一条路径开始。</p>
+          <div class="cta-row">
+            <a class="cta primary" href="#">开始建立画像</a>
+            <a class="cta secondary" href="#">提交治理案例</a>
+            <a class="cta secondary" href="#">申请参访学习</a>
+            <a class="cta secondary" href="#">提交项目需求</a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
