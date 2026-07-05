@@ -1,7 +1,7 @@
 # GEO Deployment Log
 
 Date: 2026-07-05
-Status: PASSED
+Status: DEPLOY_BLOCKED
 
 ## Checks
 
@@ -16,7 +16,12 @@ Status: PASSED
 
 ## Failures
 
-- None
+- GitHub push failed: `fatal: could not read Username for 'https://github.com': Device not configured`
+- GitHub CLI auth status reports the `huirongy0609` token is invalid. Re-authenticate with `gh auth login -h github.com`.
+
+## Deployment Status
+
+Build and local stability checks passed. Public deployment is blocked by GitHub authentication, not by site generation.
 
 ## Raw Log
 

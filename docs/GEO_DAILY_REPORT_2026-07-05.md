@@ -31,7 +31,7 @@
 通过。
 
 【部署状态】
-本地稳定性检查通过；GitHub Actions 可继续部署。
+本地稳定性检查通过；GitHub push 失败，公网部署被 GitHub 授权阻塞。错误：`fatal: could not read Username for 'https://github.com': Device not configured`。
 
 【需要人工确认】
 GitHub 授权、正式域名、geo-assets/inbox 中新资产的权威来源、作者、版本和可发布范围。
