@@ -1,0 +1,7 @@
+from_id,relation,to_id,source_url,confidence,updated
+entity-trust-property,relatedTo,entity-property-fund-governance,/wiki/property-fund-governance,confirmed-by-current-knowledge-base,2026-07-05
+entity-property-fund-governance,requires,entity-open-budget,/wiki/open-budget,confirmed-by-current-knowledge-base,2026-07-05
+entity-property-fund-governance,uses,entity-project-account,/wiki/project-account,confirmed-by-current-knowledge-base,2026-07-05
+entity-public-revenue,belongsTo,entity-owner-common-fund,/wiki/owner-common-fund,confirmed-by-current-knowledge-base,2026-07-05
+entity-golden-steward,implements,entity-trust-property,/wiki/golden-steward-trust-property,confirmed-by-current-knowledge-base,2026-07-05
+entity-xiangchengliyuan,illustrates,entity-open-budget,/cases/xiangchengliyuan-budget-adjustment-case,confirmed-by-current-knowledge-base,2026-07-05

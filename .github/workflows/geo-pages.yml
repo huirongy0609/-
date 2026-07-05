@@ -1,0 +1,72 @@
+name: GEO Pages Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: geo-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build and Validate GEO Site
+    runs-on: ubuntu-latest
+    env:
+      GEO_SITE_URL: https://huirongy0609.github.io/-
+      GEO_SITE_BASE_PATH: /-/
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run GEO stability check
+        run: npm run geo:stability-check
+
+      - name: Upload deployment log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: geo-deployment-log
+          path: |
+            docs/deployment-log-latest.md
+            docs/deployment-log.md
+            docs/GEO_DAILY_REPORT_*.md
+            docs/knowledge-asset-listener-report.md
+          if-no-files-found: ignore
+
+      - name: Upload Pages artifact
+        if: success()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/.vitepress/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

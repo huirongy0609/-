@@ -7,7 +7,15 @@
     "build": "next build",
     "start": "next start",
     "studio": "remotion studio remotion/index.ts",
-    "render:sample": "remotion render remotion/index.ts BookGuideVideo out/book-guide-sample.mp4 --props=data/sample-script.json"
+    "render:sample": "remotion render remotion/index.ts BookGuideVideo out/book-guide-sample.mp4 --props=data/sample-script.json",
+    "geo:generate-keywords": "node scripts/generate-keywords.mjs",
+    "geo:generate-pages": "node scripts/generate-pages.mjs",
+    "geo:refresh-sitemap": "node scripts/refresh-sitemap.mjs",
+    "geo:update-publish-log": "node scripts/update-publish-log.mjs",
+    "geo:generate": "node scripts/generate-geo-mvp.mjs",
+    "geo:asset-listen": "node scripts/geo-asset-listener.mjs",
+    "geo:build-site": "node scripts/build-site.mjs",
+    "geo:stability-check": "node scripts/geo-stability-check.mjs"
   },
   "dependencies": {
     "@remotion/bundler": "^4.0.448",
@@ -29,6 +37,7 @@
     "autoprefixer": "^10.5.0",
     "postcss": "^8.5.15",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitepress": "^1.6.4"
   }
 }

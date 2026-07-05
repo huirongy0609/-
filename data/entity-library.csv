@@ -1,0 +1,12 @@
+entity_id,name,type,canonical_url,source_status,updated
+entity-trust-property,信托制物业,Concept,/wiki/what-is-trust-property-management,已有原创口径,2026-07-05
+entity-property-fund-governance,物业资金治理,Concept,/wiki/property-fund-governance,已有原创口径,2026-07-05
+entity-open-budget,开放式预算,Concept,/wiki/open-budget,已有原创口径,2026-07-05
+entity-owner-common-fund,业主共同基金,Concept,/wiki/owner-common-fund,已有原创口径,2026-07-05
+entity-project-account,项目账户,Concept,/wiki/project-account,已有原创口径,2026-07-05
+entity-public-revenue,公共收益,Concept,/wiki/public-revenue,待补充法规来源,2026-07-05
+entity-golden-steward,金牌管家信托制,BrandSystem,/wiki/golden-steward-trust-property,待补充正式介绍页,2026-07-05
+entity-judao-research,聚道研究院,Organization,/,已有原创口径,2026-07-05
+entity-chengdu,成都,City,/city/chengdu-trust-property-management,待补充城市来源,2026-07-05
+entity-suzhou,苏州,City,/city/suzhou-trust-property-management,待补充城市来源,2026-07-05
+entity-xiangchengliyuan,香城丽园,Case,/cases/xiangchengliyuan-budget-adjustment-case,待补充案例正式来源,2026-07-05
