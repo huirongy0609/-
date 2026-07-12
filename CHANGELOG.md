@@ -6,6 +6,27 @@
 
 ### Added
 
+- 新增 Knowledge Object 统一模型，首批支持 `JD`、`GT`、`Article`。
+- 新增文件驱动知识对象存储：`data/knowledge-objects.json`。
+- 新增知识中心浏览、分类、关键词搜索和详情页。
+- 新增 Markdown 基础渲染组件。
+- 新增最简后台：`/admin/knowledge`。
+- 新增 Knowledge Object CRUD API：`/api/knowledge-objects`。
+
+### Changed
+
+- 首页接入最新知识和最新文章。
+- 导航菜单增加知识中心和后台入口。
+- `ROADMAP.md` 从 Architecture Review 阶段更新为 MVP P0 Development 阶段。
+
+### Deferred
+
+- AI 问答、GEO 分析、登录权限细化、支付、小程序和工作流继续暂缓。
+
+## 2026-07-13 Architecture Review
+
+### Added
+
 - 新增 `docs/architecture-review-v1-submission.md`，提交 Architecture Review V1.0 可审核成果包。
 - 新增 `ROADMAP.md`，开始持续维护开发路线图。
 - 新增 `CHANGELOG.md`，开始持续维护版本变更记录。

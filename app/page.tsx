@@ -1,14 +1,41 @@
-import stats from '@/data/stats.json';
-import {HomeCommandCenter} from '@/components/HomeCommandCenter';
+import {
+  ContentCardGrid,
+  HeroSection,
+  HomeSection,
+  PageShell,
+  PortalEntryGrid,
+  portalEntries,
+} from '@/components/KnowledgePortalMvp';
+import {knowledgeObjectTypeLabels} from '@/lib/domain/knowledge-object';
+import {getKnowledgeObjects, getKnowledgeObjectsByType} from '@/lib/repositories/knowledge-objects';
 
-const commandMetrics = [
-  {label: '已接入城市', value: stats.cityCount, helper: '全国治理节点'},
-  {label: '治理案例', value: stats.caseCount, helper: '结构化沉淀'},
-  {label: '今日AI情报', value: stats.todayIntelligence, helper: '政策 / 舆情 / 案例'},
-  {label: '共建机构', value: stats.organizationCount, helper: '跨主体协同'},
-  {label: '政策动态', value: stats.policyCount, helper: '持续追踪'},
-];
+export const dynamic = 'force-dynamic';
 
-export default function HomePage() {
-  return <HomeCommandCenter commandMetrics={commandMetrics} />;
+export default async function HomePage() {
+  const [latestKnowledge, latestArticles] = await Promise.all([getKnowledgeObjects(), getKnowledgeObjectsByType('Article')]);
+  const knowledgeCards = latestKnowledge.slice(0, 6).map((item) => ({
+    title: item.title,
+    summary: item.summary,
+    tag: knowledgeObjectTypeLabels[item.type],
+  }));
+  const articleCards = latestArticles.slice(0, 3).map((item) => ({
+    title: item.title,
+    summary: item.summary,
+    tag: item.category,
+  }));
+
+  return (
+    <PageShell>
+      <HeroSection />
+      <PortalEntryGrid entries={portalEntries} />
+
+      <HomeSection eyebrow="Knowledge Objects" title="最新知识">
+        <ContentCardGrid items={knowledgeCards} />
+      </HomeSection>
+
+      <HomeSection eyebrow="Articles" title="最新文章">
+        <ContentCardGrid items={articleCards} />
+      </HomeSection>
+    </PageShell>
+  );
 }
