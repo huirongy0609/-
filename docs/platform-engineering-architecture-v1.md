@@ -13,6 +13,13 @@ Approver: 杨慧荣
 
 它不是功能开发任务书，不直接启动新页面、小程序、AI 问答、数据库或后台系统。
 
+本文与即将形成的《中国信托制物业发展平台总体建设纲要 V1.0》是上下位关系：
+
+- 《中国信托制物业发展平台总体建设纲要 V1.0》是平台最高规划文件，负责定义平台使命、战略边界、阶段目标、业务体系、内容体系、产品体系和总体治理原则。
+- 本文是总体建设纲要之下的工程专项架构，只回答工程模块、数据契约、协作链路、技术演进、质量控制和仓库治理问题。
+- 如本文与总体建设纲要发生不一致，以总体建设纲要为准；本文应作为工程侧执行细则修订，不得替代总体建设纲要。
+- 本文不批准任何新功能启动。任何新功能仍需进入任务、决策、PR 和项目总架构师批准流程。
+
 本文回答：
 
 - 平台应划分哪些工程模块。
@@ -34,6 +41,7 @@ Approver: 杨慧荣
 5. 先文件驱动，后数据库化；先结构稳定，后自动化增强。
 6. 先建立知识资产模型和质量检查，再建设 AI 问答和小程序。
 7. 工程模块之间通过清晰数据契约协作，不通过页面之间相互复制内容协作。
+8. 已批准知识不可由工程侧擅自修改；任何涉及 Approved 内容的变更必须进入审核、批准和 PR 门禁。
 
 ## 2. 平台工程模块划分
 
@@ -76,6 +84,8 @@ Approver: 杨慧荣
 
 - No.001 PR 合并后，此模块成为所有后续协作的必经入口。
 - 优先建立 Approved File Register，避免 Codex 误改已批准内容。
+- 将 Approved File Register 作为 PR 审核门禁的数据来源之一。
+- 对涉及已批准知识、标准、书稿映射、来源治理和正式口径的路径建立受保护清单，清单可先文件化，后续再接入 CI 检查。
 
 ### 2.2 source-library
 
@@ -140,7 +150,9 @@ Approver: 杨慧荣
 
 建议：
 
-- 短期明确一个第一发布面，避免 `site/`、`trust-property-site/`、`content/` 长期并行扩散。
+- 短期对 `site/`、`trust-property-site/`、`app/`、`content/` 的边界进行审查，形成目录职责表、内容来源表、发布路径表和风险清单。
+- 在审查和决策完成前，不迁移、不删除、不合并这些并行目录。
+- 第一发布面的确认应通过决策记录完成，不能在工程 PR 中顺手完成目录收敛。
 - 页面内容应从知识资产或站点内容源生成，不应在多个目录手工复制同一知识正文。
 - 网站层只做表达、路由和用户体验，不应成为专业定义的最终来源。
 
@@ -281,6 +293,8 @@ AI 接入原则：
 - relations 目标是否存在。
 - Book Traceability 是否存在。
 - Approved 文件是否被直接修改。
+- 受保护路径是否被工程侧直接修改。
+- PR 是否缺少对应任务、决策或交接文件。
 - 内链、sitemap、RSS、robots、canonical URL。
 - 页面标题、摘要、更新时间、来源字段。
 - AI 引用材料包是否只包含允许状态资产。
@@ -319,6 +333,29 @@ ai-reference-layer
   ↓
 product-surfaces / content-factory / geo-growth-engine
 ```
+
+四方职责链路：
+
+```text
+Work
+  ↓ 产出专业母稿、标准、制度、治理词典、Evidence Package、正式内容草案
+ChatGPT
+  ↓ 审核内容口径、总体一致性、任务拆解、跨模块协调、需杨老师确认事项
+Codex
+  ↓ 工程集成、知识入库、页面生成、索引构建、自动化检查、部署与技术交接
+杨慧荣
+  ↓ 批准关键方向、重大标准、核心口径、阶段进入和重大争议裁决
+GitHub
+  ↓ 记录任务、决策、PR、交接、版本和审查历史
+```
+
+四方协作规则：
+
+- Work 是专业母稿和正式内容的生产中心，不负责工程实现。
+- ChatGPT 是总体设计和一致性审核中心，负责判断内容与工程是否偏离平台方向。
+- Codex 是工程集成中心，只能基于已确认输入进行结构化、发布、索引、检查和部署。
+- 杨慧荣是关键批准人，涉及平台方向、核心定义、重大标准、阶段进入和争议裁决时必须确认。
+- Codex 发现内容缺口、结构冲突或工程风险时，应形成任务、决策或交接，不得直接创造专业口径补洞。
 
 运营链路：
 
@@ -363,6 +400,16 @@ Review / Publish / Blocked
 - 明确主仓库、分支、PR、Project、Labels。
 - 确认本文架构是否作为 V1.0 方向。
 
+首阶段可验收成果：
+
+| 成果 | 验收标准 | 责任建议 |
+| --- | --- | --- |
+| Approved File Register | 登记文件路径、状态、Owner、Reviewer、Approver、批准时间、保护规则；至少覆盖书稿映射、知识来源治理、标准、站点核心内容和 GEO 运营文件 | ChatGPT + Codex |
+| 知识对象最小 Schema | 定义 `id`、`type`、`title`、`summary`、`status`、`source_trace`、`relations`、`updated` 等最小字段，并说明 Draft/Review/Approved 使用规则 | Work + Codex |
+| 来源追溯字段 | 为知识页、标准、案例、GEO 节点和 AI 引用材料包设计统一 `source_trace` 或等效字段 | Work + ChatGPT + Codex |
+| 目录健康检查 | 输出 `site/`、`trust-property-site/`、`app/`、`content/`、`knowledge-base/`、`gt-geo/` 的职责审查表，不做迁移、删除或合并 | Codex |
+| PR 审核门禁 | 建立 PR 模板检查、Approved 路径提示、任务/交接关联检查和构建/文档检查的最小门禁方案 | Codex |
+
 不做：
 
 - 新功能开发。
@@ -387,7 +434,7 @@ Review / Publish / Blocked
 
 目标：
 
-- 确认 `site/`、`trust-property-site/`、`content/` 的长期边界。
+- 确认 `site/`、`trust-property-site/`、`app/`、`content/` 的长期边界。
 - 建立知识页模板、热点案例模板、FAQ 模板、工具页模板。
 - 建立 sitemap、RSS、内链、推荐阅读、相关案例和相关法规机制。
 
@@ -523,7 +570,57 @@ approved_at:
 source_trace:
 ```
 
-### 6.3 关系字段
+### 6.3 已批准知识保护机制
+
+“已批准知识不可由工程侧擅自修改”必须落到可执行机制，而不是只写在协作原则中。
+
+建议采用三层控制：
+
+第一层：Approved File Register。
+
+```text
+approved-file-register
+├── path
+├── status
+├── owner
+├── reviewer
+├── approver
+├── approved_at
+├── protected_scope
+└── change_rule
+```
+
+要求：
+
+- 登记所有 Approved 文件和受保护片段。
+- 标明是否允许工程侧修改 frontmatter、链接、排版或正文。
+- 标明修改是否必须由 Work、ChatGPT 或杨慧荣审核。
+
+第二层：受保护路径或受保护片段清单。
+
+建议首批纳入：
+
+- `docs/knowledge-source-governance.md`
+- `docs/book-mapping-report-trust-property-governance-foundation.md`
+- `docs/book-coverage-trust-property-governance-foundation.md`
+- `docs/revision-notes-trust-property-governance-foundation.md`
+- `knowledge-base/books/content/`
+- `knowledge-base/book-*.md`
+- `knowledge-base/report-*.md`
+- `knowledge-base/research-*.md`
+- `knowledge-base/case-*.md`
+- 后续经杨慧荣确认的标准、定义和正式知识页。
+
+第三层：PR 审核门禁。
+
+门禁规则：
+
+- PR 触及受保护路径时，必须在 PR 中声明影响范围。
+- PR 触及 Approved 文件正文时，必须关联任务、变更说明、审核人和批准人。
+- Codex 可以修改结构、索引、链接、元数据和自动化，但不得绕过审批改写专业定义、标准正文、书稿内容或正式知识口径。
+- CI 或脚本可先以 warning 方式提示，稳定后再升级为 blocking check。
+
+### 6.4 关系字段
 
 当前 `relations` 可以继续使用，但中长期建议统一为 typed relation：
 
@@ -534,6 +631,31 @@ relations:
   - type: references
     target: case-chengdu-guidong
 ```
+
+### 6.5 来源追溯字段
+
+建议所有正式知识对象逐步具备来源追溯字段。
+
+最小形态：
+
+```yaml
+source_trace:
+  primary_source:
+    type:
+    id:
+    title:
+    section:
+  relation:
+  evidence:
+  review_status:
+```
+
+用途：
+
+- 支持网站页面说明来源。
+- 支持搜索结果展示可信度。
+- 支持 AI Citation Pack 只读取可引用材料。
+- 支持发现页面内容与书稿或标准冲突。
 
 ## 7. API 与服务演进建议
 
@@ -642,13 +764,14 @@ AI 接入分四层：
 
 表现：
 
-- `site/`、`trust-property-site/`、`content/`、`knowledge-base/` 各自保存相似内容。
+- `site/`、`trust-property-site/`、`app/`、`content/`、`knowledge-base/` 各自保存相似内容或承担相近发布职责。
 
 建议：
 
-- 先决策第一发布面。
-- 再建立内容来源与发布目标关系。
-- 不做无方案迁移。
+- 本 PR 只提出审查与收敛方案，不做迁移、删除或合并。
+- 先产出目录职责表、内容来源表、发布路径表和重复风险清单。
+- 再由 ChatGPT 整理收敛方案并提交杨慧荣确认第一发布面。
+- 决策确认后，另行建立迁移任务、回滚方案和验收标准。
 
 ### 风险 2：AI 早于知识治理上线
 
@@ -696,14 +819,16 @@ AI 接入分四层：
 
 1. 合并并执行 No.001 协作工作区。
 2. 建立 Approved File Register。
-3. 建立 Knowledge Asset Metadata V1：状态、来源、审核字段。
-4. 建立 relation 有效性检查脚本。
-5. 明确 `site/`、`trust-property-site/`、`content/` 的边界和第一发布面。
-6. 建立网站页面与 Book Mapping Report 的覆盖检查。
-7. 建立静态搜索索引设计稿。
-8. 建立 AI Citation Pack 设计稿。
-9. 建立 GitHub Project 和 Labels。
-10. 建立每周工程健康报告模板。
+3. 建立知识对象最小 Schema：`id`、`type`、`title`、`summary`、`status`、`source_trace`、`relations`、`updated`。
+4. 建立来源追溯字段规范，先覆盖知识页、标准、案例、GEO 节点和 AI 引用材料包。
+5. 建立目录健康检查：审查 `site/`、`trust-property-site/`、`app/`、`content/`、`knowledge-base/`、`gt-geo/`，不做迁移。
+6. 建立 PR 审核门禁：Approved 文件提示、受保护路径提示、任务/交接关联检查。
+7. 建立 relation 有效性检查脚本。
+8. 建立网站页面与 Book Mapping Report 的覆盖检查。
+9. 建立静态搜索索引设计稿。
+10. 建立 AI Citation Pack 设计稿。
+11. 建立 GitHub Project 和 Labels。
+12. 建立每周工程健康报告模板。
 
 ## 12. 当前建议结论
 
