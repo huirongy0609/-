@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 项目协作规则
+    url: https://github.com/huirongy0609/-
+    about: 创建 Issue 前请先查看 README、CONTRIBUTING 和 governance 目录。
