@@ -3,15 +3,15 @@ import Link from 'next/link';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: '聚道智库｜中国信托制物业知识平台',
-  description: '持续研究、持续实践、持续共创，建设 AI 时代信托制物业知识基础设施。',
+  title: '中国信托制物业发展平台',
+  description: '面向社区治理、信托制物业和资金治理的公共知识基础设施。',
 };
 
 const navItems = [
   {href: '/', label: '首页'},
   {href: '/knowledge', label: '知识中心'},
-  {href: '/admin/knowledge', label: '后台'},
-  {href: '/cases', label: '案例'},
+  {href: '/standards', label: '平台标准'},
+  {href: '/admin', label: '内部后台'},
 ];
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
@@ -21,7 +21,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
         <header className="siteHeader">
           <Link className="brand" href="/">
             <span className="brandMark">聚</span>
-            <span>聚道智库</span>
+            <span>中国信托制物业发展平台</span>
           </Link>
           <nav aria-label="主导航">
             {navItems.map((item) => (
