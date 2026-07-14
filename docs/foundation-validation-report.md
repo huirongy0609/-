@@ -2,7 +2,7 @@
 
 > 对应任务：Codex任务单 No.007
 >
-> 检查时间：2026-07-13 20:28:40（Asia/Shanghai）
+> 检查时间：2026-07-14 09:53:08（Asia/Shanghai）
 >
 > 检查方式：`npm run foundation:validate`
 >
@@ -18,7 +18,7 @@
 
 ## 结果摘要
 
-- 通过项：147
+- 通过项：161
 - 警告项：3
 - 错误项：0
 
@@ -26,7 +26,7 @@
 
 - **索引与Manifest**：index.json对象记录与Manifest生成结果一致。
 - **索引汇总**：index.json汇总与对象记录一致。
-- **ID唯一性**：共11项，未发现重复ID。
+- **ID唯一性**：共12项，未发现重复ID。
 - **STD-001 Audit逐项记录**：《中国信托制物业知识对象标准 V1.0》
 - **STD-001 Audit生命周期**：Audit：空；索引：空。
 - **STD-001 Audit原件审计状态**：Audit：not_found；索引：not_found。
@@ -149,25 +149,39 @@
 - **JD008文件存在**：knowledge/foundation/drafts/jd/jd008-owner-common-fund-draft.md
 - **JD008 SHA-256**：校验值一致。
 - **JD008 Draft隔离**：knowledge/foundation/drafts/jd/jd008-owner-common-fund-draft.md
-- **正式目录文件登记**：6个Markdown知识原件均已进入索引。
+- **JD009 Audit逐项记录**：JD009《什么是开放式预算？》
+- **JD009 Audit生命周期**：Audit：approved；索引：approved。
+- **JD009 Audit原件审计状态**：Audit：空；索引：空。
+- **JD009 Audit文件路径**：knowledge/foundation/v1.0/jd/jd009-what-is-open-budget.md
+- **JD009生命周期状态**：approved
+- **JD009原件审计状态**：原件或候选已经取得。
+- **JD009文件存在**：knowledge/foundation/v1.0/jd/jd009-what-is-open-budget.md
+- **JD009 SHA-256**：校验值一致。
+- **JD009正式目录**：knowledge/foundation/v1.0/jd/jd009-what-is-open-budget.md
+- **JD009批准记录**：批准日期2026-07-14；批准记录已登记。
+- **JD009关联JD005**：目标存在，状态approved。
+- **JD009关联JD006**：目标存在，状态approved。
+- **JD009关联JD007**：目标存在，状态draft。
+- **JD009关联JD008**：目标存在，状态draft。
+- **正式目录文件登记**：7个Markdown知识原件均已进入索引。
 - **Draft目录文件登记**：2个Draft均已进入索引。
-- **正式目录与Approved数量**：正式文件6；Approved索引6。
+- **正式目录与Approved数量**：正式文件7；Approved索引7。
 - **Draft目录与Draft数量**：Draft文件2；Draft索引2。
 - **README统计：draft**：登记值2；索引值2
 - **README统计：in_review**：登记值0；索引值0
-- **README统计：approved**：登记值6；索引值6
+- **README统计：approved**：登记值7；索引值7
 - **README统计：pending_revision**：登记值0；索引值0
 - **README统计：archived**：登记值0；索引值0
 - **README统计：not_found**：登记值3；索引值3
 - **Manifest统计：draft**：登记值2；索引值2
 - **Manifest统计：in_review**：登记值0；索引值0
-- **Manifest统计：approved**：登记值6；索引值6
+- **Manifest统计：approved**：登记值7；索引值7
 - **Manifest统计：pending_revision**：登记值0；索引值0
 - **Manifest统计：archived**：登记值0；索引值0
 - **Manifest统计：not_found**：登记值3；索引值3
 - **Audit统计：draft**：登记值2；索引值2
 - **Audit统计：in_review**：登记值0；索引值0
-- **Audit统计：approved**：登记值6；索引值6
+- **Audit统计：approved**：登记值7；索引值7
 - **Audit统计：pending_revision**：登记值0；索引值0
 - **Audit统计：archived**：登记值0；索引值0
 - **Audit统计：not_found**：登记值3；索引值3

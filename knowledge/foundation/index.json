@@ -1,14 +1,14 @@
 {
   "schema_version": "0.1",
-  "generated_at": "2026-07-13T09:08:02.552Z",
+  "generated_at": "2026-07-14T01:53:07.832Z",
   "source_manifest": "knowledge/foundation/v1.0/manifest.md",
   "governance_standard": "docs/standards/knowledge-object-lifecycle-management-v1.0.md",
   "summary": {
-    "total": 11,
+    "total": 12,
     "lifecycle": {
       "draft": 2,
       "in_review": 0,
-      "approved": 6,
+      "approved": 7,
       "pending_revision": 0,
       "archived": 0
     },
@@ -301,6 +301,39 @@
       "status_evidence": "项目总架构师于2026-07-13明确确认当前版本不作为正式原件入库",
       "sha256": "3a8e2b155e1b956404e062253cea0eb8f780e12f3da1f2bc3dd4b283462dd73b",
       "related_objects": [],
+      "last_updated": null
+    },
+    {
+      "id": "JD009",
+      "title": "什么是开放式预算？",
+      "version": "V1.0",
+      "version_note": "V1.0",
+      "lifecycle_status": "approved",
+      "source_audit_status": null,
+      "file_path": "knowledge/foundation/v1.0/jd/jd009-what-is-open-budget.md",
+      "object_type": "JD",
+      "approved_at": "2026-07-14",
+      "approval_record": "项目总架构师于2026-07-14确认JD009已完成Architecture Review AR-008并批准正式入库",
+      "status_evidence": "项目总架构师于2026-07-14确认JD009已完成Architecture Review AR-008并批准正式入库",
+      "sha256": "7e6b59e667039da50afdf33ff38f7e8b7b61de3e6160ff7fd1c0e47c4ba5de71",
+      "related_objects": [
+        {
+          "id": "JD005",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD006",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD007",
+          "lifecycle_status": "draft"
+        },
+        {
+          "id": "JD008",
+          "lifecycle_status": "draft"
+        }
+      ],
       "last_updated": null
     }
   ]

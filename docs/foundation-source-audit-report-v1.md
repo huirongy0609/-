@@ -4,9 +4,9 @@
 >
 > 对应任务：Codex 任务单 No.006
 >
-> 报告日期：2026-07-13
+> 报告日期：2026-07-14
 >
-> 状态：审计持续更新；JD001—JD006已正式入库，JD007—JD008进入Draft隔离区，三份标准尚未取得原件
+> 状态：审计持续更新；JD001—JD006及JD009已正式入库，JD007—JD008进入Draft隔离区，三份标准尚未取得原件
 
 ## 一、审计目标
 
@@ -17,6 +17,8 @@
 2026-07-13，项目总架构师明确确认附件`39245a45-bd9d-409c-a261-ad2c6705aa00/pasted-text.txt`中的JD001—JD004为批准原件，并补充确认JD003正式版本为V1.0。随后又明确确认附件`8dcebbf2-43a7-47b7-b407-d5813c0c9c02/pasted-text.txt`中的JD005、JD006为批准原件，JD007、JD008只作为Draft候选。Codex据此执行第二步正式入库和Draft隔离，所有原文正文均不作修改；生命周期、缺失元数据和修订问题仅记录在Manifest与本报告。
 
 同日，项目总架构师通过Architecture Review AR-004正式批准《中国信托制物业发展平台知识对象生命周期管理规范 V1.0》。本报告据此将知识对象生命周期状态与原件审计状态拆分记录；该规范自JD009起生效，并适用于平台全部知识对象。
+
+2026-07-14，JD009《什么是开放式预算？》V1.0完成Work编制和Architecture Review AR-008，项目总架构师明确批准该具体正文和版本正式入库。Codex依据任务单No.013保留批准附件原始字节进入Foundation正式目录，并将生命周期、批准证据、校验值和关联关系登记至Manifest、Audit及机器索引，不回写冻结正文。
 
 ## 二、检索范围
 
@@ -76,7 +78,7 @@
 
 | 生命周期状态 | 数量 | 项目 |
 | --- | ---: | --- |
-| `approved` | 6 | JD001—JD006 |
+| `approved` | 7 | JD001—JD006、JD009 |
 | `draft` | 2 | JD007、JD008 |
 | `in_review` | 0 | 无 |
 | `pending_revision` | 0 | 无 |
@@ -88,7 +90,7 @@
 | --- | ---: | --- |
 | `not_found` | 3 | 三份标准 |
 
-**JD001—JD006已经完成“项目总架构师批准—Codex入库”两步确认。** JD007、JD008已进入独立Draft区但不属于Foundation V1.0正式库；三份标准仍需杨老师提供正式原件和批准证据。
+**JD001—JD006及JD009已经完成“项目总架构师批准—Codex入库”两步确认。** JD007、JD008已进入独立Draft区但不属于Foundation V1.0正式库；三份标准仍需杨老师提供正式原件和批准证据。
 
 审计过程中发现的“仅有引用”“存在相邻材料”“有旧页面候选”等证据继续写入逐项判断，不与生命周期状态或原件审计状态混为一列。
 
@@ -183,6 +185,14 @@
 
 判断：项目总架构师明确确认当前版本不作为正式原件入库。Codex已将附件第296—385行原样保留至`knowledge/foundation/drafts/jd/jd008-owner-common-fund-draft.md`，供后续修订；它不是曾获批准后退回修订的正式对象，因此标记`draft`而非`pending_revision`。
 
+### 5.12 JD009《什么是开放式预算？》
+
+生命周期状态：`approved`。
+
+Work依据当前平台规范和既有知识对象完成JD009 V1.0提交审核稿；Architecture Review AR-008确认其定义、六项预算原则、模式比较及分级知识关联达到正式知识对象要求。项目总架构师于2026-07-14明确批准该具体正文和版本，并授权Codex执行正式入库。
+
+Codex已将批准附件原样保存至`knowledge/foundation/v1.0/jd/jd009-what-is-open-budget.md`，附件与入库文件SHA-256均为`7e6b59e667039da50afdf33ff38f7e8b7b61de3e6160ff7fd1c0e47c4ba5de71`。正文中的审核阶段元数据保持冻结；当前权威生命周期、批准事实和入库状态由Manifest、Audit及机器索引记录。JD007、JD008继续保持`draft`，GT-B07、GT-B08仅作为Pending Reference，不推定批准状态。
+
 ## 六、Word、PDF及其他格式结论
 
 - 初次审计时，对仓库内全部Word文件执行正文文本检索，没有命中三份标准正式名称、JD001—JD008编号或JD004—JD008完整标题；JD005—JD008候选均来自后续提供的Codex附件，不改变该历史检索结果。
@@ -250,6 +260,7 @@ Draft候选、尚未批准：
 4. JD004《什么是信义义务？》V1.0
 5. JD005《什么是受托关系？》V1.0
 6. JD006《谁是信托制物业中的委托人？》V1.0（2026年版）
+7. JD009《什么是开放式预算？》V1.0
 
 ## 十、杨老师下一步最少需要提供的材料
 
@@ -264,7 +275,7 @@ Draft候选、尚未批准：
 
 ## 十一、可直接入库与等待确认
 
-- 已确认并完成入库：JD001—JD006。
+- 已确认并完成入库：JD001—JD006、JD009。
 - 已隔离为Draft：JD007、JD008；不得作为正式对象发布或引用。
 - 等待正式原件及批准证明：STD-001、STD-002、STD-003。
 - `pending_revision`当前为0项；后续只有“曾获正式批准、现需修订”的对象才使用该状态。
@@ -283,6 +294,7 @@ Draft候选、尚未批准：
 - `knowledge/foundation/v1.0/jd/jd004-what-is-fiduciary-duty.md`
 - `knowledge/foundation/v1.0/jd/jd005-what-is-fiduciary-relationship.md`
 - `knowledge/foundation/v1.0/jd/jd006-who-is-the-settlor.md`
+- `knowledge/foundation/v1.0/jd/jd009-what-is-open-budget.md`
 - `knowledge/foundation/drafts/jd/jd007-who-is-the-trustee-v0.1-draft.md`
 - `knowledge/foundation/drafts/jd/jd008-owner-common-fund-draft.md`
 
@@ -296,13 +308,13 @@ Draft候选、尚未批准：
 
 ## 十四、最终结论
 
-Foundation Knowledge Pack V1.0已完成JD001—JD006正式入库，6份文件均具有正文、版本、编号和项目总架构师批准事实，且已记录来源与SHA-256校验值。JD007、JD008已作为Draft候选隔离保存；三份标准尚未取得原件，因此知识包仍不完整。
+Foundation Knowledge Pack V1.0已完成JD001—JD006及JD009正式入库，7份文件均具有正文、版本、编号和项目总架构师批准事实，且已记录来源与SHA-256校验值。JD007、JD008已作为Draft候选隔离保存；三份标准尚未取得原件，因此知识包仍不完整。
 
 在杨老师提供最小材料包并完成逐项核验前：
 
 - 不得宣布Foundation Knowledge Pack为唯一权威来源。
 - 不得以JD003旧候选稿替代本次入库的批准版，也不得以JD007、JD008 Draft候选替代正式批准版。
-- 不得启动依赖该知识包的JD009正式编制。
+- JD009已作为首个Foundation建立后的新增正式知识对象完成入库，可供平台读取；其渠道发布仍由后续独立任务决定。
 
 ## 十五、正式知识对象入库规则（2026-07-13确认）
 
