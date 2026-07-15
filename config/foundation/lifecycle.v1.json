@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "governance_standard": "docs/standards/knowledge-object-lifecycle-management-v1.0.md",
+  "statuses": [
+    { "id": "draft", "foundation_eligible": false },
+    { "id": "in_review", "foundation_eligible": false },
+    { "id": "approved", "foundation_eligible": true },
+    { "id": "pending_revision", "foundation_eligible": false },
+    { "id": "archived", "foundation_eligible": false }
+  ],
+  "transitions": {
+    "draft": ["in_review"],
+    "in_review": ["draft", "approved"],
+    "approved": ["pending_revision", "archived"],
+    "pending_revision": ["in_review", "archived"],
+    "archived": []
+  }
+}
