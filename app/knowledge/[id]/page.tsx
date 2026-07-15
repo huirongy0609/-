@@ -1,6 +1,11 @@
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
-import {MarkdownView} from '@/components/MarkdownView';
+import {ArticleBody} from '@/components/platform/ArticleBody';
+import {Breadcrumb} from '@/components/platform/Breadcrumb';
+import {CitationPanel} from '@/components/platform/CitationPanel';
+import {KnowledgeRelation} from '@/components/platform/KnowledgeRelation';
+import {PageTitle} from '@/components/platform/PageTitle';
+import {Sidebar} from '@/components/platform/Sidebar';
 import {foundationTypeLabels, lifecycleLabels} from '@/lib/domain/foundation';
 import {getFoundationKnowledgeObject, getFoundationKnowledgeObjects} from '@/lib/repositories/foundation';
 
@@ -9,76 +14,118 @@ export const dynamic = 'force-dynamic';
 export default async function KnowledgeDetailPage({params}: {params: {id: string}}) {
   const [item, allObjects] = await Promise.all([getFoundationKnowledgeObject(params.id), getFoundationKnowledgeObjects()]);
   if (!item) notFound();
+
   const objectLookup = new Map(allObjects.map((object) => [object.id, object]));
-  const lifecycle = item.lifecycleStatus ? lifecycleLabels[item.lifecycleStatus] : '状态未登记';
+  const currentIndex = allObjects.findIndex((object) => object.id === item.id);
+  const previous = currentIndex > 0 ? allObjects[currentIndex - 1] : undefined;
+  const next = currentIndex >= 0 && currentIndex < allObjects.length - 1 ? allObjects[currentIndex + 1] : undefined;
+  const gtRelations = item.relatedObjects
+    .flatMap((relation) => {
+      const related = objectLookup.get(relation.id);
+      return related?.type === 'GT' ? [related] : [];
+    });
+  const jdRelations = item.relatedObjects
+    .flatMap((relation) => {
+      const related = objectLookup.get(relation.id);
+      return related?.type === 'JD' ? [related] : [];
+    });
 
   return (
-    <main className="min-h-screen bg-[#0b1110] px-5 py-10 text-[#f3f6f4] sm:px-8">
-      <article className="mx-auto max-w-4xl">
-        <Link className="text-sm font-semibold text-[#6fafa2]" href="/knowledge">
-          返回知识中心
-        </Link>
-        <header className="mt-5 rounded-lg border border-[#2a3431] bg-[#151c1a]/78 p-6 md:p-8">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-[#4fbda8]/12 px-3 py-1 text-xs font-semibold text-[#9bd8cd]">{item.id} · {foundationTypeLabels[item.type]}</span>
-            <span className="rounded-full border border-[#2a3431] px-3 py-1 text-xs text-[#b8c4bf]">{lifecycle}</span>
-            <span className="rounded-full border border-[#2a3431] px-3 py-1 text-xs text-[#b8c4bf]">{item.version || '版本未标注'}</span>
-          </div>
-          <h1 className="mt-5 text-4xl font-semibold leading-tight md:text-6xl">{item.title}</h1>
-          <div className="mt-6 border-l-2 border-[#4fbda8] pl-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6fafa2]">一句话定义</p>
-            <p className="mt-3 text-base leading-8 text-[#d7dfdc]">{item.summary}</p>
-          </div>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {item.tags.map((tag) => (
-              <span className="rounded-full bg-[#4fbda8]/10 px-2.5 py-1 text-xs text-[#9bd8cd]" key={tag}>
-                {tag}
-              </span>
-            ))}
-          </div>
-        </header>
+    <main className="platformPage">
+      <article className="platformContainer">
+        <Breadcrumb
+          items={[
+            {href: '/', label: '首页'},
+            {href: '/knowledge', label: '知识中心'},
+            {label: item.title},
+          ]}
+        />
+        <PageTitle
+          description={item.summary}
+          eyebrow={foundationTypeLabels[item.type]}
+          meta={[item.id, item.version || '版本未标注']}
+          status={item.lifecycleStatus}
+          tags={item.tags}
+          title={item.title}
+        />
 
-        {item.body ? (
-          <section className="mt-6 rounded-lg border border-[#2a3431] bg-[#151c1a]/72 p-6 md:p-8">
-            <MarkdownView source={item.body} />
-          </section>
-        ) : (
-          <section className="mt-6 rounded-lg border border-[#2a3431] bg-[#151c1a]/72 p-8 text-center text-sm text-[#b8c4bf]">
-            Foundation 已登记该对象，但当前没有可读取的正文文件。
-          </section>
-        )}
+        <KnowledgeRelation
+          items={[
+            {label: '所属主题', value: item.category, href: `/knowledge?category=${encodeURIComponent(item.category)}`},
+            {label: '上一篇', value: previous?.title || '暂无', href: previous ? `/knowledge/${previous.id}` : undefined},
+            {label: '下一篇', value: next?.title || '暂无', href: next ? `/knowledge/${next.id}` : undefined},
+            {label: '关联 GT', value: gtRelations[0]?.title || '暂无已登记关联', href: gtRelations[0] ? `/knowledge/${gtRelations[0].id}` : undefined},
+            {label: '关联案例', value: '待案例库确认'},
+            {label: '关联法规', value: '待法规库确认'},
+          ]}
+        />
 
-        <section className="mt-6 grid gap-4 md:grid-cols-2">
-          <div className="rounded-lg border border-[#2a3431] bg-[#151c1a]/72 p-5">
-            <h2 className="text-lg font-semibold">延伸阅读</h2>
-            {item.relatedObjects.length ? (
-              <div className="mt-3 flex flex-col gap-2">
-                {item.relatedObjects.map((relation) => {
-                  const related = objectLookup.get(relation.id);
-                  return related ? (
-                    <Link className="text-sm leading-7 text-[#9bd8cd] hover:text-[#f3f6f4]" href={`/knowledge/${related.id}`} key={relation.id}>
-                      {related.id} · {related.title}
-                    </Link>
-                  ) : (
-                    <span className="text-sm leading-7 text-[#b8c4bf]" key={relation.id}>
-                      {relation.id} · 当前索引未提供正文
-                    </span>
-                  );
-                })}
+        <div className="platformDocLayout">
+          <aside className="platformSidebar platformDocNav">
+            <h2>词条导航</h2>
+            <a href="#definition">一句话定义</a>
+            <a href="#body">核心解释</a>
+            <a href="#relations">知识关系</a>
+            <Link href="/knowledge">返回知识中心</Link>
+          </aside>
+          <div>
+            <section className="articleBody" id="definition">
+              <p className="platformEyebrow">一句话定义</p>
+              <p className="mt-4 text-lg leading-8 text-[var(--muted)]">{item.summary}</p>
+            </section>
+            <div id="body">
+              <ArticleBody source={item.body} />
+            </div>
+            <section className="articleBody" id="relations">
+              <h2>知识关系</h2>
+              <div className="mt-4 grid gap-3">
+                {item.relatedObjects.length ? (
+                  item.relatedObjects.map((relation) => {
+                    const related = objectLookup.get(relation.id);
+                    return related ? (
+                      <Link className="platformTextLink" href={`/knowledge/${related.id}`} key={relation.id}>
+                        {related.id} · {related.title}
+                      </Link>
+                    ) : (
+                      <span className="text-sm text-[var(--muted)]" key={relation.id}>
+                        {relation.id} · 当前索引未提供正文
+                      </span>
+                    );
+                  })
+                ) : (
+                  <p className="text-sm leading-7 text-[var(--muted)]">暂无已登记关联对象。</p>
+                )}
               </div>
-            ) : (
-              <p className="mt-3 text-sm leading-7 text-[#b8c4bf]">暂无已登记关联对象。</p>
-            )}
+            </section>
           </div>
-          <div className="rounded-lg border border-[#2a3431] bg-[#151c1a]/72 p-5">
-            <h2 className="text-lg font-semibold">Foundation 记录</h2>
-            <dl className="mt-3 space-y-2 text-sm leading-7 text-[#b8c4bf]">
-              <div className="flex justify-between gap-4"><dt>生命周期</dt><dd>{item.lifecycleStatus || '未登记'}</dd></div>
-              <div className="flex justify-between gap-4"><dt>版本</dt><dd>{item.versionNote || item.version || '未标注'}</dd></div>
-              <div className="flex justify-between gap-4"><dt>批准日期</dt><dd>{item.approvedAt || '不适用'}</dd></div>
-            </dl>
-          </div>
-        </section>
+
+          <Sidebar title="引用信息">
+            <CitationPanel
+              items={[
+                {label: '对象编号', value: item.id},
+                {label: '标题', value: item.title},
+                {label: '生命周期', value: item.lifecycleStatus ? lifecycleLabels[item.lifecycleStatus] : '未登记'},
+                {label: '版本', value: item.versionNote || item.version || '未标注'},
+                {label: '批准日期', value: item.approvedAt || '不适用'},
+                {label: '来源路径', value: item.filePath || '未登记'},
+              ]}
+            />
+            <div className="mt-6">
+              <h2>相关阅读</h2>
+              <div className="mt-4 grid gap-3">
+                {jdRelations.length ? (
+                  jdRelations.slice(0, 4).map((relation) => (
+                    <Link className="platformTextLink" href={`/knowledge/${relation.id}`} key={relation.id}>
+                      {relation.title}
+                    </Link>
+                  ))
+                ) : (
+                  <p className="text-sm leading-7 text-[var(--muted)]">暂无已登记关联对象。</p>
+                )}
+              </div>
+            </div>
+          </Sidebar>
+        </div>
       </article>
     </main>
   );

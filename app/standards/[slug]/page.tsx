@@ -1,33 +1,106 @@
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
-import {MarkdownView} from '@/components/MarkdownView';
-import {getPlatformStandard} from '@/lib/repositories/standards';
+import {ArticleBody} from '@/components/platform/ArticleBody';
+import {Breadcrumb} from '@/components/platform/Breadcrumb';
+import {CitationPanel} from '@/components/platform/CitationPanel';
+import {KnowledgeRelation} from '@/components/platform/KnowledgeRelation';
+import {PageTitle} from '@/components/platform/PageTitle';
+import {Sidebar} from '@/components/platform/Sidebar';
+import {getPlatformStandard, getPlatformStandards} from '@/lib/repositories/standards';
 
 export const dynamic = 'force-dynamic';
 
 export default async function StandardDetailPage({params}: {params: {slug: string}}) {
-  const standard = await getPlatformStandard(params.slug);
+  const [standard, standards] = await Promise.all([getPlatformStandard(params.slug), getPlatformStandards()]);
   if (!standard) notFound();
 
+  const related = standards.filter((item) => item.slug !== standard.slug).slice(0, 3);
+  const toc = extractToc(standard.body);
+
   return (
-    <main className="min-h-screen bg-[#0b1110] px-5 py-10 text-[#f3f6f4] sm:px-8">
-      <article className="mx-auto max-w-4xl">
-        <Link className="text-sm font-semibold text-[#6fafa2]" href="/standards">
-          返回标准目录
-        </Link>
-        <header className="mt-5 rounded-lg border border-[#2a3431] bg-[#151c1a]/78 p-6 md:p-8">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-[#4fbda8]/12 px-3 py-1 text-xs font-semibold text-[#9bd8cd]">{standard.type}</span>
-            <span className="rounded-full border border-[#2a3431] px-3 py-1 text-xs text-[#b8c4bf]">{standard.status}</span>
-            <span className="rounded-full border border-[#2a3431] px-3 py-1 text-xs text-[#b8c4bf]">{standard.version}</span>
-          </div>
-          <h1 className="mt-5 text-4xl font-semibold leading-tight md:text-5xl">{standard.title}</h1>
-          <p className="mt-5 text-sm leading-7 text-[#b8c4bf]">仓库路径：{standard.filePath}</p>
-        </header>
-        <section className="mt-6 rounded-lg border border-[#2a3431] bg-[#151c1a]/72 p-6 md:p-8">
-          <MarkdownView source={standard.body} />
-        </section>
+    <main className="platformPage">
+      <article className="platformContainer">
+        <Breadcrumb
+          items={[
+            {href: '/', label: '首页'},
+            {href: '/standards', label: '标准中心'},
+            {label: standard.title},
+          ]}
+        />
+        <PageTitle
+          description={standard.summary}
+          eyebrow={standard.type}
+          meta={[standard.version, standard.filePath]}
+          status={standard.status}
+          title={standard.title}
+        />
+
+        <KnowledgeRelation
+          items={[
+            {label: '标准编号', value: standard.version},
+            {label: '生命周期', value: standard.status},
+            {label: '关联标准', value: related[0]?.title || '暂无已登记关联', href: related[0] ? `/standards/${related[0].slug}` : undefined},
+          ]}
+        />
+
+        <div className="platformLayout">
+          <ArticleBody source={standard.body} />
+          <Sidebar title="标准阅读">
+            <dl>
+              <div>
+                <dt>标准编号</dt>
+                <dd>{standard.version}</dd>
+              </div>
+              <div>
+                <dt>状态</dt>
+                <dd>{standard.status}</dd>
+              </div>
+              <div>
+                <dt>来源</dt>
+                <dd>{standard.filePath}</dd>
+              </div>
+            </dl>
+            <div className="mt-6">
+              <h2>目录</h2>
+              <div className="mt-4 grid gap-2">
+                {toc.length ? toc.map((heading) => <span className="text-sm text-[var(--muted)]" key={heading}>{heading}</span>) : <span className="text-sm text-[var(--muted)]">正文未生成目录。</span>}
+              </div>
+            </div>
+            <div className="mt-6">
+              <h2>关联标准</h2>
+              <div className="mt-4 grid gap-3">
+                {related.length ? (
+                  related.map((item) => (
+                    <Link className="platformTextLink" href={`/standards/${item.slug}`} key={item.slug}>
+                      {item.title}
+                    </Link>
+                  ))
+                ) : (
+                  <span className="text-sm text-[var(--muted)]">暂无关联标准。</span>
+                )}
+              </div>
+            </div>
+            <div className="mt-6">
+              <CitationPanel
+                items={[
+                  {label: '标题', value: standard.title},
+                  {label: '版本', value: standard.version},
+                  {label: '路径', value: standard.filePath},
+                ]}
+              />
+            </div>
+          </Sidebar>
+        </div>
       </article>
     </main>
   );
+}
+
+function extractToc(body: string): string[] {
+  return body
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => /^#{2,3}\s+/.test(line) || /^(?:[一二三四五六七八九十]+、)/.test(line))
+    .map((line) => line.replace(/^#{2,3}\s+/, ''))
+    .slice(0, 8);
 }

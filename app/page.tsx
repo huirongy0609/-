@@ -1,138 +1,193 @@
 import Link from 'next/link';
 import {FoundationObjectCard} from '@/components/FoundationObjectCard';
+import {KnowledgeCard} from '@/components/platform/KnowledgeCard';
+import {SearchBar} from '@/components/platform/SearchBar';
+import {Tag} from '@/components/platform/Tag';
 import {foundationTypeLabels} from '@/lib/domain/foundation';
-import {getFoundationCategories, getFoundationKnowledgeObjects} from '@/lib/repositories/foundation';
+import {getCaseViews} from '@/lib/repositories/cases';
+import {getFoundationKnowledgeObjects} from '@/lib/repositories/foundation';
 import {getPlatformStandards} from '@/lib/repositories/standards';
 
 export const dynamic = 'force-dynamic';
 
+const entryCards = [
+  {href: '/knowledge', title: '知识中心', label: 'Knowledge', description: '治理词典、核心概念与可引用知识对象。', featured: true},
+  {href: '/standards', title: '标准中心', label: 'Standards', description: '平台标准、引用规则与治理规范。'},
+  {href: '/cases', title: '案例中心', label: 'Case', description: '真实项目案例与治理复盘。'},
+  {href: '/books', title: '产品中心', label: 'Products', description: '图书、课程与工具入口。'},
+  {href: '/reports', title: 'GEO', label: 'GEO', description: 'AI 搜索与认知研究入口。'},
+  {href: '/research', title: '社区', label: 'Community', description: '研究、共创与发展网络。'},
+];
+
 export default async function HomePage() {
-  const [objects, categories, standards] = await Promise.all([
+  const [objects, standards, cases] = await Promise.all([
     getFoundationKnowledgeObjects(),
-    getFoundationCategories(),
     getPlatformStandards(),
+    Promise.resolve(getCaseViews()),
   ]);
+
   const approvedObjects = objects.filter((item) => item.lifecycleStatus === 'approved');
   const latestKnowledge = [...approvedObjects]
     .sort((a, b) => (b.approvedAt || '').localeCompare(a.approvedAt || '') || b.id.localeCompare(a.id, 'en', {numeric: true}))
-    .slice(0, 6);
-  const popularQuestions = approvedObjects.filter((item) => item.type === 'JD').slice(0, 6);
-  const jdCount = objects.filter((item) => item.type === 'JD').length;
-  const gtCount = objects.filter((item) => item.type === 'GT').length;
+    .slice(0, 3);
+  const popularQuestions = approvedObjects.filter((item) => item.type === 'JD').slice(0, 5);
+  const featuredKnowledge = approvedObjects.slice(0, 6);
+  const latestStandards = standards.slice(0, 3);
+  const featuredCases = cases.slice(0, 3);
 
   return (
-    <main className="min-h-screen bg-[#0b1110] text-[#f3f6f4]">
-      <section className="mx-auto max-w-6xl px-5 py-12 sm:px-8 lg:py-16">
-        <header className="rounded-lg border border-[#2a3431] bg-[#151c1a]/78 p-6 md:p-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6fafa2]">MVP V0.2 · Knowledge Infrastructure</p>
-          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-tight md:text-6xl">中国信托制物业发展平台</h1>
-          <p className="mt-5 max-w-3xl text-base leading-8 text-[#b8c4bf]">
-            面向社区治理、信托制物业和资金治理的公共知识基础设施。当前版本开放 Foundation 知识浏览、检索与平台标准阅读。
-          </p>
-
-          <form action="/knowledge" className="mt-8 flex max-w-3xl flex-col gap-3 sm:flex-row">
-            <input
-              aria-label="搜索知识"
-              className="min-h-12 flex-1 rounded-md border border-[#2a3431] bg-[#0b1110] px-4 text-sm text-[#f3f6f4] outline-none placeholder:text-[#72807b] focus:border-[#4fbda8]"
-              name="q"
-              placeholder="搜索信托、受托关系、共同基金……"
-            />
-            <button className="min-h-12 rounded-md bg-[#4fbda8] px-6 text-sm font-semibold text-[#07110f]" type="submit">
-              搜索知识
-            </button>
-          </form>
-
-          <div className="mt-8 grid gap-3 sm:grid-cols-3">
-            <Metric label="Foundation JD" value={jdCount} />
-            <Metric label="Foundation GT" value={gtCount} />
-            <Metric label="Platform Standards" value={standards.length} />
-          </div>
-        </header>
-
-        <section className="mt-10">
-          <SectionHeading eyebrow="Browse" title="分类导航" />
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <EntryLink href="/knowledge?type=JD" label="JD" title={foundationTypeLabels.JD} description="阅读平台治理词典和正式定义。" />
-            <EntryLink href="/knowledge?type=GT" label="GT" title={foundationTypeLabels.GT} description="浏览治理工具；无正式对象时显示真实空状态。" />
-            {categories.slice(0, 2).map((category) => (
-              <EntryLink
-                description={`查看归入“${category}”的 Foundation 对象。`}
-                href={`/knowledge?category=${encodeURIComponent(category)}`}
-                key={category}
-                label="Category"
-                title={category}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-10">
-          <div className="flex items-end justify-between gap-4">
-            <SectionHeading eyebrow="Foundation" title="最新知识" />
-            <Link className="text-sm font-semibold text-[#6fafa2]" href="/knowledge">
-              查看全部
-            </Link>
-          </div>
-          <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {latestKnowledge.map((item) => (
-              <FoundationObjectCard item={item} key={item.id} />
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-10 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+    <main className="platformPage">
+      <section className="platformHero">
+        <div className="platformContainer platformHeroGrid">
           <div>
-            <SectionHeading eyebrow="Questions" title="热门问题" />
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {popularQuestions.map((item) => (
-                <Link
-                  className="rounded-lg border border-[#2a3431] bg-[#151c1a]/72 p-4 text-sm font-semibold leading-7 transition hover:border-[#4fbda8]/45"
-                  href={`/knowledge/${item.id}`}
-                  key={item.id}
-                >
-                  {item.title}
+            <span className="platformEyebrow">Knowledge First · 中国信托制物业发展平台</span>
+            <h1>可信、开放、可引用的信托制物业知识平台</h1>
+            <p className="platformHeroLead">持续沉淀知识、标准、案例与治理方法，服务物业企业、街道社区、业委会和研究机构。</p>
+            <p className="platformHeroBrand">聚道研究院建设面向 AI 时代的信托制物业知识基础设施。</p>
+            <SearchBar />
+            <div className="heroQuickLinks">
+              {['什么是信托制物业？', '什么是开放式预算？', '公共收益归谁？', '为什么物业费越来越难收？'].map((question) => (
+                <Link href={`/knowledge?q=${encodeURIComponent(question)}`} key={question}>
+                  {question}
                 </Link>
               ))}
             </div>
           </div>
+
+          <aside className="platformPanel">
+            <div className="platformPanelTitle">
+              <h2>最新知识</h2>
+              <Link href="/knowledge">查看知识索引</Link>
+            </div>
+            <div className="platformGrid">
+              {latestKnowledge.map((item) => (
+                <KnowledgeCard
+                  href={`/knowledge/${item.id}`}
+                  key={item.id}
+                  objectId={item.id}
+                  status={item.lifecycleStatus}
+                  summary={item.summary}
+                  title={item.title}
+                  typeLabel={foundationTypeLabels[item.type]}
+                />
+              ))}
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section className="platformContainer platformSection">
+        <div className="platformSectionTitle">
           <div>
-            <SectionHeading eyebrow="Standards" title="平台标准" />
-            <Link className="mt-5 block rounded-lg border border-[#2a3431] bg-[#151c1a]/72 p-5 transition hover:border-[#4fbda8]/45" href="/standards">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6fafa2]">{standards.length} Standards</p>
-              <h3 className="mt-3 text-xl font-semibold">查看标准目录</h3>
-              <p className="mt-3 text-sm leading-7 text-[#b8c4bf]">阅读当前批准或提交审核的平台标准，不与历史 Source Archive 混用。</p>
-            </Link>
+            <h2>大家都在问</h2>
+            <p>从真实问题进入知识，再进入治理方法。</p>
           </div>
-        </section>
+          <Link className="platformTextLink" href="/knowledge?type=JD">查看全部问题</Link>
+        </div>
+        <div className="questionList">
+          {popularQuestions.map((item) => (
+            <Link className="questionLink" href={`/knowledge/${item.id}`} key={item.id}>
+              {item.title}
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="platformContainer platformSection">
+        <div className="platformSectionTitle">
+          <div>
+            <h2>平台入口</h2>
+            <p>知识平台优先，平台能力辅助。用户可以从问题、标准、案例或产品入口继续深入。</p>
+          </div>
+        </div>
+        <div className="platformGrid platformGridSix">
+          {entryCards.map((entry) => (
+            <Link className="platformEntryCard" href={entry.href} key={entry.title}>
+              <Tag>{entry.label}</Tag>
+              <h3>{entry.title}</h3>
+              <p>{entry.description}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="platformContainer platformSection">
+        <div className="platformSectionTitle">
+          <div>
+            <h2>精选知识</h2>
+            <p>以统一知识对象承载 JD、GT、案例和标准引用关系。</p>
+          </div>
+          <Link className="platformTextLink" href="/knowledge">进入知识中心</Link>
+        </div>
+        <div className="platformGrid platformGridThree">
+          {featuredKnowledge.map((item) => (
+            <FoundationObjectCard item={item} key={item.id} />
+          ))}
+        </div>
+      </section>
+
+      <section className="platformContainer platformSection">
+        <div className="platformGrid platformGridTwo">
+          <div>
+            <div className="platformSectionTitle">
+              <div>
+                <h2>最新标准</h2>
+                <p>以正式标准口径沉淀平台运行规则。</p>
+              </div>
+            </div>
+            <div className="platformGrid">
+              {latestStandards.map((standard) => (
+                <KnowledgeCard
+                  href={`/standards/${standard.slug}`}
+                  key={standard.slug}
+                  objectId={standard.version}
+                  status={standard.status}
+                  summary={standard.summary}
+                  title={standard.title}
+                  typeLabel="标准"
+                />
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="platformSectionTitle">
+              <div>
+                <h2>精选案例</h2>
+                <p>案例作为知识生产机制，而不是宣传材料。</p>
+              </div>
+            </div>
+            <div className="platformGrid">
+              {featuredCases.map((item) => (
+                <KnowledgeCard
+                  href={`/cases/${item.id}`}
+                  key={item.id}
+                  objectId={`${item.city} · ${item.district}`}
+                  status={item.status}
+                  summary={item.problem}
+                  title={item.title}
+                  typeLabel="案例"
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="platformContainer platformSection">
+        <div className="platformPanel">
+          <div className="platformPanelTitle">
+            <h2>第一次了解信托制物业</h2>
+            <Link href="/knowledge">继续阅读</Link>
+          </div>
+          <div className="platformGrid platformGridThree">
+            {['信托制物业', '受托关系', '业主共同基金', '开放式预算', '长期公共信任'].map((step, index) => (
+              <Link className="questionLink" href={`/knowledge?q=${encodeURIComponent(step)}`} key={step}>
+                {String(index + 1).padStart(2, '0')} · {step}
+              </Link>
+            ))}
+          </div>
+        </div>
       </section>
     </main>
-  );
-}
-
-function Metric({label, value}: {label: string; value: number}) {
-  return (
-    <div className="rounded-lg border border-[#2a3431] bg-[#0b1110]/55 p-4">
-      <span className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6fafa2]">{label}</span>
-      <strong className="mt-3 block text-3xl font-semibold">{value}</strong>
-    </div>
-  );
-}
-
-function SectionHeading({eyebrow, title}: {eyebrow: string; title: string}) {
-  return (
-    <div>
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6fafa2]">{eyebrow}</p>
-      <h2 className="mt-2 text-3xl font-semibold">{title}</h2>
-    </div>
-  );
-}
-
-function EntryLink({description, href, label, title}: {description: string; href: string; label: string; title: string}) {
-  return (
-    <Link className="rounded-lg border border-[#2a3431] bg-[#151c1a]/72 p-5 transition hover:-translate-y-0.5 hover:border-[#4fbda8]/45" href={href}>
-      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6fafa2]">{label}</p>
-      <h3 className="mt-3 text-xl font-semibold">{title}</h3>
-      <p className="mt-3 text-sm leading-7 text-[#b8c4bf]">{description}</p>
-    </Link>
   );
 }
