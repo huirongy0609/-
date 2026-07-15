@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type {Metadata} from 'next';
 import {FoundationObjectCard} from '@/components/FoundationObjectCard';
 import {KnowledgeCard} from '@/components/platform/KnowledgeCard';
 import {SearchBar} from '@/components/platform/SearchBar';
@@ -9,6 +10,12 @@ import {getFoundationKnowledgeObjects} from '@/lib/repositories/foundation';
 import {getPlatformStandards} from '@/lib/repositories/standards';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: '可信、开放、可引用的信托制物业知识平台',
+  description: '中国信托制物业发展平台持续沉淀知识、标准、案例与治理方法。',
+  alternates: {canonical: '/'},
+};
 
 const entryCards = [
   {href: '/knowledge', title: '知识中心', label: 'Knowledge', description: '治理词典、核心概念与可引用知识对象。', featured: true},
@@ -62,7 +69,7 @@ export default async function HomePage() {
             <div className="platformGrid">
               {latestKnowledge.map((item) => (
                 <KnowledgeCard
-                  href={`/knowledge/${item.id}`}
+                  href={`/knowledge/${item.id.toLowerCase()}`}
                   key={item.id}
                   objectId={item.id}
                   status={item.lifecycleStatus}
@@ -86,7 +93,7 @@ export default async function HomePage() {
         </div>
         <div className="questionList">
           {popularQuestions.map((item) => (
-            <Link className="questionLink" href={`/knowledge/${item.id}`} key={item.id}>
+            <Link className="questionLink" href={`/knowledge/${item.id.toLowerCase()}`} key={item.id}>
               {item.title}
             </Link>
           ))}

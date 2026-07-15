@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import {ArticleBody} from '@/components/platform/ArticleBody';
 import {Breadcrumb} from '@/components/platform/Breadcrumb';
@@ -10,6 +11,24 @@ import {foundationTypeLabels, lifecycleLabels} from '@/lib/domain/foundation';
 import {getFoundationKnowledgeObject, getFoundationKnowledgeObjects} from '@/lib/repositories/foundation';
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({params}: {params: {id: string}}): Promise<Metadata> {
+  const item = await getFoundationKnowledgeObject(params.id);
+  if (!item) return {title: '知识对象未找到'};
+  const canonicalPath = `/knowledge/${item.id.toLowerCase()}`;
+  const description = item.summary.replace(/[*_`#>]/g, '').trim();
+  return {
+    title: item.title,
+    description,
+    alternates: {canonical: canonicalPath},
+    openGraph: {
+      title: item.title,
+      description,
+      type: 'article',
+      url: canonicalPath,
+    },
+  };
+}
 
 export default async function KnowledgeDetailPage({params}: {params: {id: string}}) {
   const [item, allObjects] = await Promise.all([getFoundationKnowledgeObject(params.id), getFoundationKnowledgeObjects()]);
@@ -52,9 +71,9 @@ export default async function KnowledgeDetailPage({params}: {params: {id: string
         <KnowledgeRelation
           items={[
             {label: '所属主题', value: item.category, href: `/knowledge?category=${encodeURIComponent(item.category)}`},
-            {label: '上一篇', value: previous?.title || '暂无', href: previous ? `/knowledge/${previous.id}` : undefined},
-            {label: '下一篇', value: next?.title || '暂无', href: next ? `/knowledge/${next.id}` : undefined},
-            {label: '关联 GT', value: gtRelations[0]?.title || '暂无已登记关联', href: gtRelations[0] ? `/knowledge/${gtRelations[0].id}` : undefined},
+            {label: '上一篇', value: previous?.title || '暂无', href: previous ? `/knowledge/${previous.id.toLowerCase()}` : undefined},
+            {label: '下一篇', value: next?.title || '暂无', href: next ? `/knowledge/${next.id.toLowerCase()}` : undefined},
+            {label: '关联 GT', value: gtRelations[0]?.title || '暂无已登记关联', href: gtRelations[0] ? `/knowledge/${gtRelations[0].id.toLowerCase()}` : undefined},
             {label: '关联案例', value: '待案例库确认'},
             {label: '关联法规', value: '待法规库确认'},
           ]}
@@ -83,7 +102,7 @@ export default async function KnowledgeDetailPage({params}: {params: {id: string
                   item.relatedObjects.map((relation) => {
                     const related = objectLookup.get(relation.id);
                     return related ? (
-                      <Link className="platformTextLink" href={`/knowledge/${related.id}`} key={relation.id}>
+                      <Link className="platformTextLink" href={`/knowledge/${related.id.toLowerCase()}`} key={relation.id}>
                         {related.id} · {related.title}
                       </Link>
                     ) : (
@@ -115,7 +134,7 @@ export default async function KnowledgeDetailPage({params}: {params: {id: string
               <div className="mt-4 grid gap-3">
                 {jdRelations.length ? (
                   jdRelations.slice(0, 4).map((relation) => (
-                    <Link className="platformTextLink" href={`/knowledge/${relation.id}`} key={relation.id}>
+                    <Link className="platformTextLink" href={`/knowledge/${relation.id.toLowerCase()}`} key={relation.id}>
                       {relation.title}
                     </Link>
                   ))

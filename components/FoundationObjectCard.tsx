@@ -6,7 +6,7 @@ export function FoundationObjectCard({item}: {item: FoundationKnowledgeObject}) 
 
   return (
     <KnowledgeCard
-      href={`/knowledge/${item.id}`}
+      href={`/knowledge/${item.id.toLowerCase()}`}
       objectId={item.id}
       status={status}
       summary={item.summary}

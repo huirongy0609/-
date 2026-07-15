@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import {ArticleBody} from '@/components/platform/ArticleBody';
 import {Breadcrumb} from '@/components/platform/Breadcrumb';
@@ -10,11 +11,30 @@ import {getPlatformStandard, getPlatformStandards} from '@/lib/repositories/stan
 
 export const dynamic = 'force-dynamic';
 
+export async function generateMetadata({params}: {params: {slug: string}}): Promise<Metadata> {
+  const standard = await getPlatformStandard(params.slug);
+  if (!standard) return {title: '标准未找到'};
+  return {
+    title: standard.title,
+    description: standard.summary,
+    alternates: {canonical: `/standards/${standard.slug}`},
+    openGraph: {
+      title: standard.title,
+      description: standard.summary,
+      type: 'article',
+      url: `/standards/${standard.slug}`,
+    },
+  };
+}
+
 export default async function StandardDetailPage({params}: {params: {slug: string}}) {
   const [standard, standards] = await Promise.all([getPlatformStandard(params.slug), getPlatformStandards()]);
   if (!standard) notFound();
 
   const related = standards.filter((item) => item.slug !== standard.slug).slice(0, 3);
+  const currentIndex = standards.findIndex((item) => item.slug === standard.slug);
+  const previous = currentIndex > 0 ? standards[currentIndex - 1] : undefined;
+  const next = currentIndex >= 0 && currentIndex < standards.length - 1 ? standards[currentIndex + 1] : undefined;
   const toc = extractToc(standard.body);
 
   return (
@@ -40,6 +60,8 @@ export default async function StandardDetailPage({params}: {params: {slug: strin
             {label: '标准编号', value: standard.version},
             {label: '生命周期', value: standard.status},
             {label: '关联标准', value: related[0]?.title || '暂无已登记关联', href: related[0] ? `/standards/${related[0].slug}` : undefined},
+            {label: '上一篇', value: previous?.title || '暂无', href: previous ? `/standards/${previous.slug}` : undefined},
+            {label: '下一篇', value: next?.title || '暂无', href: next ? `/standards/${next.slug}` : undefined},
           ]}
         />
 

@@ -16,7 +16,7 @@ export const statusTokens = {
     tone: 'danger',
   },
   archived: {
-    label: 'Archived',
+    label: 'Archive',
     tone: 'muted',
   },
   pending_revision: {

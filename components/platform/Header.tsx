@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import {usePathname} from 'next/navigation';
 
 const navItems = [
   {href: '/knowledge', label: '知识中心'},
@@ -10,18 +13,16 @@ const navItems = [
 ];
 
 export function Header() {
+  const pathname = usePathname();
+
   return (
     <header className="platformHeader">
       <Link className="platformBrand" href="/">
-        <span className="platformBrandMark">聚</span>
-        <span>
-          <strong>中国信托制物业发展平台</strong>
-          <em>Judao Research Institute</em>
-        </span>
+        <img alt="聚道物业研究院" className="platformBrandLogo" src="/brand/judao-logo-horizontal.png" />
       </Link>
       <nav aria-label="主导航" className="platformNav">
         {navItems.map((item) => (
-          <Link href={item.href} key={item.href}>
+          <Link className={pathname === item.href || pathname?.startsWith(`${item.href}/`) ? 'active' : undefined} href={item.href} key={item.href}>
             {item.label}
           </Link>
         ))}

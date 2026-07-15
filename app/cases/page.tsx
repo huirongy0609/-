@@ -1,7 +1,14 @@
 import Link from 'next/link';
+import type {Metadata} from 'next';
 import {PageTitle} from '@/components/platform/PageTitle';
 import {CasesExplorer} from './CasesExplorer';
 import {getCaseViews} from '@/lib/repositories/cases';
+
+export const metadata: Metadata = {
+  title: '案例中心',
+  description: '沉淀信托制物业、老旧小区治理、财务公开和业委会治理等可复盘案例。',
+  alternates: {canonical: '/cases'},
+};
 
 export default function CasesPage() {
   const cases = getCaseViews();

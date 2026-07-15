@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import {Breadcrumb} from '@/components/platform/Breadcrumb';
 import {CitationPanel} from '@/components/platform/CitationPanel';
@@ -12,9 +13,29 @@ export function generateStaticParams() {
   return getCaseViews().map((item) => ({id: item.id}));
 }
 
+export function generateMetadata({params}: {params: {id: string}}): Metadata {
+  const item = getCaseViewById(params.id);
+  if (!item) return {title: '案例未找到'};
+  return {
+    title: item.title,
+    description: item.problem,
+    alternates: {canonical: `/cases/${item.id}`},
+    openGraph: {
+      title: item.title,
+      description: item.problem,
+      type: 'article',
+      url: `/cases/${item.id}`,
+    },
+  };
+}
+
 export default function CaseDetailPage({params}: {params: {id: string}}) {
   const item = getCaseViewById(params.id);
   if (!item) notFound();
+  const cases = getCaseViews();
+  const currentIndex = cases.findIndex((caseItem) => caseItem.id === item.id);
+  const previous = currentIndex > 0 ? cases[currentIndex - 1] : undefined;
+  const next = currentIndex >= 0 && currentIndex < cases.length - 1 ? cases[currentIndex + 1] : undefined;
 
   return (
     <main className="platformPage">
@@ -40,6 +61,8 @@ export default function CaseDetailPage({params}: {params: {id: string}}) {
             {label: '关联 JD', value: item.tags[0] || '待确认'},
             {label: '关联 GT', value: item.model || '待确认'},
             {label: '推荐引用', value: `${item.city} ${item.title}`},
+            {label: '上一篇', value: previous?.title || '暂无', href: previous ? `/cases/${previous.id}` : undefined},
+            {label: '下一篇', value: next?.title || '暂无', href: next ? `/cases/${next.id}` : undefined},
           ]}
         />
 

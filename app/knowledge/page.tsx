@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import type {Metadata} from 'next';
 import {FoundationObjectCard} from '@/components/FoundationObjectCard';
+import {EmptyState} from '@/components/platform/EmptyState';
 import {PageTitle} from '@/components/platform/PageTitle';
 import {
   foundationTypeLabels,
@@ -17,6 +19,12 @@ type KnowledgeSearchParams = {
 };
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: '知识中心',
+  description: '搜索、筛选和阅读中国信托制物业发展平台 Foundation 中已经登记的 JD 与 GT 知识对象。',
+  alternates: {canonical: '/knowledge'},
+};
 
 export default async function KnowledgePage({searchParams}: {searchParams: KnowledgeSearchParams}) {
   const activeType: FoundationObjectType | 'All' = searchParams.type === 'JD' || searchParams.type === 'GT' ? searchParams.type : 'All';
@@ -98,12 +106,10 @@ export default async function KnowledgePage({searchParams}: {searchParams: Knowl
               ))}
             </div>
           ) : (
-            <div className="platformPanel text-center text-[var(--muted)]">
-              <p className="text-lg font-semibold text-[var(--ink)]">没有匹配的知识对象</p>
-              <p className="mt-2 text-sm leading-7">
-                {activeType === 'GT' ? '当前 Foundation 尚未登记 GT 正式对象；页面不会生成模拟数据。' : '请调整关键词、分类或生命周期筛选。'}
-              </p>
-            </div>
+            <EmptyState
+              title="没有匹配的知识对象"
+              description={activeType === 'GT' ? '当前 Foundation 尚未登记 GT 正式对象；页面不会生成模拟数据。' : '请调整关键词、分类或生命周期筛选。'}
+            />
           )}
         </section>
       </section>

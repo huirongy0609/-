@@ -10,7 +10,7 @@ type SearchBarProps = {
 export function SearchBar({
   action = '/knowledge',
   name = 'q',
-  placeholder = '什么是信托制物业？什么是开放式预算？公共收益归谁？',
+  placeholder = '开放式预算 / 共同基金 / GT-B07 / 受托关系',
   defaultValue,
   buttonLabel = '搜索',
   compact = false,
