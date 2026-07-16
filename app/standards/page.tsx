@@ -1,46 +1,27 @@
 import type {Metadata} from 'next';
-import {EmptyState} from '@/components/platform/EmptyState';
-import {PageTitle} from '@/components/platform/PageTitle';
-import {StandardCard} from '@/components/platform/StandardCard';
-import {getPlatformStandards} from '@/lib/repositories/standards';
+import {FoundationCollectionPage} from '@/components/website/FoundationCollectionPage';
+import type {WebsiteObjectQuery} from '@/lib/website/foundation-view-model';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: '标准中心',
-  description: '阅读中国信托制物业发展平台当前批准或提交审核的治理标准。',
+  title: '治理标准中心',
+  description: '以 GT Package 为一级对象组织已批准的治理标准包。',
   alternates: {canonical: '/standards'},
 };
 
-export default async function StandardsPage() {
-  const standards = await getPlatformStandards();
-
+export default function StandardsPage({searchParams}: {searchParams: WebsiteObjectQuery & {page?: string}}) {
   return (
-    <main className="platformPage">
-      <section className="platformContainer">
-        <PageTitle
-          description="标准中心用于阅读平台当前批准或提交审核的治理标准，与历史 Source Archive 分轨管理。"
-          eyebrow="Standards Center"
-          title="标准中心"
-        />
-
-        {standards.length ? (
-          <div className="platformGrid platformGridTwo">
-            {standards.map((standard) => (
-              <StandardCard
-                href={`/standards/${standard.slug}`}
-                key={standard.slug}
-                status={standard.status}
-                summary={standard.summary}
-                title={standard.title}
-                version={standard.version}
-              />
-            ))}
-          </div>
-        ) : (
-          <EmptyState title="当前标准目录为空" description="标准中心不会生成模拟标准。" />
-        )}
-      </section>
-    </main>
+    <FoundationCollectionPage
+      allowedTypes={['GT_PACKAGE']}
+      basePath="/standards"
+      breadcrumbLabel="治理标准中心"
+      description="治理标准中心只承载 GT Package，不混入平台建设标准。"
+      emptyDescription="当前 Foundation 尚无可公开的 GT Package；页面保持真实空状态。"
+      emptyTitle="暂无公开 GT Package"
+      eyebrow="Standards Center"
+      searchParams={searchParams}
+      title="治理标准中心"
+    />
   );
 }

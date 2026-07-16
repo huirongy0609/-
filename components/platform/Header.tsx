@@ -5,11 +5,10 @@ import {usePathname} from 'next/navigation';
 
 const navItems = [
   {href: '/knowledge', label: '知识中心'},
-  {href: '/standards', label: '标准中心'},
-  {href: '/books', label: '产品中心'},
-  {href: '/cases', label: '案例中心'},
-  {href: '/reports', label: 'GEO'},
-  {href: '/research', label: '社区'},
+  {href: '/standards', label: '治理标准'},
+  {href: '/cases', label: '案例'},
+  {href: '/laws', label: '法律法规'},
+  {href: '/research', label: '研究'},
 ];
 
 export function Header() {
