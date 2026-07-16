@@ -96,6 +96,24 @@ export function metadataString(
   return null;
 }
 
+export function metadataList(
+  attributes: Record<string, unknown>,
+  ...keys: string[]
+): string[] {
+  for (const key of keys) {
+    const value = attributes[key];
+    if (Array.isArray(value)) {
+      return value.filter((item): item is string => typeof item === "string")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+    if (typeof value === "string" && value.trim()) {
+      return value.split(",").map((item) => item.trim()).filter(Boolean);
+    }
+  }
+  return [];
+}
+
 export function normalizeNullableId(value: string | null): string | null {
   if (!value || /^(?:未分配|none|null|n\/a)$/i.test(value.trim())) return null;
   return value.replaceAll("`", "").trim();

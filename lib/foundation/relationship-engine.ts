@@ -1,13 +1,24 @@
 import type {
   KnowledgeRelationship,
+  KnowledgeObjectType,
   RelationshipKind,
 } from "./types.ts";
 
 const targetPattern = /^(?:BK\d+-)?(?:JD|GT|CASE|FAQ|QA|LAW)[-_]?[A-Z0-9-]+$/i;
 
-export function relationshipKind(targetId: string): RelationshipKind | null {
+export function relationshipKind(
+  targetId: string,
+  targetType?: KnowledgeObjectType,
+): RelationshipKind | null {
   const normalized = targetId.toUpperCase();
+  if (targetType === "GT_PACKAGE") return "RELATED_GT_PACKAGE";
+  if (targetType === "JD") return "RELATED_JD";
+  if (targetType === "GT") return "RELATED_GT";
+  if (targetType === "CASE") return "RELATED_CASE";
+  if (targetType === "FAQ") return "RELATED_FAQ";
+  if (targetType === "LAW") return "RELATED_LAW";
   if (/^(?:BK\d+-)?JD/.test(normalized)) return "RELATED_JD";
+  if (/^GT-P(?:ACKAGE)?[-_]?/i.test(normalized)) return "RELATED_GT_PACKAGE";
   if (/^GT/.test(normalized)) return "RELATED_GT";
   if (/^CASE/.test(normalized)) return "RELATED_CASE";
   if (/^(?:FAQ|QA)/.test(normalized)) return "RELATED_FAQ";
@@ -38,16 +49,19 @@ export function extractRelationshipTargets(markdown: string): string[] {
 export function buildRelationships(
   sourceObjectId: string,
   targetIds: string[],
-  registeredIds: ReadonlySet<string>,
+  registeredTargets: ReadonlySet<string> | ReadonlyMap<string, KnowledgeObjectType>,
 ): KnowledgeRelationship[] {
   return targetIds.flatMap((targetObjectId) => {
-    const kind = relationshipKind(targetObjectId);
+    const targetType = registeredTargets instanceof Map
+      ? registeredTargets.get(targetObjectId)
+      : undefined;
+    const kind = relationshipKind(targetObjectId, targetType);
     if (!kind) return [];
     return [{
       source_object_id: sourceObjectId,
       target_object_id: targetObjectId,
       kind,
-      target_registered: registeredIds.has(targetObjectId),
+      target_registered: registeredTargets.has(targetObjectId),
     }];
   });
 }

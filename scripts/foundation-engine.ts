@@ -4,6 +4,7 @@ import {fileURLToPath} from "node:url";
 
 import {isKnownLifecycleStatus} from "../lib/foundation/lifecycle-engine.ts";
 import {buildProductionLog} from "../lib/foundation/production-log.ts";
+import {validateGtPackageRegistry} from "../lib/foundation/package-registry.ts";
 import {
   buildKnowledgeRegistry,
   loadLifecycleConfig,
@@ -22,7 +23,7 @@ function json(value: unknown): string {
 function relationshipsDocument(registry: KnowledgeRegistry): Record<string, unknown> {
   const relationships = registry.objects.flatMap((object) => object.relationships);
   return {
-    schema_version: "1.0",
+    schema_version: registry.schema_version,
     generated_at: registry.generated_at,
     summary: {
       total: relationships.length,
@@ -62,6 +63,7 @@ async function validate(): Promise<void> {
   const ids = registry.objects.map((object) => object.object_id);
 
   if (new Set(ids).size !== ids.length) errors.push("Registry contains duplicate Object IDs.");
+  errors.push(...validateGtPackageRegistry(registry.objects, registry.packages));
   for (const object of registry.objects) {
     if (!object.object_id || !object.object_type || !object.title) {
       errors.push(`${object.object_id || "Unknown object"} is missing required identity metadata.`);

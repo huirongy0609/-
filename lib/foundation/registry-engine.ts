@@ -6,20 +6,25 @@ import {
   validateLifecycleConfig,
 } from "./lifecycle-engine.ts";
 import {
+  metadataList,
   metadataString,
   normalizeNullableId,
   normalizeStatus,
   parseMarkdownMetadata,
 } from "./metadata-parser.ts";
+import {buildGtPackageRegistry} from "./package-registry.ts";
 import {
   buildRelationships,
   extractRelationshipTargets,
 } from "./relationship-engine.ts";
+import {knowledgeObjectTypes, packageMemberTypes} from "./types.ts";
 import type {
   KnowledgeObject,
+  KnowledgeObjectType,
   KnowledgeRegistry,
   LifecycleConfig,
   MetadataFormat,
+  PackageMemberType,
 } from "./types.ts";
 
 export const LIFECYCLE_CONFIG_PATH = "config/foundation/lifecycle.v1.json";
@@ -81,6 +86,32 @@ function titleFromMarkdown(markdown: string): string {
   return heading.match(/《([^》]+)》/)?.[1] ?? heading.trim();
 }
 
+function normalizeObjectType(value: string | null, objectId: string): KnowledgeObjectType {
+  const normalized = value?.trim().replace(/[\s-]+/g, "_").toUpperCase();
+  if (normalized && knowledgeObjectTypes.includes(normalized as KnowledgeObjectType)) {
+    return normalized as KnowledgeObjectType;
+  }
+  if (/^GT-P(?:ACKAGE)?[-_]?/i.test(objectId)) return "GT_PACKAGE";
+  const embedded = value?.match(/\b(JD|GT|CASE|FAQ|QA|LAW|RESEARCH|STANDARD)\b/i)?.[1]
+    ?? objectId.match(/(?:^|-)(JD|GT|CASE|FAQ|QA|LAW|RESEARCH|STANDARD)/i)?.[1];
+  const inferred = embedded?.toUpperCase() === "QA" ? "FAQ" : embedded?.toUpperCase();
+  return inferred && knowledgeObjectTypes.includes(inferred as KnowledgeObjectType)
+    ? inferred as KnowledgeObjectType
+    : "UNKNOWN";
+}
+
+function normalizePackageMemberType(value: string | null): PackageMemberType | null {
+  const normalized = value?.trim().toUpperCase();
+  return normalized && packageMemberTypes.includes(normalized as PackageMemberType)
+    ? normalized as PackageMemberType
+    : null;
+}
+
+function normalizeIdList(values: string[]): string[] {
+  return [...new Set(values.map((value) => value.replaceAll("`", "").trim().toUpperCase())
+    .filter(Boolean))];
+}
+
 function candidateObject(input: ParsedCandidateInput): Omit<KnowledgeObject, "relationships"> & {
   relationshipTargets: string[];
 } {
@@ -98,10 +129,10 @@ function candidateObject(input: ParsedCandidateInput): Omit<KnowledgeObject, "re
   if (!objectId) throw new Error(`${input.filePath} is missing an object ID.`);
 
   const source = metadataString(attributes, "source", "来源图书");
-  const objectTypeLabel = metadataString(attributes, "object_type", "type", "知识对象类型");
-  const objectType = objectTypeLabel?.match(/\b(JD|GT|CASE|FAQ|QA|LAW)\b/i)?.[1]
-    ?.toUpperCase() ?? objectId.match(/(?:^|-)(JD|GT|CASE|FAQ|QA|LAW)/i)?.[1]
-    ?.toUpperCase() ?? "UNKNOWN";
+  const objectType = normalizeObjectType(
+    metadataString(attributes, "object_type", "type", "知识对象类型"),
+    objectId,
+  );
   const status = normalizeStatus(
     metadataString(attributes, "status", "lifecycle_status", "生命周期状态"),
   );
@@ -122,7 +153,26 @@ function candidateObject(input: ParsedCandidateInput): Omit<KnowledgeObject, "re
     file_path: input.filePath,
     metadata_format: input.metadataFormat,
     foundation_ready: false,
-    relationshipTargets: extractRelationshipTargets(input.markdown),
+    package_id: normalizeNullableId(
+      metadataString(attributes, "package_id", "packageId", "Package ID"),
+    )?.toUpperCase() ?? null,
+    package_version: metadataString(
+      attributes,
+      "package_version",
+      "packageVersion",
+      "Package Version",
+    ),
+    parent_object: normalizeNullableId(
+      metadataString(attributes, "parent_object", "parentObject", "Parent Object"),
+    )?.toUpperCase() ?? null,
+    children: normalizeIdList(metadataList(attributes, "children", "Children")),
+    package_member_type: normalizePackageMemberType(
+      metadataString(attributes, "package_member_type", "member_type", "Package Member Type"),
+    ),
+    relationshipTargets: normalizeIdList([
+      ...metadataList(attributes, "relations", "relationships", "Relationships"),
+      ...extractRelationshipTargets(input.markdown),
+    ]),
   };
 }
 
@@ -134,7 +184,7 @@ function formalObject(
     object_id: object.id.toUpperCase(),
     candidate_id: null,
     foundation_id: object.file_path ? object.id.toUpperCase() : null,
-    object_type: object.object_type.toUpperCase(),
+    object_type: normalizeObjectType(object.object_type, object.id),
     status: object.lifecycle_status,
     version: object.version,
     source: [sourceManifest],
@@ -144,6 +194,11 @@ function formalObject(
     file_path: object.file_path,
     metadata_format: "none",
     foundation_ready: false,
+    package_id: null,
+    package_version: null,
+    parent_object: null,
+    children: [],
+    package_member_type: null,
     relationshipTargets: object.related_objects.map((related) => related.id.toUpperCase()),
   };
 }
@@ -186,11 +241,13 @@ export function buildKnowledgeRegistryFromInputs(
     ...foundationIndex.objects.map((object) => formalObject(object, foundationIndex.source_manifest)),
     ...parsedCandidates.map(candidateObject),
   ];
-  const registeredIds = new Set(pendingObjects.map((object) => object.object_id));
+  const registeredTargets = new Map(
+    pendingObjects.map((object) => [object.object_id, object.object_type] as const),
+  );
   const objects: KnowledgeObject[] = pendingObjects.map(({relationshipTargets, ...object}) => ({
     ...object,
     foundation_ready: isFoundationReady(object.status, object.foundation_id, config),
-    relationships: buildRelationships(object.object_id, relationshipTargets, registeredIds),
+    relationships: buildRelationships(object.object_id, relationshipTargets, registeredTargets),
   })).sort(sortObjects);
   const generatedAt = objects
     .flatMap((object) => [object.updated_at, object.created_at])
@@ -199,7 +256,7 @@ export function buildKnowledgeRegistryFromInputs(
     .at(-1) ?? null;
 
   return {
-    schema_version: "1.0",
+    schema_version: "1.1",
     generated_at: generatedAt,
     lifecycle_config: LIFECYCLE_CONFIG_PATH,
     summary: {
@@ -209,6 +266,7 @@ export function buildKnowledgeRegistryFromInputs(
       foundation_ready: objects.filter((object) => object.foundation_ready).length,
     },
     objects,
+    packages: buildGtPackageRegistry(objects),
   };
 }
 
