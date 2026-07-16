@@ -38,6 +38,35 @@ export const websiteTypeLabels: Record<WebsiteObjectType, string> = {
   RESEARCH: '研究',
 };
 
+export const websiteTypeDescriptions: Record<WebsiteObjectType, string> = {
+  JD: '理解信托制物业的基础概念与治理语言。',
+  GT_PACKAGE: '查看由规则、方法、原则与证据组成的治理标准包。',
+  CASE: '通过已登记实践理解治理机制如何落地。',
+  LAW: '查找知识对象关联的法律法规与适用依据。',
+  FAQ: '从真实问题进入已经批准的权威知识。',
+  RESEARCH: '浏览专题研究、行业观察与长期研究成果。',
+};
+
+export function countWebsiteObjectsByType(
+  objects: WebsiteFoundationObject[],
+): Record<WebsiteObjectType, number> {
+  const counts = Object.fromEntries(websiteObjectTypes.map((type) => [type, 0])) as Record<WebsiteObjectType, number>;
+  for (const object of objects) counts[object.type] += 1;
+  return counts;
+}
+
+export function getWebsiteObjectHref(object: Pick<WebsiteFoundationObject, 'id' | 'type'>): string {
+  const id = object.id.toLocaleLowerCase('en');
+  switch (object.type) {
+    case 'GT_PACKAGE': return `/standards/${id}`;
+    case 'CASE': return `/cases/${id}`;
+    case 'LAW': return `/laws/${id}`;
+    case 'FAQ': return `/faq/${id}`;
+    case 'RESEARCH': return `/research/${id}`;
+    case 'JD': return `/knowledge/${id}`;
+  }
+}
+
 export function isWebsiteObjectType(value: KnowledgeObjectType): value is WebsiteObjectType {
   return websiteObjectTypes.includes(value as WebsiteObjectType);
 }
