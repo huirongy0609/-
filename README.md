@@ -1,66 +1,82 @@
-# 全国社区治理协同地图 MVP
+# 中国信托制物业发展平台 Website Beta
 
-这是《全国社区治理协同地图》的 7 天 MVP 演示版。项目定位不是物业管理系统、SaaS 或社区 App，而是“社区治理协同平台”的第一版入口，用于展示全国社区治理、信托制物业、老旧小区治理、AI 行业情报和案例共建网络。
+judao.club 的 Next.js Website Beta。当前版本进入 Phase 2：Knowledge Publishing，优先交付可运行、可浏览、可搜索、可持续迭代的网站。
 
-第一版目标是可演示、可展示、可讲述，重点呈现全国感、平台感、专业感和未来感。
+## 当前页面
+
+- `/`：深色首页，包含平台 Logo、定位、搜索、最新 Topic、热门 Topic 和平台简介。
+- `/topics`：Topic 列表，支持关键词、分类和标签筛选。
+- `/topics/[slug]`：Topic 阅读页，按 JD、GT、FAQ、LAW、CASE、Research 展示 Topic Index。
+- `/search`：基础联合搜索，覆盖 Topic 元数据和已公开 Foundation JD 正文。
+- `/about`：平台介绍与 Beta 数据边界。
+- `/knowledge`：Foundation 驱动的知识中心。
 
 ## 技术栈
 
 - Next.js 14
 - React 18
 - TypeScript
-- CSS 响应式样式
-- 本地 mock JSON 数据
-- lucide-react 图标
+- Tailwind CSS + Platform Design System
+- Knowledge Foundation Engine
+- 本地 Beta Topic Provider（可替换为 Foundation Topic Provider）
 
-后续可按需接入 Tailwind CSS、Supabase、飞书多维表格或后端 API。
+## 数据边界
 
-## 如何安装
+正式知识对象来自 Knowledge Foundation Engine，公共页面只展示 `approved` 且 `foundation_ready` 的对象。
+
+当前正式 Website Ready Topic 为 0。`data/beta-topics.json` 是明确标注为 `beta_fallback` 的演示目录，只用于验证 Topic 产品结构：
+
+- 不代表 Topic 已通过 Architecture Review；
+- 不提供 `in_review` 对象的正文链接；
+- 已批准 JD 继续链接到 Foundation 详情页；
+- 后续由 `TopicProvider` 工厂切换到正式 Foundation Provider，页面契约保持不变。
+
+## 本地开发
+
+环境要求：Node.js 18+，推荐使用当前锁文件对应的 npm 版本。
 
 ```bash
 npm install
-```
-
-## 如何运行
-
-```bash
 npm run dev
 ```
 
-打开浏览器访问：
+浏览器访问：
 
 ```text
 http://localhost:3000
 ```
 
-## 页面结构
+## 验证
 
-- `/` 首页：平台标题、全国地图区域、今日 AI 情报、今日新增案例、城市共建入口、平台数据概览
-- `/map` 全国地图页：城市协同网络示意图、已点亮城市、待加入城市、城市卡片
-- `/intelligence` AI 情报页：分类筛选、关键词搜索、AI 摘要信息卡片
-- `/cases` 案例库页：案例列表、分类筛选、城市筛选、标签筛选、提交案例入口
-- `/cases/[id]` 案例详情页：核心问题、治理模式、关键动作、阶段成果、风险提示
-- `/submit` 共建提交页：提交案例、政策线索、城市动态、舆情线索或申请加入城市共建
+```bash
+npm run beta:test
+npm run foundation:test
+npm run foundation:engine:validate
+npx tsc --noEmit --pretty false
+npm run build
+```
 
-## Mock 数据说明
+## Development 部署
 
-数据位于 `/data`：
+Development 环境不新增基础设施，继续使用当前 Next.js 运行方式：
 
-- `/data/cities.json` 城市协同网络数据
-- `/data/intelligence.json` AI 行业情报数据
-- `/data/cases.json` 社区治理案例数据
-- `/data/categories.json` 分类、身份类型和提交类型
-- `/data/stats.json` 首页平台数据概览
+```bash
+npm ci
+NEXT_PUBLIC_SITE_URL=https://dev.judao.club npm run build
+NEXT_PUBLIC_SITE_URL=https://dev.judao.club npm run start
+```
 
-当前数字和内容均为演示数据，用于支撑 MVP 讲述。后续接入真实数据后，可保持页面结构不变，替换数据来源。
+默认监听 `3000` 端口。部署服务器可由现有 Nginx 反向代理到该端口，并沿用项目现有 HTTPS、PM2 和发布流程。
 
-## 后续可接入方向
+建议的 Development 环境变量：
 
-- Supabase 数据库与审核状态
-- 飞书多维表格作为轻量运营后台
-- 真实地图坐标与行政区划数据
-- AI 情报采集与摘要接口
-- 案例审核流与公开状态
-- 城市共建机构资料库
+```text
+NEXT_PUBLIC_SITE_URL=https://dev.judao.club
+NODE_ENV=production
+```
 
-更多超出 MVP 的内容见 `TODO.md`。
+发布前必须执行 Beta tests、Foundation validation、TypeScript 和 Production Build。Development 部署不得修改 Topic、Foundation、知识对象或平台标准。
+
+## 当前非目标
+
+Sprint 1 不包含登录、收藏、评论、AI 对话、推荐、权限管理或正式 Topic 发布后台。

@@ -21,6 +21,7 @@
     "foundation:sync": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/foundation-engine.ts sync",
     "foundation:engine:validate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/foundation-engine.ts validate",
     "foundation:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/foundation-engine.test.ts",
+    "beta:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/website-framework.test.ts tests/website-beta.test.ts",
     "foundation:refresh": "npm run foundation:index && npm run foundation:sync && npm run foundation:validate && npm run foundation:engine:validate"
   },
   "dependencies": {

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "beta-1",
+  "provider": "beta_fallback",
+  "notice": "Beta 演示目录，不代表 Topic 已通过 Architecture Review 或进入 Foundation。",
+  "categories": [
+    {"id": "foundation", "label": "基础认知"},
+    {"id": "governance", "label": "治理机制"},
+    {"id": "funds", "label": "资金治理"}
+  ],
+  "tags": [
+    {"id": "trust-property", "label": "信托制物业"},
+    {"id": "common-entrustment", "label": "共同委托"},
+    {"id": "open-budget", "label": "开放式预算"},
+    {"id": "fiduciary-duty", "label": "受托责任"},
+    {"id": "public-disclosure", "label": "公开监督"}
+  ],
+  "topics": [
+    {
+      "id": "P0-01",
+      "slug": "what-is-trust-property",
+      "title": "什么是信托制物业",
+      "summary": "从平台已批准的基础定义进入制度边界、治理标准、案例与法律依据。",
+      "categoryId": "foundation",
+      "tagIds": ["trust-property", "fiduciary-duty"],
+      "keywords": ["信托制物业", "信托", "社区共有财产", "治理制度"],
+      "updatedAt": "2026-07-17",
+      "popularity": 96,
+      "status": "beta_preview",
+      "sections": [
+        {"type": "JD", "label": "治理词典", "items": [{"id": "JD003", "title": "什么是信托制物业？", "status": "approved", "href": "/knowledge/jd003"}]},
+        {"type": "GT", "label": "治理标准", "items": [{"id": "BK1-GT-001", "title": "共同委托与受托履职标准", "status": "in_review"}, {"id": "BK1-GT-006", "title": "年度预算治理标准", "status": "in_review"}]},
+        {"type": "FAQ", "label": "常见问题", "items": [{"id": "BK1-FAQ-011", "title": "信托制物业是否属于民事信托？", "status": "in_review"}]},
+        {"type": "LAW", "label": "法律依据", "items": [{"id": "TPK001-LAW-001", "title": "共同委托法律依据索引", "status": "in_review"}]},
+        {"type": "CASE", "label": "实践案例", "items": [{"id": "BK1-CASE-003", "title": "北京朗琴园物业治理变革", "status": "in_review"}]},
+        {"type": "RESEARCH", "label": "专题研究", "items": []}
+      ]
+    },
+    {
+      "id": "P0-02",
+      "slug": "common-entrustment",
+      "title": "共同委托",
+      "summary": "围绕共同决定、专业执行、受托责任与监督边界组织专题阅读路径。",
+      "categoryId": "governance",
+      "tagIds": ["common-entrustment", "fiduciary-duty"],
+      "keywords": ["共同委托", "共同决定", "受托管理", "专业执行"],
+      "updatedAt": "2026-07-17",
+      "popularity": 92,
+      "status": "beta_preview",
+      "sections": [
+        {"type": "JD", "label": "治理词典", "items": [{"id": "BK1-JD-026", "title": "什么是共同委托？", "status": "in_review"}]},
+        {"type": "GT", "label": "治理标准", "items": [{"id": "BK1-GT-001", "title": "共同委托与受托履职标准", "status": "in_review"}]},
+        {"type": "FAQ", "label": "常见问题", "items": [{"id": "TPK001-FAQ-001", "title": "为什么共同委托不是共同管理？", "status": "in_review"}, {"id": "TPK001-FAQ-004", "title": "共同委托应当如何建立？", "status": "in_review"}]},
+        {"type": "LAW", "label": "法律依据", "items": [{"id": "TPK001-LAW-001", "title": "共同委托法律依据索引", "status": "in_review"}]},
+        {"type": "CASE", "label": "实践案例", "items": [{"id": "BK1-CASE-003", "title": "北京朗琴园物业治理变革", "status": "in_review"}]},
+        {"type": "RESEARCH", "label": "专题研究", "items": [{"id": "TPK001-RESEARCH-001", "title": "共同委托制度研究依据", "status": "in_review"}]}
+      ]
+    },
+    {
+      "id": "P0-05",
+      "slug": "open-budget",
+      "title": "开放式预算",
+      "summary": "从已批准定义进入年度预算、执行偏差、公开监督与收费关系。",
+      "categoryId": "funds",
+      "tagIds": ["open-budget", "public-disclosure"],
+      "keywords": ["开放式预算", "预算治理", "收费标准", "执行偏差", "公开"],
+      "updatedAt": "2026-07-16",
+      "popularity": 88,
+      "status": "beta_preview",
+      "sections": [
+        {"type": "JD", "label": "治理词典", "items": [{"id": "JD009", "title": "什么是开放式预算？", "status": "approved", "href": "/knowledge/jd009"}, {"id": "BK1-JD-051", "title": "什么是预算治理？", "status": "in_review"}]},
+        {"type": "GT", "label": "治理标准", "items": [{"id": "BK1-GT-006", "title": "年度预算治理标准", "status": "in_review"}]},
+        {"type": "FAQ", "label": "常见问题", "items": [{"id": "P0-FAQ-001", "title": "开放式预算是否只是公开预算表？", "status": "in_review"}, {"id": "BK1-FAQ-001", "title": "收费标准与预算的关系", "status": "in_review"}]},
+        {"type": "LAW", "label": "法律依据", "items": []},
+        {"type": "CASE", "label": "实践案例", "items": [{"id": "BK1-CASE-003", "title": "北京朗琴园物业治理变革", "status": "in_review"}]},
+        {"type": "RESEARCH", "label": "专题研究", "items": []}
+      ]
+    }
+  ]
+}
