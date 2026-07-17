@@ -26,6 +26,8 @@ export type TopicRegistryValidation = {
   schemaVersion: string;
   generatedAt: string | null;
   foundationIndex: string;
+  manifestRoot: string;
+  manifestPaths: string[];
   categories: TopicTaxonomyEntry[];
   tags: TopicTaxonomyEntry[];
   topics: Topic[];
@@ -40,9 +42,19 @@ export function validateTopicRegistry(input: unknown): TopicRegistryValidation {
     warnings.push(warning('REGISTRY_READ_FAILED', `Topic Registry 读取失败：${asString(root.repositoryWarning)}`));
   }
 
+  const rawManifestPaths = Array.isArray(root.manifests) ? root.manifests : [];
+  const manifestPaths = rawManifestPaths.flatMap((item) => typeof item === 'string' && item.trim() ? [item.trim()] : []);
+  for (const manifestPath of duplicateValues(manifestPaths)) {
+    warnings.push(warning('DUPLICATE_MANIFEST_PATH', `Topic Registry 重复登记 Manifest: ${manifestPath}。`));
+  }
+
   const rawTopics = Array.isArray(root.topics) ? root.topics : [];
-  if (!Array.isArray(root.topics)) warnings.push(warning('MISSING_TOPICS', 'Topic Registry 缺少 topics 数组。'));
-  if (!rawTopics.length) warnings.push(warning('EMPTY_REGISTRY', 'Foundation Topic Registry 当前没有已登记 Topic；Repository 将启用 beta_fallback。'));
+  if (!Array.isArray(root.manifests) && !Array.isArray(root.topics)) {
+    warnings.push(warning('MISSING_MANIFESTS', 'Topic Registry 缺少 manifests 数组。'));
+  }
+  if (!manifestPaths.length && !rawTopics.length) {
+    warnings.push(warning('EMPTY_REGISTRY', 'Topic Release Registry 当前没有已登记 Manifest；Repository 将启用 beta_fallback。'));
+  }
 
   const topics = rawTopics.flatMap((raw, index) => normalizeTopic(raw, index, warnings));
   warnForDuplicates(topics, 'id', 'DUPLICATE_ID', warnings);
@@ -55,6 +67,8 @@ export function validateTopicRegistry(input: unknown): TopicRegistryValidation {
     schemaVersion: asString(root.schemaVersion) || '1.0',
     generatedAt: asString(root.generatedAt) || null,
     foundationIndex: asString(root.foundationIndex) || 'knowledge/foundation/index.json',
+    manifestRoot: asString(root.manifestRoot) || 'foundation/topic-manifests',
+    manifestPaths: [...new Set(manifestPaths)],
     categories: normalizeTaxonomy(root.categories),
     tags: normalizeTaxonomy(root.tags),
     topics: topics.filter((topic) => !duplicateIds.has(topic.id) && !duplicateSlugs.has(topic.slug)),

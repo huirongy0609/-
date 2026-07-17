@@ -79,9 +79,12 @@ export type TopicRegistryDocument = {
   schemaVersion: string;
   generatedAt: string | null;
   foundationIndex: string;
+  manifestRoot?: string;
+  manifests?: string[];
   categories: TopicTaxonomyEntry[];
   tags: TopicTaxonomyEntry[];
-  topics: unknown[];
+  /** @deprecated ENG-025 legacy inline records; use manifests. */
+  topics?: unknown[];
 };
 
 export type TopicValidationWarning = {

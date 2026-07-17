@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://judao.club/schemas/topic-manifest.v1.json",
+  "title": "Judao Topic Manifest",
+  "description": "Release Pipeline 中连接批准记录、Foundation、Repository 与 Website 的唯一 Topic 发布对象。",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "title",
+    "summary",
+    "releaseStatus",
+    "foundationStatus",
+    "websiteStatus",
+    "version",
+    "releaseRecord",
+    "updatedAt",
+    "objects"
+  ],
+  "properties": {
+    "schemaVersion": {"type": "string", "default": "1.0"},
+    "id": {"type": "string", "minLength": 1},
+    "slug": {"type": "string", "minLength": 1, "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "title": {"type": "string", "minLength": 1},
+    "subtitle": {"type": "string"},
+    "summary": {"type": "string"},
+    "releaseStatus": {
+      "type": "string",
+      "enum": ["draft", "foundation_ready", "website_ready", "archived"]
+    },
+    "foundationStatus": {
+      "type": "string",
+      "enum": ["in_review", "foundation_ready", "archived"]
+    },
+    "websiteStatus": {
+      "type": "string",
+      "enum": ["hidden", "website_ready", "archived"]
+    },
+    "version": {"type": "string", "minLength": 1},
+    "releaseRecord": {"type": "string"},
+    "sourcePackage": {"type": "string"},
+    "updatedAt": {"type": "string"},
+    "objects": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "categoryId": {"type": "string"},
+    "tagIds": {"type": "array", "items": {"type": "string"}},
+    "keywords": {"type": "array", "items": {"type": "string"}},
+    "popularity": {"type": "number", "minimum": 0},
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label"],
+        "properties": {
+          "id": {"type": "string"},
+          "label": {"type": "string"},
+          "source": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

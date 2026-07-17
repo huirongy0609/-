@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "2.0",
+  "verificationOnly": true,
+  "notice": "ENG-025 validation-only Release Registry. It is not the formal Registry.",
+  "generatedAt": "2026-07-17T00:00:00.000Z",
+  "foundationIndex": "knowledge/foundation/index.json",
+  "manifestRoot": "foundation/topic-manifests",
+  "categories": [{"id": "verification", "label": "发布验证"}],
+  "tags": [{"id": "release-verification", "label": "Release Verification"}],
+  "manifests": ["tests/fixtures/topic-manifest.mock.json"]
+}

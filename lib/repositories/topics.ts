@@ -8,6 +8,9 @@ import {
   isWebsiteReadyTopic,
   validateTopicRegistry,
 } from '@/lib/foundation/topic-registry';
+import {
+  loadTopicManifestCatalog,
+} from '@/lib/foundation/topic-manifest-loader';
 import {getFoundationKnowledgeObjects} from '@/lib/repositories/foundation';
 import {getPublicWebsiteObjects} from '@/lib/repositories/website-foundation';
 import {getWebsiteObjectHref} from '@/lib/website/foundation-view-model';
@@ -42,7 +45,7 @@ const loadRepositoryCatalog = cache(async (): Promise<TopicCatalog> => {
   return {
     schemaVersion: registry.schemaVersion,
     provider: 'foundation',
-    notice: 'Topic 数据来自 Foundation Topic Registry；仅 approved + Website Ready Topic 对网站公开。',
+    notice: 'Topic 数据来自 Release Registry 登记的 Topic Manifest；仅 website_ready Topic 对网站公开。',
     categories: registry.categories,
     tags: registry.tags,
     topics: hydratedTopics.filter(isWebsiteReadyTopic),
@@ -140,15 +143,45 @@ export async function searchTopicRepository(
 async function readAndValidateRegistry() {
   try {
     const source = await readFile(topicRegistryPath, 'utf8');
-    return validateTopicRegistry(JSON.parse(source) as unknown);
+    const registry = validateTopicRegistry(JSON.parse(source) as unknown);
+    if (!registry.manifestPaths.length) return registry;
+
+    const publicObjects = await getPublicWebsiteObjects();
+    const objectViews = new Map(publicObjects.map((object) => [object.id, {
+      id: object.id,
+      title: object.title,
+      href: getWebsiteObjectHref(object),
+    }]));
+    const knownObjectIds = new Set(publicObjects.map((object) => object.id));
+    const loaded = await loadTopicManifestCatalog(registry.manifestPaths, {
+      knownObjectIds,
+      objectViews,
+      async readManifest(manifestPath) {
+        const manifestSource = await readFile(resolveRepositoryPath(manifestPath), 'utf8');
+        return JSON.parse(manifestSource) as unknown;
+      },
+    });
+
+    return {
+      ...registry,
+      topics: loaded.topics,
+      warnings: [...registry.warnings, ...loaded.warnings],
+    };
   } catch (error) {
     return validateTopicRegistry({
-      topics: [],
-      schemaVersion: '1.0',
+      manifests: [],
+      schemaVersion: '2.0',
       foundationIndex: 'knowledge/foundation/index.json',
       repositoryWarning: error instanceof Error ? error.message : String(error),
     });
   }
+}
+
+function resolveRepositoryPath(filePath: string): string {
+  const absolutePath = path.resolve(process.cwd(), filePath);
+  const repositoryRoot = `${path.resolve(process.cwd())}${path.sep}`;
+  if (!absolutePath.startsWith(repositoryRoot)) throw new Error(`Manifest path escapes repository: ${filePath}`);
+  return absolutePath;
 }
 
 async function loadBetaFallback(registryWarnings: TopicValidationWarning[]): Promise<TopicCatalog> {
