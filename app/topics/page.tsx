@@ -29,7 +29,7 @@ export default async function TopicsPage({searchParams}: {searchParams: TopicQue
         <PageTitle
           description="以 Topic 组织概念、治理标准、案例、FAQ、法律依据与研究，形成连续阅读路径。"
           eyebrow="Topic Library"
-          meta={[`${topics.length} 个匹配专题`, 'Beta Preview']}
+          meta={[`${topics.length} 个匹配专题`, catalog.provider === 'foundation' ? 'Website Ready' : 'Beta Preview']}
           title="专题 Topic"
         />
 

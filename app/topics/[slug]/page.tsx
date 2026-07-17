@@ -37,7 +37,7 @@ export default async function TopicDetailPage({params}: {params: {slug: string}}
             <Tag>Topic Index</Tag>
             <span>{topic.id}</span>
             <span>{category}</span>
-            <span>Beta Preview</span>
+            <span>{topic.releaseLevel}</span>
           </div>
           <h1 className="mt-6 text-4xl font-semibold leading-[1.2] tracking-[-0.02em] md:text-6xl">{topic.title}</h1>
           <p className="mt-6 text-lg leading-9 text-[var(--muted)]">{topic.summary}</p>

@@ -4,10 +4,10 @@ import {resolve} from 'node:path';
 import test from 'node:test';
 
 import {filterTopics} from '../lib/beta/topic-query.ts';
-import {topicSectionTypes, type TopicCatalog} from '../lib/beta/types.ts';
+import {topicSectionTypes, type BetaFallbackCatalog} from '../lib/beta/types.ts';
 
-async function catalog(): Promise<TopicCatalog> {
-  return JSON.parse(await readFile(resolve(process.cwd(), 'data/beta-topics.json'), 'utf8')) as TopicCatalog;
+async function catalog(): Promise<BetaFallbackCatalog> {
+  return JSON.parse(await readFile(resolve(process.cwd(), 'data/beta-topics.json'), 'utf8')) as BetaFallbackCatalog;
 }
 
 test('loads an explicitly labelled beta fallback catalog', async () => {
@@ -20,6 +20,8 @@ test('loads an explicitly labelled beta fallback catalog', async () => {
 test('filters topics by keyword, stable category id, and stable tag id', async () => {
   const data = await catalog();
   assert.deepEqual(filterTopics(data.topics, {q: 'JD003'}).map((topic) => topic.id), ['P0-01']);
+  assert.deepEqual(filterTopics(data.topics, {q: '共同委托'}).map((topic) => topic.id), ['P0-01', 'P0-02']);
+  assert.deepEqual(filterTopics(data.topics, {q: '执行偏差'}).map((topic) => topic.id), ['P0-05']);
   assert.deepEqual(filterTopics(data.topics, {category: 'funds'}).map((topic) => topic.id), ['P0-05']);
   assert.deepEqual(filterTopics(data.topics, {tag: 'common-entrustment'}).map((topic) => topic.id), ['P0-02']);
 });

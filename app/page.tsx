@@ -70,7 +70,9 @@ export default async function HomePage() {
               <p className="text-xs font-semibold tracking-[0.12em] text-[var(--primary-dark)]">POPULAR TOPICS</p>
               <h2 className="mt-2 text-2xl font-semibold md:text-3xl">热门 Topic</h2>
             </div>
-            <p className="max-w-lg text-right text-xs leading-6 text-[var(--subtle)]">Beta 排序仅用于页面验证，不代表内容权威等级。</p>
+            <p className="max-w-lg text-right text-xs leading-6 text-[var(--subtle)]">
+              {catalog.provider === 'foundation' ? '按 Foundation Registry 更新记录排序。' : 'Beta 排序仅用于页面验证，不代表内容权威等级。'}
+            </p>
           </div>
           <div className="divide-y divide-[var(--line)]">
             {popularTopics.map((topic, index) => (

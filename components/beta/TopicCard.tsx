@@ -26,7 +26,7 @@ export function TopicCard({
     >
       <div className="flex flex-wrap items-center gap-2">
         <Tag>{category}</Tag>
-        <span className={dark ? 'text-xs font-semibold text-data-muted' : 'text-xs font-semibold text-[var(--subtle)]'}>Beta Preview</span>
+        <span className={dark ? 'text-xs font-semibold text-data-muted' : 'text-xs font-semibold text-[var(--subtle)]'}>{topic.releaseLevel}</span>
       </div>
       <h3 className={dark ? 'mt-5 text-2xl font-semibold text-data-white' : undefined}>{topic.title}</h3>
       <p className={dark ? 'mt-3 text-sm leading-7 text-data-soft' : undefined}>{topic.summary}</p>

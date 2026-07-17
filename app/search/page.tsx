@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type {Metadata} from 'next';
 import {Breadcrumb} from '@/components/platform/Breadcrumb';
 import {Tag} from '@/components/platform/Tag';
-import {searchBetaContent} from '@/lib/repositories/beta-search';
+import {searchTopicRepository} from '@/lib/repositories/topics';
 import type {BetaSearchScope} from '@/lib/beta/types';
 
 export const dynamic = 'force-dynamic';
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default async function SearchPage({searchParams}: {searchParams: {q?: string; scope?: string}}) {
   const query = searchParams.q?.trim() ?? '';
   const scope = isSearchScope(searchParams.scope) ? searchParams.scope : 'all';
-  const results = await searchBetaContent(query, scope);
+  const results = await searchTopicRepository(query, {scope});
 
   return (
     <main className="min-h-screen bg-[#fbfcfb] text-[var(--ink)]">

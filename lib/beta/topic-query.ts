@@ -1,6 +1,17 @@
-import type {BetaTopic, TopicQuery} from '@/lib/beta/types';
+import type {TopicQuery, TopicSection} from '@/lib/beta/types';
 
-export function filterTopics(topics: BetaTopic[], query: TopicQuery = {}): BetaTopic[] {
+type TopicSearchDocument = {
+  id: string;
+  title: string;
+  summary: string;
+  categoryId: string;
+  tagIds: string[];
+  keywords: string[];
+  updatedAt: string;
+  sections: TopicSection[];
+};
+
+export function filterTopics<T extends TopicSearchDocument>(topics: T[], query: TopicQuery = {}): T[] {
   const normalizedQuery = query.q?.trim().toLocaleLowerCase('zh-CN') ?? '';
 
   return topics
