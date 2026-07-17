@@ -16,10 +16,10 @@ export function SearchBar({
   compact = false,
 }: SearchBarProps) {
   return (
-    <form action={action} className={compact ? 'platformSearch platformSearchCompact' : 'platformSearch'}>
+    <form action={action} className={`${compact ? 'platformSearch platformSearchCompact' : 'platformSearch'} max-[760px]:!grid-cols-[auto_minmax(0,1fr)]`}>
       <span aria-hidden="true" className="platformSearchIcon">⌕</span>
       <input aria-label="搜索平台知识" defaultValue={defaultValue} name={name} placeholder={placeholder} />
-      <button type="submit">{buttonLabel}</button>
+      <button className="max-[760px]:col-span-2" type="submit">{buttonLabel}</button>
     </form>
   );
 }
