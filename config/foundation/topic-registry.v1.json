@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "2.0",
+  "generatedAt": null,
+  "foundationIndex": "knowledge/foundation/index.json",
+  "manifestRoot": "foundation/topic-manifests",
+  "categories": [],
+  "tags": [],
+  "manifests": []
+}

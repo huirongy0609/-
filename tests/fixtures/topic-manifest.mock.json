@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "verificationOnly": true,
+  "notice": "ENG-025 validation-only Mock Manifest. This file is not formal Foundation data and is not registered for production.",
+  "id": "mock-topic-eng-025",
+  "slug": "eng-025-manifest-verification",
+  "title": "Topic Manifest 自动发布验证（Mock）",
+  "subtitle": "仅用于测试 Manifest → Repository → Website 数据契约",
+  "summary": "该 Mock Manifest 只验证 website_ready 状态能够转换为网站 Topic，不代表正式知识内容。",
+  "releaseStatus": "website_ready",
+  "foundationStatus": "foundation_ready",
+  "websiteStatus": "website_ready",
+  "version": "1.0.0-mock",
+  "releaseRecord": "MOCK-ARCHITECTURE-REVIEW-ENG-025",
+  "updatedAt": "2026-07-17",
+  "objects": [],
+  "categoryId": "verification",
+  "tagIds": ["release-verification"],
+  "keywords": ["ENG-025", "Topic Manifest", "Release Pipeline"],
+  "popularity": 1,
+  "evidence": []
+}

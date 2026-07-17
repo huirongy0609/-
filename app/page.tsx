@@ -1,96 +1,96 @@
 import Link from 'next/link';
 import type {Metadata} from 'next';
-import {Breadcrumb} from '@/components/platform/Breadcrumb';
-import {PageTitle} from '@/components/platform/PageTitle';
+import {TopicCard} from '@/components/beta/TopicCard';
 import {SearchBar} from '@/components/platform/SearchBar';
-import {Tag} from '@/components/platform/Tag';
-import {FoundationBrowser} from '@/components/website/FoundationBrowser';
-import {getPublicWebsiteObjects} from '@/lib/repositories/website-foundation';
-import {
-  websiteObjectTypes,
-  type WebsiteObjectQuery,
-  type WebsiteObjectType,
-} from '@/lib/website/foundation-view-model';
+import {getLatestTopics, getPopularTopics, getTopicProvider} from '@/lib/repositories/topics';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: '中国信托制物业知识平台',
-  description: '从统一页面框架进入信托制物业知识、治理标准、案例、法律法规、FAQ 与研究。',
+  title: '信托制物业知识发布平台 Beta',
+  description: '从 Topic 进入信托制物业知识、治理标准、案例、法律依据与研究。',
   alternates: {canonical: '/'},
 };
 
-const centerDefinitions: Array<{
-  description: string;
-  href: string;
-  label: string;
-  title: string;
-  type: WebsiteObjectType;
-}> = [
-  {href: '/knowledge', title: '知识中心', label: 'Knowledge', description: '跨类型检索公开知识对象。', type: 'JD'},
-  {href: '/standards', title: '治理标准中心', label: 'Standards', description: '以 GT Package 组织治理标准。', type: 'GT_PACKAGE'},
-  {href: '/cases', title: '案例中心', label: 'Cases', description: '浏览已登记、可复盘的案例对象。', type: 'CASE'},
-  {href: '/laws', title: '法律法规中心', label: 'Laws', description: '查看知识关系中的法律法规对象。', type: 'LAW'},
-  {href: '/faq', title: 'FAQ 中心', label: 'FAQ', description: '从问题进入已批准知识。', type: 'FAQ'},
-  {href: '/research', title: '研究中心', label: 'Research', description: '浏览专题研究与行业研究对象。', type: 'RESEARCH'},
-];
-
-export default async function HomePage({searchParams}: {searchParams: WebsiteObjectQuery & {page?: string}}) {
-  const objects = await getPublicWebsiteObjects();
-  const counts = new Map<WebsiteObjectType, number>();
-  for (const object of objects) counts.set(object.type, (counts.get(object.type) ?? 0) + 1);
+export default async function HomePage() {
+  const provider = getTopicProvider();
+  const [catalog, latestTopics, popularTopics] = await Promise.all([
+    provider.getCatalog(),
+    getLatestTopics(3),
+    getPopularTopics(3),
+  ]);
 
   return (
-    <main className="platformPage">
-      <section className="platformContainer pb-20">
-        <Breadcrumb items={[{label: '首页'}]} />
-        <section className="platformHero !pb-8">
-          <PageTitle
-            description="以 Knowledge Foundation Engine 为唯一对象来源，建立统一、可检索、可扩展的网站访问框架。"
-            eyebrow="Website MVP Framework V1.0"
-            title="中国信托制物业知识平台"
-          />
-          <SearchBar action="/knowledge" placeholder="搜索 Object ID、标题或来源" />
-        </section>
-
-        <section className="platformSection !pt-8">
-          <div className="platformSectionTitle">
-            <div>
-              <h2>平台中心</h2>
-              <p>从统一入口进入 Foundation 对象集合；对象数量全部由当前 Registry 计算。</p>
+    <main className="min-h-screen bg-[#fbfcfb] text-[var(--ink)]">
+      <section className="border-b border-[var(--line)] bg-white">
+        <div className="mx-auto w-[min(1120px,calc(100vw-40px))]">
+          <div className="mx-auto flex max-w-4xl flex-col items-center pb-20 pt-16 text-center md:pb-24 md:pt-24">
+            <p className="text-sm font-semibold tracking-[0.08em] text-[var(--primary-dark)]">中国信托制物业知识平台</p>
+            <h1 className="mt-5 text-4xl font-semibold leading-[1.18] tracking-[-0.02em] text-[var(--ink)] md:text-6xl">
+              从专题进入知识，<br className="hidden sm:block" />从知识进入治理。
+            </h1>
+            <div className="mt-2 w-full max-w-3xl text-left">
+              <SearchBar action="/search" placeholder="搜索 Topic、知识概念、治理标准或案例" />
+            </div>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-[var(--muted)]">
+              <span className="text-[var(--subtle)]">热门搜索</span>
+              {popularTopics.map((topic) => (
+                <Link
+                  className="border-b border-transparent pb-0.5 transition hover:border-[var(--primary-dark)] hover:text-[var(--primary-dark)]"
+                  href={`/search?q=${encodeURIComponent(topic.title)}`}
+                  key={topic.id}
+                >
+                  {topic.title}
+                </Link>
+              ))}
             </div>
           </div>
-          <div className="platformGrid platformGridThree">
-            {centerDefinitions.map((center) => (
-              <Link className="platformEntryCard" href={center.href} key={center.href}>
-                <Tag>{center.label}</Tag>
-                <h3>{center.title}</h3>
-                <p>{center.description}</p>
-                <div className="knowledgeCardFooter">
-                  <span>{counts.get(center.type) ?? 0} 个公开对象</span>
-                  <span aria-hidden="true">→</span>
+        </div>
+      </section>
+
+      <section className="mx-auto w-[min(1120px,calc(100vw-40px))] py-16 md:py-20">
+        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-[var(--line)] pb-5">
+          <div>
+            <p className="text-xs font-semibold tracking-[0.12em] text-[var(--primary-dark)]">LATEST TOPICS</p>
+            <h2 className="mt-2 text-2xl font-semibold md:text-3xl">最新 Topic</h2>
+          </div>
+          <Link className="text-sm font-semibold text-[var(--primary-dark)]" href="/topics">查看全部 →</Link>
+        </div>
+        <div className="mt-7 grid gap-5 md:grid-cols-3">
+          {latestTopics.map((topic) => (
+            <TopicCard categories={catalog.categories} key={topic.id} tags={catalog.tags} topic={topic} />
+          ))}
+        </div>
+      </section>
+
+      <section className="border-t border-[var(--line)] bg-white">
+        <div className="mx-auto w-[min(1120px,calc(100vw-40px))] py-16 md:py-20">
+          <div className="flex flex-wrap items-end justify-between gap-4 border-b border-[var(--line)] pb-5">
+            <div>
+              <p className="text-xs font-semibold tracking-[0.12em] text-[var(--primary-dark)]">POPULAR TOPICS</p>
+              <h2 className="mt-2 text-2xl font-semibold md:text-3xl">热门 Topic</h2>
+            </div>
+            <p className="max-w-lg text-right text-xs leading-6 text-[var(--subtle)]">
+              {catalog.provider === 'foundation' ? '按 Foundation Registry 更新记录排序。' : 'Beta 排序仅用于页面验证，不代表内容权威等级。'}
+            </p>
+          </div>
+          <div className="divide-y divide-[var(--line)]">
+            {popularTopics.map((topic, index) => (
+              <Link
+                className="group grid gap-3 py-7 transition md:grid-cols-[56px_minmax(0,1fr)_auto] md:items-center"
+                href={`/topics/${topic.slug}`}
+                key={topic.id}
+              >
+                <span className="font-mono text-sm text-[var(--subtle)]">0{index + 1}</span>
+                <div>
+                  <h3 className="text-xl font-semibold transition group-hover:text-[var(--primary-dark)]">{topic.title}</h3>
+                  <p className="mt-2 max-w-3xl text-sm leading-7 text-[var(--muted)]">{topic.summary}</p>
                 </div>
+                <span aria-hidden="true" className="text-[var(--primary-dark)]">阅读 →</span>
               </Link>
             ))}
           </div>
-        </section>
-
-        <section className="platformSection">
-          <div className="platformSectionTitle">
-            <div>
-              <h2>当前公开知识</h2>
-              <p>这里只展示 Foundation Ready 且生命周期为 approved 的真实对象。</p>
-            </div>
-          </div>
-          <FoundationBrowser
-            allowedTypes={websiteObjectTypes}
-            basePath="/"
-            emptyDescription="当前 Foundation 没有符合公开条件的对象。"
-            emptyTitle="暂无公开知识对象"
-            pageSize={6}
-            searchParams={searchParams}
-          />
-        </section>
+        </div>
       </section>
     </main>
   );
