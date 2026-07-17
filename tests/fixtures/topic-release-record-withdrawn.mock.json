@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-07-17T00:00:00.000Z",
+  "foundationIndex": "knowledge/foundation/index.json",
+  "verificationOnly": true,
+  "notice": "ENG-024B validation-only withdrawn Mock Release Record. The record remains registered and is not formal Foundation data.",
+  "categories": [
+    {"id": "verification", "label": "发布验证"}
+  ],
+  "tags": [
+    {"id": "release-verification", "label": "Release Verification"}
+  ],
+  "topics": [
+    {
+      "id": "MOCK-TOPIC-ENG-024B",
+      "slug": "eng-024b-release-verification",
+      "title": "首个 Topic 发布验证（Mock）",
+      "subtitle": "仅用于验证 Release Record 撤回链路",
+      "summary": "验证 archived Release Record 保留登记但自动退出网站与搜索，不代表正式 Foundation 内容。",
+      "status": "archived",
+      "releaseLevel": "Website Ready",
+      "sections": [
+        {"type": "JD", "label": "治理词典", "items": []},
+        {"type": "GT", "label": "治理标准", "items": []},
+        {"type": "FAQ", "label": "常见问题", "items": []},
+        {"type": "LAW", "label": "法律依据", "items": []},
+        {"type": "CASE", "label": "实践案例", "items": []},
+        {"type": "RESEARCH", "label": "专题研究", "items": []}
+      ],
+      "evidence": [
+        {"id": "MOCK-EV-ENG-024B", "label": "验证夹具（非知识 Evidence）", "source": "tests/fixtures/topic-release-record-withdrawn.mock.json"}
+      ],
+      "updatedAt": "2026-07-17",
+      "categoryId": "verification",
+      "tagIds": ["release-verification"],
+      "keywords": ["ENG-024B", "Release Record", "发布验证"],
+      "popularity": 1
+    }
+  ]
+}

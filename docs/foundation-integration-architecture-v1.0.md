@@ -9,7 +9,8 @@ Foundation Integration 的目标，是让 Website 通过稳定的数据边界读
 ```mermaid
 flowchart LR
   KF["Knowledge Factory"] --> AR["Architecture Review"]
-  AR --> F["Foundation"]
+  AR --> RR["Topic Release Record"]
+  RR --> F["Foundation"]
   F --> TR["Topic Registry"]
   TR --> R["Topic Repository"]
   R --> W["Website"]
@@ -19,7 +20,7 @@ flowchart LR
   BF["beta_fallback"] -. "仅 Registry 无数据时" .-> R
 ```
 
-本次接入不改变 Knowledge Factory、Architecture Review 或 Foundation 的治理职责，也不推定任何 Topic 已获得批准。当前 Foundation 有已批准知识对象，但正式 Topic Registry 仍为 0；Repository 因此按明确规则启用 `beta_fallback`。
+本次接入不改变 Knowledge Factory、Architecture Review 或 Foundation 的治理职责，也不推定任何 Topic 已获得批准。Topic Release Record 是 Architecture Review 批准结果进入 Foundation 与 Topic Registry 的显式工程接口。当前 Foundation 有已批准知识对象，但正式 Topic Registry 仍为 0；Repository 因此按明确规则启用 `beta_fallback`。
 
 ## 2. 三层职责
 
@@ -67,6 +68,10 @@ Repository 输出的 Topic 最低契约包括：
 Release Gate 是显式判断：只有 `status = approved` 且 `releaseLevel = Website Ready` 的 Foundation Topic 才会被 Website Provider 返回。`Foundation Ready` 不等于已经公开；`Candidate` 也不会因为引用了 approved JD 而自动升级。
 
 `beta_fallback` 是开发期容错源，不是 Foundation。它只在 Registry 没有有效 Topic 数据时启用，输出统一模型并保持 `Candidate` 标记。Registry 一旦出现正式 Topic 数据，fallback 整体退出，不与 Foundation Topic 混合。
+
+### Release Record 与撤回
+
+获批 Release Record 以 `approved + Website Ready` 登记后，Repository 自动向 Home、Topic List、Topic Detail 与 Search 暴露该 Topic；Canonical URL 由稳定 `slug` 派生，不需要另行维护页面配置。撤回时保留同一 Registry 记录并把生命周期改为 `archived`，Release Gate 自动从 Website 和 Search 移除该 Topic。由于 Registry 仍非空，撤回不会误触发 beta fallback。
 
 ## 4. Validation 与故障隔离
 

@@ -4,7 +4,7 @@ judao.club 的 Next.js Website Beta。当前版本进入 Phase 2：Knowledge Pub
 
 ## 当前页面
 
-- `/`：深色首页，包含平台 Logo、定位、搜索、最新 Topic、热门 Topic 和平台简介。
+- `/`：Knowledge First 浅色首页，以平台 Logo、定位和搜索为第一视觉，并展示最新 Topic 与热门 Topic。
 - `/topics`：Topic 列表，支持关键词、分类和标签筛选。
 - `/topics/[slug]`：Topic 阅读页，按 JD、GT、FAQ、LAW、CASE、Research 展示 Topic Index。
 - `/search`：基础联合搜索，覆盖 Topic 元数据和已公开 Foundation JD 正文。
@@ -18,18 +18,18 @@ judao.club 的 Next.js Website Beta。当前版本进入 Phase 2：Knowledge Pub
 - TypeScript
 - Tailwind CSS + Platform Design System
 - Knowledge Foundation Engine
-- 本地 Beta Topic Provider（可替换为 Foundation Topic Provider）
+- Foundation Topic Repository（Registry 为空时自动启用明确标注的 beta fallback）
 
 ## 数据边界
 
 正式知识对象来自 Knowledge Foundation Engine，公共页面只展示 `approved` 且 `foundation_ready` 的对象。
 
-当前正式 Website Ready Topic 为 0。`data/beta-topics.json` 是明确标注为 `beta_fallback` 的演示目录，只用于验证 Topic 产品结构：
+当前正式 Website Ready Topic 为 0。Website 的唯一 Topic 数据入口是 `lib/repositories/topics.ts`；正式 Registry 非空时自动使用 Foundation 数据，Registry 为空时才启用 `data/beta-topics.json` 这一明确标注的 `beta_fallback` 演示目录：
 
 - 不代表 Topic 已通过 Architecture Review；
 - 不提供 `in_review` 对象的正文链接；
 - 已批准 JD 继续链接到 Foundation 详情页；
-- 后续由 `TopicProvider` 工厂切换到正式 Foundation Provider，页面契约保持不变。
+- 首个经批准的 Topic Release Record 登记后，页面无需修改即可自动退出 fallback；撤回时保留 Registry 记录并自动停止公开。
 
 ## 本地开发
 
