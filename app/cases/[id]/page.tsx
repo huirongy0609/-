@@ -8,12 +8,17 @@ import {PageTitle} from '@/components/platform/PageTitle';
 import {Sidebar} from '@/components/platform/Sidebar';
 import {Tag} from '@/components/platform/Tag';
 import {getCaseViewById, getCaseViews} from '@/lib/repositories/cases';
+import {getPublicWebsiteObjects} from '@/lib/repositories/website-foundation';
 
-export function generateStaticParams() {
-  return getCaseViews().map((item) => ({id: item.id}));
+export async function generateStaticParams() {
+  const publicObjects = await getPublicWebsiteObjects();
+  return publicObjects.filter((item) => item.type === 'CASE').map((item) => ({id: item.id.toLowerCase()}));
 }
 
-export function generateMetadata({params}: {params: {id: string}}): Metadata {
+export async function generateMetadata({params}: {params: {id: string}}): Promise<Metadata> {
+  const publicObjects = await getPublicWebsiteObjects();
+  const isPublic = publicObjects.some((object) => object.type === 'CASE' && object.id.toLowerCase() === params.id.toLowerCase());
+  if (!isPublic) return {title: '案例未找到'};
   const item = getCaseViewById(params.id);
   if (!item) return {title: '案例未找到'};
   return {
@@ -29,7 +34,10 @@ export function generateMetadata({params}: {params: {id: string}}): Metadata {
   };
 }
 
-export default function CaseDetailPage({params}: {params: {id: string}}) {
+export default async function CaseDetailPage({params}: {params: {id: string}}) {
+  const publicObjects = await getPublicWebsiteObjects();
+  const isPublic = publicObjects.some((object) => object.type === 'CASE' && object.id.toLowerCase() === params.id.toLowerCase());
+  if (!isPublic) notFound();
   const item = getCaseViewById(params.id);
   if (!item) notFound();
   const cases = getCaseViews();

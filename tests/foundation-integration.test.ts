@@ -8,13 +8,14 @@ import {
   validateTopicRegistry,
 } from '../lib/foundation/topic-registry.ts';
 
-test('loads the single Foundation Topic Registry without inventing approved Topics', async () => {
+test('loads the formal Topic001 Manifest path without legacy inline Topic records', async () => {
   const source = await readFile(resolve(process.cwd(), 'config/foundation/topic-registry.v1.json'), 'utf8');
   const result = validateTopicRegistry(JSON.parse(source) as unknown);
 
   assert.equal(result.foundationIndex, 'knowledge/foundation/index.json');
+  assert.deepEqual(result.manifestPaths, ['foundation/topic-manifests/topic001.json']);
   assert.equal(result.topics.length, 0);
-  assert.equal(result.warnings.some((item) => item.code === 'EMPTY_REGISTRY'), true);
+  assert.equal(result.warnings.some((item) => item.code === 'EMPTY_REGISTRY'), false);
 });
 
 test('normalizes the compatible Topic model and exposes only approved Website Ready records', () => {

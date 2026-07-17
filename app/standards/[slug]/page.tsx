@@ -8,10 +8,14 @@ import {KnowledgeRelation} from '@/components/platform/KnowledgeRelation';
 import {PageTitle} from '@/components/platform/PageTitle';
 import {Sidebar} from '@/components/platform/Sidebar';
 import {getPlatformStandard, getPlatformStandards} from '@/lib/repositories/standards';
+import {getPublicWebsiteObjects} from '@/lib/repositories/website-foundation';
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({params}: {params: {slug: string}}): Promise<Metadata> {
+  const publicObjects = await getPublicWebsiteObjects();
+  const isPublic = publicObjects.some((object) => object.type === 'GT_PACKAGE' && object.id.toLowerCase() === params.slug.toLowerCase());
+  if (!isPublic) return {title: '标准未找到'};
   const standard = await getPlatformStandard(params.slug);
   if (!standard) return {title: '标准未找到'};
   return {
@@ -28,7 +32,13 @@ export async function generateMetadata({params}: {params: {slug: string}}): Prom
 }
 
 export default async function StandardDetailPage({params}: {params: {slug: string}}) {
-  const [standard, standards] = await Promise.all([getPlatformStandard(params.slug), getPlatformStandards()]);
+  const [standard, standards, publicObjects] = await Promise.all([
+    getPlatformStandard(params.slug),
+    getPlatformStandards(),
+    getPublicWebsiteObjects(),
+  ]);
+  const isPublic = publicObjects.some((object) => object.type === 'GT_PACKAGE' && object.id.toLowerCase() === params.slug.toLowerCase());
+  if (!isPublic) notFound();
   if (!standard) notFound();
 
   const related = standards.filter((item) => item.slug !== standard.slug).slice(0, 3);

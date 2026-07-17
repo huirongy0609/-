@@ -1,9 +1,17 @@
 {
   "schemaVersion": "2.0",
-  "generatedAt": null,
+  "generatedAt": "2026-07-17",
   "foundationIndex": "knowledge/foundation/index.json",
   "manifestRoot": "foundation/topic-manifests",
-  "categories": [],
-  "tags": [],
-  "manifests": []
+  "categories": [
+    {"id": "governance-mechanism", "label": "治理机制"}
+  ],
+  "tags": [
+    {"id": "common-entrustment", "label": "共同委托"},
+    {"id": "joint-decision", "label": "共同决定"},
+    {"id": "trustee-performance", "label": "受托履职"}
+  ],
+  "manifests": [
+    "foundation/topic-manifests/topic001.json"
+  ]
 }

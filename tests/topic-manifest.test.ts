@@ -15,15 +15,18 @@ async function loadJson(filePath: string): Promise<Record<string, unknown>> {
   return JSON.parse(await readFile(resolve(process.cwd(), filePath), 'utf8')) as Record<string, unknown>;
 }
 
-test('formal Release Registry stores Manifest paths and keeps draft Topic001 unregistered', async () => {
+test('formal Release Registry publishes Topic001 with only the seven approved JD objects', async () => {
   const registry = validateTopicRegistry(await loadJson('config/foundation/topic-registry.v1.json'));
   const topic001 = validateTopicManifest(await loadJson('foundation/topic-manifests/topic001.json'));
 
-  assert.equal(registry.manifestPaths.length, 0);
+  assert.deepEqual(registry.manifestPaths, ['foundation/topic-manifests/topic001.json']);
   assert.equal(registry.topics.length, 0);
-  assert.equal(topic001.manifest?.releaseStatus, 'draft');
-  assert.equal(topic001.manifest?.websiteStatus, 'hidden');
-  assert.equal(isWebsiteReadyManifest(topic001.manifest!), false);
+  assert.equal(topic001.manifest?.releaseStatus, 'website_ready');
+  assert.equal(topic001.manifest?.foundationStatus, 'foundation_ready');
+  assert.equal(topic001.manifest?.websiteStatus, 'website_ready');
+  assert.equal(topic001.manifest?.releaseRecord, 'ENG-026');
+  assert.deepEqual(topic001.manifest?.objects, ['JD001', 'JD002', 'JD003', 'JD004', 'JD005', 'JD006', 'JD009']);
+  assert.equal(isWebsiteReadyManifest(topic001.manifest!), true);
 });
 
 test('Mock Manifest runs Registry → Repository adapter → Website contract without entering formal Registry', async () => {

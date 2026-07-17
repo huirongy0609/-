@@ -29,6 +29,11 @@ export function TopicCard({
         <span className={dark ? 'text-xs font-semibold text-data-muted' : 'text-xs font-semibold text-[var(--subtle)]'}>{topic.releaseLevel}</span>
       </div>
       <h3 className={dark ? 'mt-5 text-2xl font-semibold text-data-white' : undefined}>{topic.title}</h3>
+      {topic.subtitle ? (
+        <p className={dark ? 'mt-2 text-sm font-semibold text-civic' : 'mt-2 text-sm font-semibold text-[var(--primary-dark)]'}>
+          {topic.subtitle}
+        </p>
+      ) : null}
       <p className={dark ? 'mt-3 text-sm leading-7 text-data-soft' : undefined}>{topic.summary}</p>
       <div className="platformTagRow mt-5">
         {topicTags.map((tag) => <Tag key={tag.id}>{tag.label}</Tag>)}

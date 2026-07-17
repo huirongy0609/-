@@ -18,6 +18,7 @@ test('keeps validation records outside the formal Foundation Topic Registry', as
   const fixture = await loadJson(releasedFixture);
 
   assert.equal(formal.topics.length, 0);
+  assert.deepEqual(formal.manifestPaths, ['foundation/topic-manifests/topic001.json']);
   assert.equal(fixture.verificationOnly, true);
   assert.match(String(fixture.notice), /not formal Foundation data/);
 });
