@@ -24,3 +24,6 @@ tsconfig.tsbuildinfo
 # Keep the public brand assets used by the live application shell.
 !public/brand/
 !public/brand/*.png
+
+# Keep the Foundation Markdown files read by citation detail pages at runtime.
+!knowledge/foundation/**/*.md
