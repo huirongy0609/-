@@ -2,6 +2,12 @@
 
 TrustPM AI is an evidence-based AI agent for property governance. It helps property managers and communities turn difficult operational questions into a transparent decision brief containing an assessment, recommendations, an implementation path, risk notes, and visible evidence sources.
 
+## Current Status
+
+**Submission Ready: NO**
+
+The only remaining release-candidate item is to configure the server-side `OPENAI_API_KEY` in Vercel, redeploy, and verify a successful production response with `mode: "openai"`.
+
 ## The problem
 
 Property governance decisions cross contracts, budgets, service standards, shared assets, regulations, and community relationships. A generic chatbot can produce fluent advice, but it may not show which professional knowledge supports the answer or where the limits are.
