@@ -1,82 +1,112 @@
-# 中国信托制物业发展平台 Website Beta
+# TrustPM AI
 
-judao.club 的 Next.js Website Beta。当前版本进入 Phase 2：Knowledge Publishing，优先交付可运行、可浏览、可搜索、可持续迭代的网站。
+TrustPM AI is an evidence-based AI agent for property governance. It helps property managers and communities turn difficult operational questions into a transparent decision brief containing an assessment, recommendations, an implementation path, risk notes, and visible evidence sources.
 
-## 当前页面
+## The problem
 
-- `/`：Knowledge First 浅色首页，以平台 Logo、定位和搜索为第一视觉，并展示最新 Topic 与热门 Topic。
-- `/topics`：Topic 列表，支持关键词、分类和标签筛选。
-- `/topics/[slug]`：Topic 阅读页，按 JD、GT、FAQ、LAW、CASE、Research 展示 Topic Index。
-- `/search`：基础联合搜索，覆盖 Topic 元数据和已公开 Foundation JD 正文。
-- `/about`：平台介绍与 Beta 数据边界。
-- `/knowledge`：Foundation 驱动的知识中心。
+Property governance decisions cross contracts, budgets, service standards, shared assets, regulations, and community relationships. A generic chatbot can produce fluent advice, but it may not show which professional knowledge supports the answer or where the limits are.
 
-## 技术栈
+## The solution
 
-- Next.js 14
-- React 18
-- TypeScript
-- Tailwind CSS + Platform Design System
-- Knowledge Foundation Engine
-- Foundation Topic Repository（Registry 为空时自动启用明确标注的 beta fallback）
-
-## 数据边界
-
-正式知识对象来自 Knowledge Foundation Engine，公共页面只展示 `approved` 且 `foundation_ready` 的对象。
-
-当前正式 Website Ready Topic 为 0。Website 的唯一 Topic 数据入口是 `lib/repositories/topics.ts`；正式 Registry 非空时自动使用 Foundation 数据，Registry 为空时才启用 `data/beta-topics.json` 这一明确标注的 `beta_fallback` 演示目录：
-
-- 不代表 Topic 已通过 Architecture Review；
-- 不提供 `in_review` 对象的正文链接；
-- 已批准 JD 继续链接到 Foundation 详情页；
-- 首个经批准的 Topic Release Record 登记后，页面无需修改即可自动退出 fallback；撤回时保留 Registry 记录并自动停止公开。
-
-## 本地开发
-
-环境要求：Node.js 18+，推荐使用当前锁文件对应的 npm 版本。
-
-```bash
-npm install
-npm run dev
-```
-
-浏览器访问：
+TrustPM AI follows a Knowledge First flow:
 
 ```text
-http://localhost:3000
+Question → controlled retrieval → evidence set → OpenAI reasoning → structured governance brief
 ```
 
-## 验证
+The hackathon MVP intentionally focuses on one reliable closed loop. It includes three clickable scenarios:
 
-```bash
-npm run beta:test
-npm run foundation:test
-npm run foundation:engine:validate
-npx tsc --noEmit --pretty false
-npm run build
-```
+1. Improve property fee collection without increasing conflict.
+2. Handle a forecast annual budget overrun.
+3. Make shared-area public revenue transparent and accountable.
 
-## Development 部署
+## Honest demo boundary
 
-Development 环境不新增基础设施，继续使用当前 Next.js 运行方式：
+- The default mode uses a small, controlled local retriever and curated answer packs so the demo remains stable without an API key.
+- Published JD sources link to Foundation knowledge pages.
+- Prototype GT and CASE items are labelled `DEMO-ONLY OBJECT` and are not represented as approved Foundation objects or verified public cases.
+- With `OPENAI_API_KEY`, the server calls the OpenAI Responses API. The model may reorganize the selected evidence into the defined answer structure, but it is instructed not to add sources or legal citations.
+- If the OpenAI request fails, the route returns the stable controlled answer and discloses the fallback.
+- The product is decision support, not legal advice.
+
+## Technology
+
+- Next.js 14 App Router
+- React 18 and TypeScript
+- Tailwind CSS and the existing platform design system
+- Existing Knowledge Foundation JD objects
+- Local, explainable keyword retrieval for the hackathon MVP
+- OpenAI Responses API with `gpt-5.6` by default
+- Vercel-compatible server route and environment variables
+
+The implementation uses the Responses API directly through `fetch`, so the MVP adds no SDK dependency.
+
+## Run locally
+
+Requirements: Node.js 18+ and npm.
 
 ```bash
 npm ci
-NEXT_PUBLIC_SITE_URL=https://dev.judao.club npm run build
-NEXT_PUBLIC_SITE_URL=https://dev.judao.club npm run start
+cp .env.example .env.local
+npm run dev
 ```
 
-默认监听 `3000` 端口。部署服务器可由现有 Nginx 反向代理到该端口，并沿用项目现有 HTTPS、PM2 和发布流程。
+Open `http://localhost:3000`.
 
-建议的 Development 环境变量：
+The demo works without any secret. To enable OpenAI mode, add:
 
 ```text
-NEXT_PUBLIC_SITE_URL=https://dev.judao.club
-NODE_ENV=production
+OPENAI_API_KEY=your_server_side_key
+OPENAI_MODEL=gpt-5.6
 ```
 
-发布前必须执行 Beta tests、Foundation validation、TypeScript 和 Production Build。Development 部署不得修改 Topic、Foundation、知识对象或平台标准。
+Never expose the API key through a `NEXT_PUBLIC_` variable or commit `.env.local`.
 
-## 当前非目标
+## Validate
 
-Sprint 1 不包含登录、收藏、评论、AI 对话、推荐、权限管理或正式 Topic 发布后台。
+```bash
+npx tsc --noEmit --pretty false
+npm run trustpm:test
+npm run beta:test
+npm run build
+```
+
+## Deploy to Vercel
+
+1. Import this repository into Vercel.
+2. Keep the framework preset as Next.js.
+3. Add `NEXT_PUBLIC_SITE_URL` with the production URL.
+4. Optionally add `OPENAI_API_KEY` and `OPENAI_MODEL` as server environment variables.
+5. Deploy. Without an API key, the production site remains fully demonstrable in controlled mode.
+
+## Main paths
+
+- `/` — TrustPM AI landing page and interactive agent demo
+- `/api/trustpm` — controlled retrieval and optional OpenAI enhancement
+- `/knowledge/[id]` — published Foundation evidence pages
+- `lib/trustpm/demo-data.ts` — explicit demo scenarios, retrieval keywords, and evidence boundary
+
+## Current limitations
+
+- Retrieval is keyword-based, not production RAG or vector search.
+- The corpus is deliberately small and supports three demonstration scenarios.
+- Legal and regulatory sources are not yet connected to a jurisdiction-aware registry.
+- Generated output has not yet been evaluated with a production expert-review dataset.
+- There is no authentication, persistence, organization workspace, or feedback loop in this MVP.
+
+## Roadmap
+
+1. Connect the complete approved JD, GT, LAW, and CASE registries.
+2. Add hybrid retrieval, source-level permissions, and citation verification.
+3. Build expert evaluations for groundedness, governance usefulness, and risk detection.
+4. Add jurisdiction-aware compliance checks and human approval workflows.
+5. Support multiple specialist agents for budgets, contracts, service quality, and community decisions.
+
+## Devpost submission checklist
+
+- Deployment URL: pending Vercel deployment
+- GitHub URL: pending branch push
+- Demo flow: homepage → choose a scenario → run agent → review assessment, steps, risks, and sources
+- Screenshots: hero, question input, structured answer, evidence cards, mobile view
+- Built with: Next.js, React, TypeScript, Tailwind CSS, OpenAI Responses API, Knowledge Foundation
+- Recommended video flow: problem (20s) → Knowledge First approach (20s) → live scenario (70s) → evidence disclosure and roadmap (30s)
