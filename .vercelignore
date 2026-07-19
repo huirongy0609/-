@@ -1,0 +1,26 @@
+.git
+.next
+.npm-cache
+node_modules
+docs
+remotion
+content-factory
+site
+scripts
+tests
+handoffs
+金牌管家成长世界
+*.html
+*.md
+*.docx
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.mp4
+*.mov
+tsconfig.tsbuildinfo
+
+# Keep the public brand assets used by the live application shell.
+!public/brand/
+!public/brand/*.png

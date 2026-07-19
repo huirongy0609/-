@@ -79,6 +79,10 @@ npm run build
 4. Optionally add `OPENAI_API_KEY` and `OPENAI_MODEL` as server environment variables.
 5. Deploy. Without an API key, the production site remains fully demonstrable in controlled mode.
 
+Current production deployment: [trustpm-ai.vercel.app](https://trustpm-ai.vercel.app)
+
+The production environment currently runs in controlled demo mode. Add the server-side `OPENAI_API_KEY` and `OPENAI_MODEL` variables, redeploy, and verify that the result badge reads `OpenAI + controlled retrieval` before claiming a successful OpenAI-powered run.
+
 ## Main paths
 
 - `/` — TrustPM AI landing page and interactive agent demo
@@ -104,9 +108,19 @@ npm run build
 
 ## Devpost submission checklist
 
-- Deployment URL: pending Vercel deployment
-- GitHub URL: pending branch push
+- Deployment URL: https://trustpm-ai.vercel.app
+- GitHub repository: https://github.com/huirongy0609/-
+- Hackathon branch: `agent/trustpm-ai-hackathon`
+- Draft PR: https://github.com/huirongy0609/-/pull/8
 - Demo flow: homepage → choose a scenario → run agent → review assessment, steps, risks, and sources
 - Screenshots: hero, question input, structured answer, evidence cards, mobile view
 - Built with: Next.js, React, TypeScript, Tailwind CSS, OpenAI Responses API, Knowledge Foundation
 - Recommended video flow: problem (20s) → Knowledge First approach (20s) → live scenario (70s) → evidence disclosure and roadmap (30s)
+
+### Release-candidate verification
+
+- Production build: passed locally and on Vercel.
+- Online smoke test: homepage and all three controlled scenarios returned HTTP 200.
+- Scenario routing: `fee-collection`, `budget-variance`, and `public-revenue` returned the expected evidence packs.
+- OpenAI online mode: not yet verified because the Vercel project does not currently have `OPENAI_API_KEY` configured.
+- Honest fallback: verified; production returns `mode: "demo"` and discloses Controlled Demo Mode.
