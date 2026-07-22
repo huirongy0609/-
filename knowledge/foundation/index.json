@@ -1,0 +1,340 @@
+{
+  "schema_version": "0.1",
+  "generated_at": "2026-07-14T01:53:07.832Z",
+  "source_manifest": "knowledge/foundation/v1.0/manifest.md",
+  "governance_standard": "docs/standards/knowledge-object-lifecycle-management-v1.0.md",
+  "summary": {
+    "total": 12,
+    "lifecycle": {
+      "draft": 2,
+      "in_review": 0,
+      "approved": 7,
+      "pending_revision": 0,
+      "archived": 0
+    },
+    "source_audit": {
+      "not_found": 3
+    }
+  },
+  "objects": [
+    {
+      "id": "STD-001",
+      "title": "中国信托制物业知识对象标准 V1.0",
+      "version": null,
+      "version_note": "引用声称V1.0；原件版本不可核实",
+      "lifecycle_status": null,
+      "source_audit_status": "not_found",
+      "file_path": null,
+      "object_type": "Standard",
+      "approved_at": null,
+      "approval_record": null,
+      "status_evidence": "只有引用和相邻材料，未取得原件或批准记录",
+      "sha256": null,
+      "related_objects": [],
+      "last_updated": null
+    },
+    {
+      "id": "STD-002",
+      "title": "中国信托制物业知识对象模板标准 V1.0",
+      "version": null,
+      "version_note": "不可核实",
+      "lifecycle_status": null,
+      "source_audit_status": "not_found",
+      "file_path": null,
+      "object_type": "Standard",
+      "approved_at": null,
+      "approval_record": null,
+      "status_evidence": null,
+      "sha256": null,
+      "related_objects": [],
+      "last_updated": null
+    },
+    {
+      "id": "STD-003",
+      "title": "聚道信托制物业治理词典建设规范 V1.0",
+      "version": null,
+      "version_note": "不可核实",
+      "lifecycle_status": null,
+      "source_audit_status": "not_found",
+      "file_path": null,
+      "object_type": "Standard",
+      "approved_at": null,
+      "approval_record": null,
+      "status_evidence": null,
+      "sha256": null,
+      "related_objects": [],
+      "last_updated": null
+    },
+    {
+      "id": "JD001",
+      "title": "什么是信托？",
+      "version": "V1.0",
+      "version_note": "V1.0",
+      "lifecycle_status": "approved",
+      "source_audit_status": null,
+      "file_path": "knowledge/foundation/v1.0/jd/jd001-what-is-trust.md",
+      "object_type": "JD",
+      "approved_at": "2026-07-13",
+      "approval_record": "项目总架构师于2026-07-13明确确认附件中JD001为批准原件",
+      "status_evidence": "项目总架构师于2026-07-13明确确认附件中JD001为批准原件",
+      "sha256": "375cb55506e12633382057915d81516454c9359a0c1641977561a12738d41bd5",
+      "related_objects": [
+        {
+          "id": "JD002",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD003",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD004",
+          "lifecycle_status": "approved"
+        }
+      ],
+      "last_updated": null
+    },
+    {
+      "id": "JD002",
+      "title": "什么是信托制？",
+      "version": "V1.0",
+      "version_note": "V1.0",
+      "lifecycle_status": "approved",
+      "source_audit_status": null,
+      "file_path": "knowledge/foundation/v1.0/jd/jd002-what-is-trust-based-system.md",
+      "object_type": "JD",
+      "approved_at": "2026-07-13",
+      "approval_record": "项目总架构师于2026-07-13明确确认附件中JD002为批准原件",
+      "status_evidence": "项目总架构师于2026-07-13明确确认附件中JD002为批准原件",
+      "sha256": "690a20fa7aad745c869631048fb3c17eb1518b80fd695d94b2b9454c25c38b62",
+      "related_objects": [
+        {
+          "id": "JD001",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD003",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD004",
+          "lifecycle_status": "approved"
+        }
+      ],
+      "last_updated": null
+    },
+    {
+      "id": "JD003",
+      "title": "什么是信托制物业？",
+      "version": "V1.0",
+      "version_note": "V1.0（版本由批准确认补充，未写入正文）",
+      "lifecycle_status": "approved",
+      "source_audit_status": null,
+      "file_path": "knowledge/foundation/v1.0/jd/jd003-what-is-trust-property.md",
+      "object_type": "JD",
+      "approved_at": "2026-07-13",
+      "approval_record": "项目总架构师于2026-07-13明确确认附件中JD003为批准原件，并确认正式版本为V1.0",
+      "status_evidence": "项目总架构师于2026-07-13明确确认附件中JD003为批准原件，并确认正式版本为V1.0",
+      "sha256": "9b324bb807d4167a2c283786c442276e1a6ea53af91e7269f00767ae41165c1b",
+      "related_objects": [
+        {
+          "id": "JD001",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD002",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD004",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD005",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD006",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD007",
+          "lifecycle_status": "draft"
+        }
+      ],
+      "last_updated": null
+    },
+    {
+      "id": "JD004",
+      "title": "什么是信义义务？",
+      "version": "V1.0",
+      "version_note": "V1.0",
+      "lifecycle_status": "approved",
+      "source_audit_status": null,
+      "file_path": "knowledge/foundation/v1.0/jd/jd004-what-is-fiduciary-duty.md",
+      "object_type": "JD",
+      "approved_at": "2026-07-13",
+      "approval_record": "项目总架构师于2026-07-13明确确认附件中JD004为批准原件",
+      "status_evidence": "项目总架构师于2026-07-13明确确认附件中JD004为批准原件",
+      "sha256": "996c7d0f1a4f116b4626236302f3639897b17f3947f28fdd69f447b9537a9d5d",
+      "related_objects": [
+        {
+          "id": "JD001",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD002",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD003",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD005",
+          "lifecycle_status": "approved"
+        }
+      ],
+      "last_updated": null
+    },
+    {
+      "id": "JD005",
+      "title": "什么是受托关系？",
+      "version": "V1.0",
+      "version_note": "V1.0",
+      "lifecycle_status": "approved",
+      "source_audit_status": null,
+      "file_path": "knowledge/foundation/v1.0/jd/jd005-what-is-fiduciary-relationship.md",
+      "object_type": "JD",
+      "approved_at": "2026-07-13",
+      "approval_record": "项目总架构师于2026-07-13明确确认附件中JD005为批准原件",
+      "status_evidence": "项目总架构师于2026-07-13明确确认附件中JD005为批准原件",
+      "sha256": "2932d536a76d203643b9b7dd11d704476817fe0b9f05634abf6ac9c312543d67",
+      "related_objects": [
+        {
+          "id": "JD001",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD002",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD003",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD004",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD006",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD007",
+          "lifecycle_status": "draft"
+        },
+        {
+          "id": "JD008",
+          "lifecycle_status": "draft"
+        }
+      ],
+      "last_updated": null
+    },
+    {
+      "id": "JD006",
+      "title": "谁是信托制物业中的委托人？",
+      "version": "V1.0",
+      "version_note": "V1.0（2026年版）",
+      "lifecycle_status": "approved",
+      "source_audit_status": null,
+      "file_path": "knowledge/foundation/v1.0/jd/jd006-who-is-the-settlor.md",
+      "object_type": "JD",
+      "approved_at": "2026-07-13",
+      "approval_record": "项目总架构师于2026-07-13明确确认附件中JD006为批准原件",
+      "status_evidence": "项目总架构师于2026-07-13明确确认附件中JD006为批准原件",
+      "sha256": "c68ada1e77a4b03873488afe01c41912521942a98b6239160fbe65d8af88e24c",
+      "related_objects": [
+        {
+          "id": "JD003",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD005",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD007",
+          "lifecycle_status": "draft"
+        }
+      ],
+      "last_updated": null
+    },
+    {
+      "id": "JD007",
+      "title": "谁是信托制物业中的受托人？",
+      "version": "V0.1",
+      "version_note": "V0.1（审核稿）",
+      "lifecycle_status": "draft",
+      "source_audit_status": null,
+      "file_path": "knowledge/foundation/drafts/jd/jd007-who-is-the-trustee-v0.1-draft.md",
+      "object_type": "JD",
+      "approved_at": null,
+      "approval_record": null,
+      "status_evidence": "原文标注“项目总架构师审核中”；项目总架构师于2026-07-13明确确认其不是正式原件",
+      "sha256": "01c99843cbac81164e16b2da4c52086b37f53834e5b188224fb282779637a0d4",
+      "related_objects": [],
+      "last_updated": null
+    },
+    {
+      "id": "JD008",
+      "title": "什么是业主共同基金？",
+      "version": null,
+      "version_note": "版本未标注",
+      "lifecycle_status": "draft",
+      "source_audit_status": null,
+      "file_path": "knowledge/foundation/drafts/jd/jd008-owner-common-fund-draft.md",
+      "object_type": "JD",
+      "approved_at": null,
+      "approval_record": null,
+      "status_evidence": "项目总架构师于2026-07-13明确确认当前版本不作为正式原件入库",
+      "sha256": "3a8e2b155e1b956404e062253cea0eb8f780e12f3da1f2bc3dd4b283462dd73b",
+      "related_objects": [],
+      "last_updated": null
+    },
+    {
+      "id": "JD009",
+      "title": "什么是开放式预算？",
+      "version": "V1.0",
+      "version_note": "V1.0",
+      "lifecycle_status": "approved",
+      "source_audit_status": null,
+      "file_path": "knowledge/foundation/v1.0/jd/jd009-what-is-open-budget.md",
+      "object_type": "JD",
+      "approved_at": "2026-07-14",
+      "approval_record": "项目总架构师于2026-07-14确认JD009已完成Architecture Review AR-008并批准正式入库",
+      "status_evidence": "项目总架构师于2026-07-14确认JD009已完成Architecture Review AR-008并批准正式入库",
+      "sha256": "7e6b59e667039da50afdf33ff38f7e8b7b61de3e6160ff7fd1c0e47c4ba5de71",
+      "related_objects": [
+        {
+          "id": "JD005",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD006",
+          "lifecycle_status": "approved"
+        },
+        {
+          "id": "JD007",
+          "lifecycle_status": "draft"
+        },
+        {
+          "id": "JD008",
+          "lifecycle_status": "draft"
+        }
+      ],
+      "last_updated": null
+    }
+  ]
+}

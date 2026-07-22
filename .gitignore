@@ -9,6 +9,7 @@ out/
 .npm-cache/
 .tmp/
 *.tsbuildinfo
+knowledge/foundation/generated/
 
 # Generated media / review outputs
 video_build/

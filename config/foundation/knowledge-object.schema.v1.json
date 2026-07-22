@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:china-trust-property:schemas:knowledge-object:v1",
+  "title": "China Trust Property Knowledge Object Metadata V1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "object_id",
+    "object_type",
+    "title",
+    "summary",
+    "keywords",
+    "category",
+    "version",
+    "status",
+    "source",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "object_id": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$"
+    },
+    "object_type": {
+      "enum": ["JD", "GT", "CASE", "LAW", "QA", "FAQ", "TOOL", "PRODUCT", "COURSE"]
+    },
+    "title": {"type": "string", "minLength": 1},
+    "summary": {"type": "string", "minLength": 1},
+    "keywords": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "category": {"type": "string", "minLength": 1},
+    "version": {"type": "string", "pattern": "^V?[0-9]+\\.[0-9]+$"},
+    "status": {
+      "enum": ["draft", "in_review", "approved", "pending_revision", "archived"]
+    },
+    "source": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "updated_at": {"type": "string", "format": "date"},
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$"
+      },
+      "uniqueItems": true,
+      "default": []
+    }
+  },
+  "additionalProperties": true
+}

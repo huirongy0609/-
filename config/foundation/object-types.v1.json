@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "metadata_schema": "config/foundation/knowledge-object.schema.v1.json",
+  "canonical_root": "knowledge/foundation/v1.0",
+  "types": [
+    {"id": "JD", "directory": "jd", "label": "治理词典"},
+    {"id": "GT", "directory": "gt", "label": "治理标准"},
+    {"id": "CASE", "directory": "case", "label": "案例"},
+    {"id": "LAW", "directory": "law", "label": "法律政策"},
+    {"id": "QA", "directory": "qa", "label": "标准问答", "runtime_alias": "FAQ"},
+    {"id": "TOOL", "directory": "tool", "label": "工具"},
+    {"id": "PRODUCT", "directory": "product", "label": "产品"},
+    {"id": "COURSE", "directory": "course", "label": "课程"}
+  ]
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "jd-trust-property",
+    "type": "JD",
+    "title": "信托制物业",
+    "summary": "以共同账户、预算治理、过程公开和受托人责任为核心的物业治理机制。",
+    "tags": ["基础概念", "治理词典", "信托制物业"],
+    "category": "基础概念",
+    "version": "v0.1",
+    "status": "Draft",
+    "references": ["book-trust-property"],
+    "evidenceRefs": [],
+    "body": "## 定义\n\n信托制物业是一种围绕业主共同利益、项目资金透明和受托责任建立的物业治理机制。\n\n## MVP 说明\n\n本条目用于验证治理词典（JD）类型的知识对象管理能力。正式定义需等待 Work 与 ChatGPT 审核。",
+    "createdAt": "2026-07-13T00:00:00.000Z",
+    "updatedAt": "2026-07-13T00:00:00.000Z"
+  },
+  {
+    "id": "gt-open-budget-checklist",
+    "type": "GT",
+    "title": "开放式预算检查清单",
+    "summary": "用于检查项目预算是否具备公开、可解释、可复盘的基本条件。",
+    "tags": ["治理工具", "预算治理", "公开透明"],
+    "category": "预算治理",
+    "version": "v0.1",
+    "status": "Draft",
+    "references": ["jd-trust-property"],
+    "evidenceRefs": [],
+    "body": "## 使用场景\n\n当项目进入年度预算沟通、费用调整或业主大会前，可使用本清单检查预算说明是否完整。\n\n## 基础检查项\n\n- 是否说明收入来源\n- 是否说明支出结构\n- 是否说明调整原因\n- 是否保留沟通记录",
+    "createdAt": "2026-07-13T00:00:00.000Z",
+    "updatedAt": "2026-07-13T00:00:00.000Z"
+  },
+  {
+    "id": "article-why-knowledge-object",
+    "type": "Article",
+    "title": "为什么平台需要知识对象",
+    "summary": "知识对象让文章、词典、工具、案例和未来 AI 引用拥有统一的数据基础。",
+    "tags": ["平台工程", "知识对象", "MVP"],
+    "category": "平台建设",
+    "version": "v0.1",
+    "status": "Draft",
+    "references": ["jd-trust-property", "gt-open-budget-checklist"],
+    "evidenceRefs": [],
+    "body": "## 背景\n\n平台不能只依靠页面和文档堆叠。每一条可长期复用的知识，都需要稳定 ID、类型、状态、标签、引用和正文。\n\n## MVP 范围\n\n当前 MVP 先支持 JD、GT、Article 三种类型。后续可扩展 Case、Course、Product 和 Evidence Package。",
+    "createdAt": "2026-07-13T00:00:00.000Z",
+    "updatedAt": "2026-07-13T00:00:00.000Z"
+  }
+]

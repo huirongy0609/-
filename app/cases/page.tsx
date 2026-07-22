@@ -1,24 +1,27 @@
-import Link from 'next/link';
-import {CasesExplorer} from './CasesExplorer';
-import {getCaseViews} from '@/lib/repositories/cases';
+import type {Metadata} from 'next';
+import {FoundationCollectionPage} from '@/components/website/FoundationCollectionPage';
+import type {WebsiteObjectQuery} from '@/lib/website/foundation-view-model';
 
-export default function CasesPage() {
-  const cases = getCaseViews();
+export const dynamic = 'force-dynamic';
 
+export const metadata: Metadata = {
+  title: '案例中心',
+  description: '浏览已批准并进入 Foundation 的 CASE 对象。',
+  alternates: {canonical: '/cases'},
+};
+
+export default function CasesPage({searchParams}: {searchParams: WebsiteObjectQuery & {page?: string}}) {
   return (
-    <main className="pageShell">
-      <section className="container pageHero withAction">
-        <div>
-          <p className="eyebrow">Case Library</p>
-          <h1>全国社区治理案例库</h1>
-          <p>沉淀信托制物业、老旧小区治理、财务公开、停车治理、业委会治理和AI社区治理等可讲述、可复盘的案例。</p>
-        </div>
-        <Link className="btn primary" href="/submit">
-          提交案例
-        </Link>
-      </section>
-
-      <CasesExplorer cases={cases} />
-    </main>
+    <FoundationCollectionPage
+      allowedTypes={['CASE']}
+      basePath="/cases"
+      breadcrumbLabel="案例中心"
+      description="案例中心只读取已批准的 CASE 对象，不使用旧案例 Mock 数据。"
+      emptyDescription="当前 Foundation 尚无可公开 CASE；待 Knowledge PR 批准入库后自动呈现。"
+      emptyTitle="暂无公开案例"
+      eyebrow="Cases Center"
+      searchParams={searchParams}
+      title="案例中心"
+    />
   );
 }

@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import {useMemo, useState} from 'react';
 import {Search} from 'lucide-react';
+import {CaseCard} from '@/components/platform/CaseCard';
 import categories from '@/data/categories.json';
 import type {CaseView} from '@/lib/domain/case';
 
@@ -35,7 +35,7 @@ export function CasesExplorer({cases}: CasesExplorerProps) {
 
   return (
     <>
-      <section className="container toolBar stacked">
+      <section className="platformFilterPanel">
         <div className="searchBox">
           <Search size={18} />
           <input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder="搜索案例标题、问题、城市或提交主体" />
@@ -61,24 +61,20 @@ export function CasesExplorer({cases}: CasesExplorerProps) {
         </div>
       </section>
 
-      <section className="container caseGrid">
+      <section className="platformSection !pt-8">
+        <div className="platformGrid platformGridTwo">
         {filtered.map((item) => (
-          <Link className="caseCard" href={`/cases/${item.id}`} key={item.id}>
-            <div className="cardMeta">
-              <span>{item.city}</span>
-              <span>{item.district}</span>
-              <span>{item.status === 'approved' ? '已审核' : '审核中'}</span>
-            </div>
-            <h2>{item.title}</h2>
-            <p>{item.problem}</p>
-            <div className="caseModel">{item.model}</div>
-            <div className="tagRow">
-              {item.tags.map((caseTag) => (
-                <span key={caseTag}>{caseTag}</span>
-              ))}
-            </div>
-          </Link>
+          <CaseCard
+            href={`/cases/${item.id}`}
+            key={item.id}
+            location={`${item.city} · ${item.district}`}
+            status={item.status}
+            summary={item.problem}
+            tags={item.tags}
+            title={item.title}
+          />
         ))}
+        </div>
       </section>
     </>
   );
