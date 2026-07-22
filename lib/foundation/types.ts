@@ -11,6 +11,7 @@ export const knowledgeObjectTypes = [
   "PRODUCT",
   "COURSE",
   "RESEARCH",
+  "ARTICLE",
   "STANDARD",
   "UNKNOWN",
 ] as const;
@@ -43,6 +44,7 @@ export const relationshipKinds = [
   "RELATED_TOOL",
   "RELATED_PRODUCT",
   "RELATED_COURSE",
+  "RELATED_ARTICLE",
 ] as const;
 
 export type RelationshipKind = (typeof relationshipKinds)[number];

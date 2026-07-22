@@ -2,7 +2,7 @@
 
 import {useEffect, useMemo, useState} from 'react';
 
-type KnowledgeObjectType = 'JD' | 'GT' | 'Article';
+type KnowledgeObjectType = 'JD' | 'GT' | 'QA' | 'Article';
 type KnowledgeObjectStatus = 'Draft' | 'Review' | 'Approved' | 'Superseded' | 'Archived';
 
 type KnowledgeObject = {
@@ -24,6 +24,7 @@ type KnowledgeObject = {
 const knowledgeObjectTypeLabels: Record<KnowledgeObjectType, string> = {
   JD: '治理词典',
   GT: '治理工具',
+  QA: '标准问答',
   Article: '文章',
 };
 

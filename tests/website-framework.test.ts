@@ -56,11 +56,13 @@ test('clamps pagination to a valid page without hardcoded result counts', () => 
 test('derives Knowledge Center category counts from Foundation view objects', () => {
   assert.deepEqual(countWebsiteObjectsByType(fixtures), {
     JD: 1,
+    GT: 0,
     GT_PACKAGE: 1,
     CASE: 0,
     LAW: 0,
     FAQ: 0,
     RESEARCH: 0,
+    ARTICLE: 0,
   });
 });
 
@@ -71,4 +73,6 @@ test('links every website object type to its frozen canonical collection', () =>
   assert.equal(getWebsiteObjectHref({...fixtures[0], id: 'LAW-001', type: 'LAW'}), '/laws/law-001');
   assert.equal(getWebsiteObjectHref({...fixtures[0], id: 'FAQ-001', type: 'FAQ'}), '/faq/faq-001');
   assert.equal(getWebsiteObjectHref({...fixtures[0], id: 'RESEARCH-001', type: 'RESEARCH'}), '/research/research-001');
+  assert.equal(getWebsiteObjectHref({...fixtures[0], id: 'GT-001', type: 'GT'}), '/standards/gt-001');
+  assert.equal(getWebsiteObjectHref({...fixtures[0], id: 'ARTICLE-001', type: 'ARTICLE'}), '/articles/article-001');
 });

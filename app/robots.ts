@@ -1,14 +1,19 @@
 import type {MetadataRoute} from 'next';
+import {getSiteUrl} from '@/lib/geo/site';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+const siteUrl = getSiteUrl();
+const privatePaths = ['/api/', '/admin/'];
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: ['/api/', '/admin/'],
-    },
-    sitemap: `${siteUrl.replace(/\/$/, '')}/sitemap.xml`,
+    rules: [
+      {userAgent: '*', allow: '/', disallow: privatePaths},
+      {userAgent: 'Googlebot', allow: '/', disallow: privatePaths},
+      {userAgent: 'OAI-SearchBot', allow: '/', disallow: privatePaths},
+      {userAgent: 'ChatGPT-User', allow: '/', disallow: privatePaths},
+      {userAgent: 'PerplexityBot', allow: '/', disallow: privatePaths},
+    ],
+    sitemap: `${siteUrl}/sitemap.xml`,
+    host: siteUrl,
   };
 }

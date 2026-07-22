@@ -1,6 +1,6 @@
 import {z} from 'zod';
 
-export const knowledgeObjectTypeSchema = z.enum(['JD', 'GT', 'Article']);
+export const knowledgeObjectTypeSchema = z.enum(['JD', 'GT', 'QA', 'Article']);
 
 export const knowledgeObjectStatusSchema = z.enum(['Draft', 'Review', 'Approved', 'Superseded', 'Archived']);
 
@@ -40,6 +40,7 @@ export type KnowledgeObjectInput = z.infer<typeof knowledgeObjectInputSchema>;
 export const knowledgeObjectTypeLabels: Record<KnowledgeObjectType, string> = {
   JD: '治理词典',
   GT: '治理工具',
+  QA: '标准问答',
   Article: '文章',
 };
 

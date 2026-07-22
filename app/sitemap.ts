@@ -2,8 +2,9 @@ import type {MetadataRoute} from 'next';
 import {getTopicProvider} from '@/lib/repositories/topics';
 import {getPublicWebsiteObjects} from '@/lib/repositories/website-foundation';
 import {getWebsiteObjectHref} from '@/lib/website/foundation-view-model';
+import {getSiteUrl} from '@/lib/geo/site';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+const siteUrl = getSiteUrl();
 
 const staticRoutes = [
   '/',
@@ -11,6 +12,9 @@ const staticRoutes = [
   '/knowledge',
   '/search',
   '/topics',
+  '/articles',
+  '/faq',
+  '/standards',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -18,18 +22,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getPublicWebsiteObjects(),
     getTopicProvider().getTopics(),
   ]);
-  const routes = [
-    ...staticRoutes,
-    ...publicObjects.map(getWebsiteObjectHref),
-    ...topics.map((topic) => `/topics/${topic.slug}`),
-  ];
-  const uniqueRoutes = [...new Set(routes)];
-  const now = new Date();
+  const entries = new Map<string, MetadataRoute.Sitemap[number]>();
+  for (const route of staticRoutes) {
+    entries.set(route, {
+      url: `${siteUrl}${route}`,
+      changeFrequency: 'weekly',
+      priority: route === '/' ? 1 : 0.7,
+    });
+  }
+  for (const object of publicObjects) {
+    const route = getWebsiteObjectHref(object);
+    entries.set(route, {
+      url: `${siteUrl}${route}`,
+      ...(isValidDate(object.updatedAt) ? {lastModified: object.updatedAt!} : {}),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    });
+  }
+  for (const topic of topics) {
+    const route = `/topics/${topic.slug}`;
+    entries.set(route, {url: `${siteUrl}${route}`, changeFrequency: 'weekly', priority: 0.7});
+  }
+  return [...entries.values()];
+}
 
-  return uniqueRoutes.map((route) => ({
-    url: `${siteUrl.replace(/\/$/, '')}${route}`,
-    lastModified: now,
-    changeFrequency: 'weekly',
-    priority: route === '/' ? 1 : 0.7,
-  }));
+function isValidDate(value: string | null): boolean {
+  return Boolean(value && !Number.isNaN(Date.parse(value)));
 }

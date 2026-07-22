@@ -58,22 +58,25 @@ npm run build
 
 ## Development 部署
 
-Development 环境不新增基础设施，继续使用当前 Next.js 运行方式：
+本地 Development 环境不新增基础设施，继续使用当前 Next.js 运行方式：
 
 ```bash
 npm ci
-NEXT_PUBLIC_SITE_URL=https://dev.judao.club npm run build
-NEXT_PUBLIC_SITE_URL=https://dev.judao.club npm run start
+NEXT_PUBLIC_SITE_URL=http://localhost:3000 npm run build
+NEXT_PUBLIC_SITE_URL=http://localhost:3000 npm run start
 ```
 
 默认监听 `3000` 端口。部署服务器可由现有 Nginx 反向代理到该端口，并沿用项目现有 HTTPS、PM2 和发布流程。
 
-建议的 Development 环境变量：
+环境变量策略：
 
 ```text
-NEXT_PUBLIC_SITE_URL=https://dev.judao.club
-NODE_ENV=production
+Local Development: NEXT_PUBLIC_SITE_URL=http://localhost:3000
+Vercel Production: NEXT_PUBLIC_SITE_URL=https://judao.club
+Vercel Preview: 留空以自动使用 VERCEL_URL，或显式设置预览域名
 ```
+
+Production 未设置 `NEXT_PUBLIC_SITE_URL` 时使用安全的正式地址 `https://judao.club`，不会回退到 dev 域名。非生产环境未设置时使用 `http://localhost:3000`；Vercel Preview 在提供 `VERCEL_URL` 时自动使用对应的 `https://*.vercel.app` 地址。显式配置的值不是有效 HTTP(S) URL 时，构建或启动会报错。
 
 发布前必须执行 Beta tests、Foundation validation、TypeScript 和 Production Build。Development 部署不得修改 Topic、Foundation、知识对象或平台标准。
 
