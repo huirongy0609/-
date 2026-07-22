@@ -2,6 +2,7 @@ import { defineConfig } from "vitepress";
 
 const siteBase = process.env.GEO_SITE_URL || "https://huirongy0609.github.io/-";
 const siteBasePath = process.env.GEO_SITE_BASE_PATH || "/";
+const isNoIndexPreview = process.env.GEO_PREVIEW_NOINDEX === "1";
 
 function pageUrl(page: string) {
   const clean = page.replace(/(^|\/)index\.md$/, "").replace(/\.md$/, "");
@@ -61,19 +62,30 @@ export default defineConfig({
   base: siteBasePath,
   cleanUrls: true,
   lastUpdated: true,
-  sitemap: { hostname: siteBase },
+  sitemap: isNoIndexPreview ? undefined : { hostname: siteBase },
   transformHead({ pageData }) {
     const url = pageUrl(pageData.relativePath || "");
     const title = pageData.title || "聚道研究院 GEO 知识站";
     const description = pageData.description || "信托制物业、物业资金治理、开放式预算、业主共同基金知识入口";
-    return [
-      ["link", { rel: "canonical", href: url }],
+    const discoveryHead = [
       ["meta", { property: "og:type", content: "article" }],
       ["meta", { property: "og:title", content: title }],
       ["meta", { property: "og:description", content: description }],
-      ["meta", { property: "og:url", content: url }],
       ["meta", { property: "og:site_name", content: "聚道研究院 GEO 知识站" }],
-      ["meta", { name: "twitter:card", content: "summary" }],
+      ["meta", { name: "twitter:card", content: "summary" }]
+    ] as const;
+
+    if (isNoIndexPreview) {
+      return [
+        ["meta", { name: "robots", content: "noindex,nofollow" }],
+        ...discoveryHead
+      ];
+    }
+
+    return [
+      ["link", { rel: "canonical", href: url }],
+      ["meta", { property: "og:url", content: url }],
+      ...discoveryHead,
       ["script", { type: "application/ld+json" }, JSON.stringify(makeJsonLd(pageData))]
     ];
   },

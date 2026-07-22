@@ -24,6 +24,7 @@ jobs:
     env:
       GEO_SITE_URL: https://huirongy0609.github.io/-
       GEO_SITE_BASE_PATH: /-/
+      GEO_PREVIEW_NOINDEX: "1"
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -8,6 +8,7 @@ const docsDir = path.join(root, "docs");
 const deploymentLogLatest = path.join(docsDir, "deployment-log-latest.md");
 const deploymentLogArchive = path.join(docsDir, "deployment-log.md");
 const basePath = process.env.GEO_SITE_BASE_PATH || "/";
+const isNoIndexPreview = process.env.GEO_PREVIEW_NOINDEX === "1";
 
 const today = new Intl.DateTimeFormat("en-CA", {
   timeZone: "Asia/Shanghai",
@@ -91,14 +92,29 @@ function checkPages() {
   const checks = [
     ["Title", "<title>"],
     ["Meta Description", 'name="description"'],
-    ["Canonical", 'rel="canonical"'],
     ["OpenGraph", 'property="og:'],
+  ];
+  if (isNoIndexPreview) checks.push(["Robots noindex", 'name="robots" content="noindex,nofollow"']);
+  else checks.push(
+    ["Canonical", 'rel="canonical"'],
     ["JSON-LD", "application/ld+json"],
     ["Breadcrumb", "BreadcrumbList"],
-  ];
+  );
   for (const [label, needle] of checks) {
     const missing = htmlFiles.filter((file) => !fs.readFileSync(file, "utf8").includes(needle));
     if (missing.length) failures.push(`${label} missing in ${missing.length} HTML file(s)`);
+  }
+
+  if (isNoIndexPreview) {
+    const forbiddenMetadata = [
+      ["Canonical", 'rel="canonical"'],
+      ["OpenGraph URL", 'property="og:url"'],
+      ["JSON-LD", "application/ld+json"],
+    ];
+    for (const [label, needle] of forbiddenMetadata) {
+      const present = htmlFiles.filter((file) => fs.readFileSync(file, "utf8").includes(needle));
+      if (present.length) failures.push(`${label} must be disabled in noindex preview (${present.length} HTML file(s))`);
+    }
   }
 
   const internalLinks = new Set();
@@ -158,9 +174,9 @@ Status: ${status}
 - Knowledge asset listener
 - GEO generation
 - VitePress build
-- sitemap.xml / robots.txt / rss.xml
+- ${isNoIndexPreview ? "noindex robots.txt / no sitemap / rss.xml" : "sitemap.xml / robots.txt / rss.xml"}
 - 首页 / FAQ / 工具页 / 案例页 / 城市页
-- Metadata: Title / Meta / Canonical / OpenGraph / JSON-LD / Breadcrumb
+- Metadata: ${isNoIndexPreview ? "Title / Meta / noindex / no Canonical / no OpenGraph URL / no JSON-LD" : "Title / Meta / Canonical / OpenGraph / JSON-LD / Breadcrumb"}
 - Internal dead links
 - Forbidden terms
 
@@ -224,9 +240,15 @@ run("geo-generate", "npm", ["run", "geo:generate"]);
 run("asset-listener", "npm", ["run", "geo:asset-listen"]);
 run("geo-build-site", "npm", ["run", "geo:build-site"]);
 
-exists("sitemap.xml");
 exists("robots.txt");
 exists("rss.xml");
+if (isNoIndexPreview) {
+  if (fs.existsSync(path.join(distDir, "sitemap.xml"))) failures.push("sitemap.xml must not be published by noindex preview");
+  const robotsPath = path.join(distDir, "robots.txt");
+  if (fs.existsSync(robotsPath) && !fs.readFileSync(robotsPath, "utf8").includes("Disallow: /")) {
+    failures.push("robots.txt must disallow all crawling in noindex preview");
+  }
+} else exists("sitemap.xml");
 if (fs.existsSync(distDir)) checkPages();
 else failures.push("site/.vitepress/dist does not exist");
 checkForbiddenTerms();
