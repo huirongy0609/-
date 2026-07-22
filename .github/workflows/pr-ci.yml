@@ -44,5 +44,8 @@ jobs:
       - name: GEO readiness
         run: npm run geo:readiness-check
 
+      - name: Site URL policy tests
+        run: npm run geo:site:test
+
       - name: Production build
         run: npm run build

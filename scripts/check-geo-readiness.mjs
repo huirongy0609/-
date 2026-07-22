@@ -35,6 +35,12 @@ for (const crawler of ['Googlebot', 'OAI-SearchBot', 'ChatGPT-User', 'Perplexity
   checks.push({status: robotsSource.includes(crawler) ? 'PASS' : 'FAIL', check: `robots 声明 ${crawler}`});
 }
 
+const siteSource = await readFile(resolve(root, 'lib/geo/site.ts'), 'utf8');
+checks.push({
+  status: !siteSource.includes('dev.judao.club') && siteSource.includes('https://judao.club') ? 'PASS' : 'FAIL',
+  check: '生产 Site URL 不回退 dev 域名',
+});
+
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
 checks.push({
   status: /^https:\/\/[^/]+/.test(siteUrl) ? 'PASS' : 'WARN',

@@ -4,10 +4,10 @@
 
 - 检查日期：2026-07-22（Asia/Shanghai）
 - 目标 PR：[PR #10 — GEO Sprint No.001](https://github.com/huirongy0609/-/pull/10)
-- 当前结论：**暂不直接合并**
-- 建议顺序：**PR #6 已合并 → 将 PR #10 retarget 到 `main` → 等待新增 CI 全部通过 → 完成审阅 → 合并 PR #10**
+- 当前结论：**合并收口进行中；正式 Review 完成前不合并**
+- 建议顺序：**PR #6 已合并 → PR #10 已 retarget 到 `main` → 完成最终 CI 与正式 Review → 由项目负责人决定合并 PR #10**
 
-本检查表只用于合并准备。本次不执行 merge、rebase、retarget，不修改 DNS、Vercel 或生产服务器。
+本检查表用于记录合并收口。PR #10 已安全 retarget 到 `main`；本次未执行 merge 或 rebase，也未修改 DNS、Vercel 或生产服务器。
 
 ## 2. 前置 PR 状态
 
@@ -28,7 +28,7 @@
 | 项目 | 状态 |
 | --- | --- |
 | PR | [PR #10 — GEO Sprint No.001](https://github.com/huirongy0609/-/pull/10) |
-| 当前 Base / Head | `codex/eng-026-first-public-release` ← `codex/geo-sprint-001-foundation` |
+| 当前 Base / Head | `main` ← `codex/geo-sprint-001-foundation` |
 | 状态 | Open、Draft、可合并；尚未合并 |
 | Head SHA（检查时） | `18b5f2e710d55f887585c086fd906b62320af3ff` |
 | 未合并 Commit | 2 个 GEO commits 尚未进入 Base / `main` |
@@ -40,19 +40,19 @@
 1. **先合并 PR #6** —— 已完成。
 2. **再合并 PR #10** —— 尚未执行；必须先完成本表中的 retarget、CI 和审阅检查。
 
-### 安全的 Base 调整方案（本次不执行）
+### Base 调整结果
 
-优先方案是直接把 PR #10 的 Base 从 `codex/eng-026-first-public-release` retarget 为 `main`。PR #6 已合并到 `main`，而 PR #10 以 PR #6 的 head 为开发基线；正常情况下 retarget 后应只保留 GEO Sprint 差异。
+PR #10 已从 `codex/eng-026-first-public-release` retarget 到 `main`。Retarget 前后均为 31 个 changed files、5 个 commits、+1203/−314；没有出现 PR #6 的 207 个文件重复回流。
 
-执行 retarget 前后必须分别记录并比较：
+复核结果：
 
-- changed files 数量；
-- commits 数量；
-- `git diff main...codex/geo-sprint-001-foundation`；
-- 是否出现 PR #6 的 207 个文件被重复带入；
-- 是否出现与最新 `main` 的冲突。
+- `git diff main...codex/geo-sprint-001-foundation` 仅包含 GEO Sprint、CI 和审阅准备文件；
+- GitHub compare 显示 head ahead 5、behind 3，merge base 为 PR #6 head；
+- 本地 `git merge-tree --write-tree origin/main HEAD` 成功，无冲突；
+- 没有意外删除或大面积重复变更；
+- 因 diff 正常，不需要 rebase 或 cherry-pick。
 
-若 retarget 后 diff 不干净，才采用备用方案：在干净工作树中从最新 `origin/main` 创建临时备份分支，将 GEO 的两个 commits rebase/cherry-pick 到最新 `main`，验证后使用 `--force-with-lease` 更新原分支。不得使用 `git reset --hard`，不得在当前含大量无关修改的工作区执行历史改写。
+若最终审阅期间 `main` 再次前进并产生冲突，应在干净工作树中从最新 `origin/main` 创建临时备份分支，只 rebase/cherry-pick GEO 真实 commits，并使用 `--force-with-lease`；不得在当前含大量无关修改的工作区改写历史。
 
 ## 3. CI 状态
 
@@ -109,20 +109,26 @@ Vercel 绑定状态必须由项目负责人在 Vercel Dashboard 的 Project → 
 | robots Sitemap | `https://judao.club/sitemap.xml` |
 | RSS | `https://judao.club/feed.xml`，频道和条目 URL 使用正式域名 |
 
-当前 Next.js GEO 输出均通过 `getSiteUrl()` 共享同一地址来源；但缺少 `NEXT_PUBLIC_SITE_URL` 时仍会回退到 `https://dev.judao.club`。因此“统一生成机制”已通过，“生产环境安全默认值”尚未通过。
+当前 Next.js GEO 输出均通过 `getSiteUrl()` 共享同一地址来源。Production 缺少 `NEXT_PUBLIC_SITE_URL` 时使用安全的 `https://judao.club`；不会再生成 `dev.judao.club`。Vercel Preview 在未显式配置且存在 `VERCEL_URL` 时使用对应预览地址；普通非生产环境使用 `http://localhost:3000`。
 
 ## 5. 环境变量状态
 
 | 检查项 | 状态 | 说明 |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` 统一驱动 Metadata / JSON-LD / sitemap / robots / RSS | 通过 | 统一入口为 `lib/geo/site.ts` |
-| PR CI 显式设置生产 URL | 通过（待 Actions 验证） | 新增 workflow 使用 `https://judao.club` |
-| `.env.example` 记录站点 URL | 未通过 | 当前只记录视频服务变量 |
-| Production 缺变量时拒绝构建/启动 | 未通过 | 当前静默回退 `dev.judao.club` |
+| PR CI 显式设置生产 URL | 通过 | workflow 使用 `https://judao.club` |
+| `.env.example` 记录站点 URL | 通过 | 示例值为 `https://judao.club`，不含真实密钥 |
+| Production 缺变量时的行为 | 通过 | 安全回退 `https://judao.club`，不使用 dev 域名 |
 | Vercel Production 环境变量 | 未核实 | 需在 Vercel Dashboard 或实际部署平台核实 |
-| Vercel Preview 环境变量 | 未核实 | 需先确认 Vercel 项目和 Preview URL |
+| Vercel Preview 环境变量 | 代码支持 | 未显式配置时读取 Vercel 自动提供的 `VERCEL_URL`；实际绑定仍需平台核实 |
 
-合并 PR #10 可以建立 GEO 框架，但在 production deploy 前必须完成正式 URL 强校验和部署平台变量配置。
+设置方式：
+
+- 本地：`NEXT_PUBLIC_SITE_URL=http://localhost:3000 npm run dev`；未设置时也使用 localhost。
+- Vercel Production：Project → Settings → Environment Variables，为 Production 设置 `NEXT_PUBLIC_SITE_URL=https://judao.club` 后重新部署。
+- Vercel Preview：优先不设置该变量，让应用读取 `VERCEL_URL`；如需要固定预览域名，可为 Preview 单独设置完整 HTTPS URL。
+- 缺少变量：Production → `https://judao.club`；Vercel Preview → `https://<VERCEL_URL>`；普通非生产 → `http://localhost:3000`。
+- 显式配置不是有效 HTTP(S) URL 时，构建或启动明确报错。
 
 ## 6. 合并前功能检查
 
@@ -164,13 +170,19 @@ Vercel 绑定状态必须由项目负责人在 Vercel Dashboard 的 Project → 
 
 ## 7. GitHub Pages / Vercel 冲突检查
 
-- [ ] 确认 Next.js 是 `https://judao.club` 的唯一正式生产应用。
-- [ ] 明确 VitePress GitHub Pages 仅为内部/预览用途，或停止公开部署。
-- [ ] 若继续公开 GitHub Pages，为其设置 noindex，且不得生成与正式站竞争的 Canonical。
+- [x] 确认 Next.js 是 `https://judao.club` 的唯一正式生产应用。
+- [x] 推荐 VitePress GitHub Pages 仅作为内部预览用途。
+- [ ] 为继续公开的 GitHub Pages 设置 noindex，且不得生成与正式站竞争的 Canonical。
 - [ ] 清理或重新生成仍引用 `geo.judao.org` 的 VitePress frontmatter、sitemap、robots 和 RSS。
 - [ ] 在完成发布架构决策前，不把 GitHub Pages 地址提交给搜索引擎。
 
-现有 GitHub Pages 工作流会在 `main` push 后公开部署 VitePress。PR #10 合并会触发该流程，因此重复索引策略必须在正式生产上线前关闭；它不阻止代码框架进入 `main`，但阻止多站点同时作为正式 Canonical 发布。
+三选一建议：
+
+1. 停用：能彻底消除重复索引，但本任务明确暂不删除或停用。
+2. **保留为内部预览并统一 noindex（推荐）**：保留当前审阅入口，同时明确它不是正式发布面；在 `judao.club` DNS/HTTPS 尚未就绪时风险和可逆性最均衡。
+3. 重定向到 `https://judao.club`：长期最干净，但应等正式域名、HTTPS 和全部目标路径稳定后再实施，否则会把可用预览重定向到不可达站点。
+
+当前 GitHub Pages 仍可能造成重复内容、重复索引、Canonical 冲突，并使旧页面继续被搜索引擎抓取。推荐方案的 noindex 尚未实施，因此它是生产公开发布前的剩余动作，但不要求在本任务中删除 Pages。
 
 ## 8. 回滚方案
 
@@ -192,19 +204,18 @@ Vercel 绑定状态必须由项目负责人在 Vercel Dashboard 的 Project → 
 PR #10 只有在以下条件全部满足后才建议从 Draft 转为 Ready 并合并：
 
 - [x] PR #6 已合并。
-- [ ] PR #10 Base 已安全 retarget 到 `main`，且 diff 只包含 GEO Sprint 差异。
+- [x] PR #10 Base 已安全 retarget 到 `main`，且 diff 只包含 GEO Sprint 差异。
 - [x] Pull Request CI 全部通过。
 - [ ] 至少完成一次正式 GitHub Review，无未解决阻断意见。
-- [ ] 项目负责人确认 `https://judao.club` 为唯一正式 Canonical。
-- [ ] 部署平台已明确 `NEXT_PUBLIC_SITE_URL` 的 Production 值；Preview 值与 Preview 域名一致。
-- [ ] GitHub Pages / VitePress 的非正式索引策略已确认。
+- [x] 项目负责人确认 `https://judao.club` 为唯一正式 Canonical。
+- [x] 代码与文档已明确 Production / Preview / Local 的 Site URL 策略。
+- [x] GitHub Pages / VitePress 推荐采用“内部预览 + noindex”。
 - [ ] 回滚负责人和上一稳定 SHA 已记录。
 
 ## 10. 建议动作
 
-1. 推送本次最小 PR CI 与检查表，使 PR #10 触发 Actions。
-2. 将 PR #10 Base 从已合并的功能分支 retarget 到 `main`，复核 changed files 和 commits。
-3. 等待 TypeScript、production build、foundation、beta、GEO readiness 全部通过。
-4. 完成正式 GitHub Review。
-5. 确认正式域名和 Vercel/实际部署平台绑定；不修改 DNS。
-6. 满足准入条件后，再决定是否合并 PR #10。
+1. 提交生产 Site URL 安全策略、环境说明与测试。
+2. 等待最终 GitHub Actions 全部通过。
+3. 将 PR #10 从 Draft 改为 Ready for review。
+4. 指定正式审阅人并完成 Review；不由本任务自行合并。
+5. 生产部署前实施 GitHub Pages noindex，并在实际部署平台核实域名绑定。
