@@ -2,11 +2,13 @@ import type {KnowledgeObjectType} from '@/lib/foundation/types';
 
 export const websiteObjectTypes = [
   'JD',
+  'GT',
   'GT_PACKAGE',
   'CASE',
   'LAW',
   'FAQ',
   'RESEARCH',
+  'ARTICLE',
 ] as const;
 
 export type WebsiteObjectType = (typeof websiteObjectTypes)[number];
@@ -20,6 +22,11 @@ export type WebsiteFoundationObject = {
   updatedAt: string | null;
   relationshipCount: number;
   packageMemberCount: number;
+  summary?: string | null;
+  keywords?: string[];
+  category?: string | null;
+  filePath?: string | null;
+  relatedIds?: string[];
 };
 
 export type WebsiteObjectQuery = {
@@ -31,20 +38,24 @@ export type WebsiteObjectQuery = {
 
 export const websiteTypeLabels: Record<WebsiteObjectType, string> = {
   JD: '治理词典',
+  GT: '治理标准',
   GT_PACKAGE: '治理标准包',
   CASE: '案例',
   LAW: '法律法规',
   FAQ: '常见问题',
   RESEARCH: '研究',
+  ARTICLE: '文章',
 };
 
 export const websiteTypeDescriptions: Record<WebsiteObjectType, string> = {
   JD: '理解信托制物业的基础概念与治理语言。',
+  GT: '查看可执行、可复核的治理标准与工作方法。',
   GT_PACKAGE: '查看由规则、方法、原则与证据组成的治理标准包。',
   CASE: '通过已登记实践理解治理机制如何落地。',
   LAW: '查找知识对象关联的法律法规与适用依据。',
   FAQ: '从真实问题进入已经批准的权威知识。',
   RESEARCH: '浏览专题研究、行业观察与长期研究成果。',
+  ARTICLE: '阅读围绕治理议题形成的长期解释与行业文章。',
 };
 
 export function countWebsiteObjectsByType(
@@ -59,10 +70,12 @@ export function getWebsiteObjectHref(object: Pick<WebsiteFoundationObject, 'id' 
   const id = object.id.toLocaleLowerCase('en');
   switch (object.type) {
     case 'GT_PACKAGE': return `/standards/${id}`;
+    case 'GT': return `/standards/${id}`;
     case 'CASE': return `/cases/${id}`;
     case 'LAW': return `/laws/${id}`;
     case 'FAQ': return `/faq/${id}`;
     case 'RESEARCH': return `/research/${id}`;
+    case 'ARTICLE': return `/articles/${id}`;
     case 'JD': return `/knowledge/${id}`;
   }
 }

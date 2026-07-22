@@ -17,7 +17,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: '知识中心',
-  description: '跨 JD、GT Package、CASE、LAW 与 FAQ 检索可公开 Foundation 对象。',
+  description: '跨 JD、GT、Article、FAQ、CASE、LAW 与研究检索可公开知识对象。',
   alternates: {canonical: '/knowledge'},
 };
 
@@ -30,7 +30,7 @@ export default async function KnowledgePage({searchParams}: {searchParams: Websi
       <section className="platformContainer pb-20">
         <Breadcrumb items={[{href: '/', label: '首页'}, {label: '知识中心'}]} />
         <PageTitle
-          description="统一检索治理词典、治理标准包、案例、法律法规、常见问题与研究；所有结果均来自 Knowledge Foundation Engine。"
+          description="统一检索治理词典、治理标准、文章、案例、法律法规、常见问题与研究；所有结果均来自已批准知识对象。"
           eyebrow="Knowledge Center"
           meta={[`${objects.length} 个公开对象`]}
           title="知识中心"
@@ -40,7 +40,7 @@ export default async function KnowledgePage({searchParams}: {searchParams: Websi
           <div className="platformSectionTitle">
             <div>
               <h2 id="knowledge-types-title">按知识类型进入</h2>
-              <p>六类入口共享同一 Foundation Registry；数量由当前公开对象实时计算。</p>
+              <p>各类入口共享同一公开对象注册表；数量由当前已批准对象实时计算。</p>
             </div>
           </div>
           <div className="platformGrid platformGridThree">

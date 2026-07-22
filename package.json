@@ -16,6 +16,7 @@
     "geo:asset-listen": "node scripts/geo-asset-listener.mjs",
     "geo:build-site": "node scripts/build-site.mjs",
     "geo:stability-check": "node scripts/geo-stability-check.mjs",
+    "geo:readiness-check": "node scripts/check-geo-readiness.mjs",
     "foundation:index": "node scripts/generate-foundation-index.mjs",
     "foundation:validate": "node scripts/validate-foundation.mjs --write-report",
     "foundation:sync": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/foundation-engine.ts sync",

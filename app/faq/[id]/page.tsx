@@ -6,14 +6,14 @@ import {getPublishedGeoObject, getPublishedGeoObjects} from '@/lib/geo/publicati
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({params}: {params: {slug: string}}): Promise<Metadata> {
-  const object = await getPublishedGeoObject('GT', params.slug);
-  return object ? buildGeoMetadata(object) : {title: '治理标准未找到', robots: {index: false, follow: false}};
+export async function generateMetadata({params}: {params: {id: string}}): Promise<Metadata> {
+  const object = await getPublishedGeoObject('QA', params.id);
+  return object ? buildGeoMetadata(object) : {title: '标准问答未找到', robots: {index: false, follow: false}};
 }
 
-export default async function StandardDetailPage({params}: {params: {slug: string}}) {
+export default async function FaqDetailPage({params}: {params: {id: string}}) {
   const [object, allObjects] = await Promise.all([
-    getPublishedGeoObject('GT', params.slug),
+    getPublishedGeoObject('QA', params.id),
     getPublishedGeoObjects(),
   ]);
   if (!object) notFound();

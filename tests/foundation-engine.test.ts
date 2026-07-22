@@ -86,6 +86,7 @@ test("extracts and classifies supported knowledge relationships", () => {
     "| TOOL-001 | Tool |",
     "| PRODUCT-001 | Product |",
     "| COURSE-001 | Course |",
+    "| ARTICLE-001 | Article |",
     "",
     "## 七、来源",
   ].join("\n");
@@ -106,6 +107,7 @@ test("extracts and classifies supported knowledge relationships", () => {
       {target_object_id: "TOOL-001", kind: "RELATED_TOOL", target_registered: false},
       {target_object_id: "PRODUCT-001", kind: "RELATED_PRODUCT", target_registered: false},
       {target_object_id: "COURSE-001", kind: "RELATED_COURSE", target_registered: false},
+      {target_object_id: "ARTICLE-001", kind: "RELATED_ARTICLE", target_registered: false},
     ],
   );
 });

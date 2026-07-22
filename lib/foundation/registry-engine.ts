@@ -92,8 +92,8 @@ function normalizeObjectType(value: string | null, objectId: string): KnowledgeO
     return normalized as KnowledgeObjectType;
   }
   if (/^GT-P(?:ACKAGE)?[-_]?/i.test(objectId)) return "GT_PACKAGE";
-  const embedded = value?.match(/\b(JD|GT|CASE|FAQ|QA|LAW|TOOL|PRODUCT|COURSE|RESEARCH|STANDARD)\b/i)?.[1]
-    ?? objectId.match(/(?:^|-)(JD|GT|CASE|FAQ|QA|LAW|TOOL|PRODUCT|COURSE|RESEARCH|STANDARD)/i)?.[1];
+  const embedded = value?.match(/\b(JD|GT|CASE|FAQ|QA|LAW|TOOL|PRODUCT|COURSE|RESEARCH|ARTICLE|STANDARD)\b/i)?.[1]
+    ?? objectId.match(/(?:^|-)(JD|GT|CASE|FAQ|QA|LAW|TOOL|PRODUCT|COURSE|RESEARCH|ARTICLE|STANDARD)/i)?.[1];
   const inferred = embedded?.toUpperCase() === "QA" ? "FAQ" : embedded?.toUpperCase();
   return inferred && knowledgeObjectTypes.includes(inferred as KnowledgeObjectType)
     ? inferred as KnowledgeObjectType
