@@ -4,7 +4,7 @@ import type {
   RelationshipKind,
 } from "./types.ts";
 
-const targetPattern = /^(?:BK\d+-)?(?:JD|GT|CASE|FAQ|QA|LAW)[-_]?[A-Z0-9-]+$/i;
+const targetPattern = /^(?:BK\d+-)?(?:JD|GT|CASE|FAQ|QA|LAW|TOOL|PRODUCT|COURSE)[-_]?[A-Z0-9-]+$/i;
 
 export function relationshipKind(
   targetId: string,
@@ -17,12 +17,18 @@ export function relationshipKind(
   if (targetType === "CASE") return "RELATED_CASE";
   if (targetType === "FAQ") return "RELATED_FAQ";
   if (targetType === "LAW") return "RELATED_LAW";
+  if (targetType === "TOOL") return "RELATED_TOOL";
+  if (targetType === "PRODUCT") return "RELATED_PRODUCT";
+  if (targetType === "COURSE") return "RELATED_COURSE";
   if (/^(?:BK\d+-)?JD/.test(normalized)) return "RELATED_JD";
   if (/^GT-P(?:ACKAGE)?[-_]?/i.test(normalized)) return "RELATED_GT_PACKAGE";
   if (/^GT/.test(normalized)) return "RELATED_GT";
   if (/^CASE/.test(normalized)) return "RELATED_CASE";
   if (/^(?:FAQ|QA)/.test(normalized)) return "RELATED_FAQ";
   if (/^LAW/.test(normalized)) return "RELATED_LAW";
+  if (/^TOOL/.test(normalized)) return "RELATED_TOOL";
+  if (/^PRODUCT/.test(normalized)) return "RELATED_PRODUCT";
+  if (/^COURSE/.test(normalized)) return "RELATED_COURSE";
   return null;
 }
 

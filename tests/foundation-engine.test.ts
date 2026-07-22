@@ -83,6 +83,9 @@ test("extracts and classifies supported knowledge relationships", () => {
     "| CASE-001 | Case |",
     "| FAQ-001 | FAQ |",
     "| LAW-001 | Law |",
+    "| TOOL-001 | Tool |",
+    "| PRODUCT-001 | Product |",
+    "| COURSE-001 | Course |",
     "",
     "## 七、来源",
   ].join("\n");
@@ -100,6 +103,9 @@ test("extracts and classifies supported knowledge relationships", () => {
       {target_object_id: "CASE-001", kind: "RELATED_CASE", target_registered: false},
       {target_object_id: "FAQ-001", kind: "RELATED_FAQ", target_registered: false},
       {target_object_id: "LAW-001", kind: "RELATED_LAW", target_registered: false},
+      {target_object_id: "TOOL-001", kind: "RELATED_TOOL", target_registered: false},
+      {target_object_id: "PRODUCT-001", kind: "RELATED_PRODUCT", target_registered: false},
+      {target_object_id: "COURSE-001", kind: "RELATED_COURSE", target_registered: false},
     ],
   );
 });
@@ -243,4 +249,29 @@ test("keeps legacy QA identifiers compatible with the FAQ object type", async ()
   );
 
   assert.equal(registry.objects[0].object_type, "FAQ");
+});
+
+test("registers Tool, Product, and Course object types", async () => {
+  const config = await lifecycleConfig();
+  const candidates = ["TOOL", "PRODUCT", "COURSE"].map((type) => ({
+    filePath: `test-fixtures/${type.toLowerCase()}-001.md`,
+    markdown: [
+      "---",
+      `object_id: ${type}-001`,
+      `candidate_id: ${type}-001`,
+      `object_type: ${type}`,
+      "status: in_review",
+      `title: ${type} fixture`,
+      "---",
+    ].join("\n"),
+  }));
+  const registry = buildKnowledgeRegistryFromInputs(
+    config,
+    {source_manifest: "test-fixture", objects: []},
+    candidates,
+  );
+
+  assert.equal(registry.summary.by_type.TOOL, 1);
+  assert.equal(registry.summary.by_type.PRODUCT, 1);
+  assert.equal(registry.summary.by_type.COURSE, 1);
 });
