@@ -6,27 +6,27 @@ import './globals.css';
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
-    default: '中国信托制物业发展平台',
-    template: '%s｜中国信托制物业发展平台',
+    default: 'TrustPM AI',
+    template: '%s | TrustPM AI',
   },
-  description: '面向社区治理、信托制物业和资金治理的公共知识基础设施。',
+  description: 'Evidence-based AI decision support for transparent and trustworthy property governance.',
   openGraph: {
-    title: '中国信托制物业发展平台',
-    description: '可信、开放、可引用的信托制物业知识平台。',
+    title: 'TrustPM AI',
+    description: 'Evidence-based AI decision support for transparent and trustworthy property governance.',
     type: 'website',
     url: '/',
-    siteName: '中国信托制物业发展平台',
+    siteName: 'TrustPM AI',
   },
   twitter: {
     card: 'summary_large_image',
-    title: '中国信托制物业发展平台',
-    description: '可信、开放、可引用的信托制物业知识平台。',
+    title: 'TrustPM AI',
+    description: 'Evidence-based AI decision support for transparent and trustworthy property governance.',
   },
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="zh-CN">
+    <html lang="en">
       <body>
         <Header />
         {children}
