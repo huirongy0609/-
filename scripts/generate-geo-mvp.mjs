@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync, readFileSync, existsSync } from "node:fs";
+import { mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 const today = "2026-07-05";
@@ -685,6 +685,7 @@ description: 面向搜索引擎和 AI 搜索引用的信托制物业、物业资
 
 const siteBase = process.env.GEO_SITE_URL || "${siteBase}";
 const siteBasePath = process.env.GEO_SITE_BASE_PATH || "/";
+const isNoIndexPreview = process.env.GEO_PREVIEW_NOINDEX === "1";
 
 function pageUrl(page: string) {
   const clean = page.replace(/(^|\\/)index\\.md$/, "").replace(/\\.md$/, "");
@@ -744,19 +745,30 @@ export default defineConfig({
   base: siteBasePath,
   cleanUrls: true,
   lastUpdated: true,
-  sitemap: { hostname: siteBase },
+  sitemap: isNoIndexPreview ? undefined : { hostname: siteBase },
   transformHead({ pageData }) {
     const url = pageUrl(pageData.relativePath || "");
     const title = pageData.title || "聚道研究院 GEO 知识站";
     const description = pageData.description || "信托制物业、物业资金治理、开放式预算、业主共同基金知识入口";
-    return [
-      ["link", { rel: "canonical", href: url }],
+    const discoveryHead = [
       ["meta", { property: "og:type", content: "article" }],
       ["meta", { property: "og:title", content: title }],
       ["meta", { property: "og:description", content: description }],
-      ["meta", { property: "og:url", content: url }],
       ["meta", { property: "og:site_name", content: "聚道研究院 GEO 知识站" }],
-      ["meta", { name: "twitter:card", content: "summary" }],
+      ["meta", { name: "twitter:card", content: "summary" }]
+    ] as const;
+
+    if (isNoIndexPreview) {
+      return [
+        ["meta", { name: "robots", content: "noindex,nofollow" }],
+        ...discoveryHead
+      ];
+    }
+
+    return [
+      ["link", { rel: "canonical", href: url }],
+      ["meta", { property: "og:url", content: url }],
+      ...discoveryHead,
       ["script", { type: "application/ld+json" }, JSON.stringify(makeJsonLd(pageData))]
     ];
   },
@@ -788,15 +800,22 @@ export default defineConfig({
 
 function refreshSitemap() {
   const urls = ["/", ...allPages.map(pagePath), "/books/fund-governance", "/courses/trust-property-training", "/consulting/"];
-  write("site/public/robots.txt", `User-agent: *
+  if (process.env.GEO_PREVIEW_NOINDEX === "1") {
+    write("site/public/robots.txt", `User-agent: *
+Disallow: /
+`);
+    if (existsSync("site/public/sitemap.xml")) rmSync("site/public/sitemap.xml");
+  } else {
+    write("site/public/robots.txt", `User-agent: *
 Allow: /
 Sitemap: ${siteBase}/sitemap.xml
 `);
-  write("site/public/sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
+    write("site/public/sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((url) => `  <url><loc>${siteBase}${url}</loc><lastmod>${today}</lastmod></url>`).join("\n")}
 </urlset>
 `);
+  }
   write("site/public/rss.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
