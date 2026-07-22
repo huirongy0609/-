@@ -128,7 +128,7 @@ function candidateObject(input: ParsedCandidateInput): Omit<KnowledgeObject, "re
   const objectId = foundationId ?? candidateId ?? explicitObjectId;
   if (!objectId) throw new Error(`${input.filePath} is missing an object ID.`);
 
-  const source = metadataString(attributes, "source", "来源图书");
+  const source = metadataList(attributes, "source", "sources", "来源", "来源图书");
   const objectType = normalizeObjectType(
     metadataString(attributes, "object_type", "type", "知识对象类型"),
     objectId,
@@ -144,9 +144,13 @@ function candidateObject(input: ParsedCandidateInput): Omit<KnowledgeObject, "re
     candidate_id: candidateId?.toUpperCase() ?? null,
     foundation_id: foundationId?.toUpperCase() ?? null,
     object_type: objectType,
+    metadata_schema_version: metadataString(attributes, "schema_version", "schemaVersion"),
     status,
     version: metadataString(attributes, "version", "版本"),
-    source: source ? [source] : [],
+    summary: metadataString(attributes, "summary", "摘要"),
+    keywords: metadataList(attributes, "keywords", "关键词"),
+    category: metadataString(attributes, "category", "category_id", "categoryId", "分类"),
+    source,
     created_at: createdAt,
     updated_at: updatedAt,
     title: metadataString(attributes, "title", "名称") ?? titleFromMarkdown(input.markdown),
@@ -185,8 +189,12 @@ function formalObject(
     candidate_id: null,
     foundation_id: object.file_path ? object.id.toUpperCase() : null,
     object_type: normalizeObjectType(object.object_type, object.id),
+    metadata_schema_version: null,
     status: object.lifecycle_status,
     version: object.version,
+    summary: null,
+    keywords: [],
+    category: null,
     source: [sourceManifest],
     created_at: null,
     updated_at: object.last_updated,

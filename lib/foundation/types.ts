@@ -59,8 +59,12 @@ export type KnowledgeObject = {
   candidate_id: string | null;
   foundation_id: string | null;
   object_type: KnowledgeObjectType;
+  metadata_schema_version: string | null;
   status: string | null;
   version: string | null;
+  summary: string | null;
+  keywords: string[];
+  category: string | null;
   source: string[];
   created_at: string | null;
   updated_at: string | null;

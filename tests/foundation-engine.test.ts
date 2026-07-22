@@ -125,7 +125,11 @@ test("builds a registry from isolated engineering fixtures", async () => {
         "object_type: JD",
         "status: in_review",
         "version: V1.0",
-        "source: test-fixture",
+        "schema_version: 1.0",
+        "summary: Test summary",
+        "keywords: [test, fixture]",
+        "category: test-category",
+        "source: [SOURCE-001, SOURCE-002]",
         "created_at: 2026-01-01",
         "updated_at: 2026-01-01",
         "title: Test Fixture",
@@ -142,6 +146,11 @@ test("builds a registry from isolated engineering fixtures", async () => {
   assert.equal(registry.objects[0].package_version, null);
   assert.equal(registry.objects[0].parent_object, null);
   assert.deepEqual(registry.objects[0].children, []);
+  assert.equal(registry.objects[0].metadata_schema_version, "1.0");
+  assert.equal(registry.objects[0].summary, "Test summary");
+  assert.deepEqual(registry.objects[0].keywords, ["test", "fixture"]);
+  assert.equal(registry.objects[0].category, "test-category");
+  assert.deepEqual(registry.objects[0].source, ["SOURCE-001", "SOURCE-002"]);
   assert.equal(
     registry.objects.every((object) => object.status === "approved" || !object.foundation_ready),
     true,
