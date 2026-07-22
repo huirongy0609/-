@@ -4,9 +4,9 @@ TrustPM AI is an evidence-based AI agent for property governance. It helps prope
 
 ## Current Status
 
-**Submission Ready: NO**
+**Submission Ready: YES**
 
-The only remaining release-candidate item is to configure the server-side `OPENAI_API_KEY` in Vercel, redeploy, and verify a successful production response with `mode: "openai"`.
+Production OpenAI verification is complete: the homepage is healthy and all three controlled scenarios return `mode: "openai"` through the OpenAI Responses API.
 
 ## The problem
 
@@ -87,7 +87,7 @@ npm run build
 
 Current production deployment: [trustpm-ai.vercel.app](https://trustpm-ai.vercel.app)
 
-The production environment currently runs in controlled demo mode. Add the server-side `OPENAI_API_KEY` and `OPENAI_MODEL` variables, redeploy, and verify that the result badge reads `OpenAI + controlled retrieval` before claiming a successful OpenAI-powered run.
+The production environment is verified in OpenAI mode. The server-side `OPENAI_API_KEY`, `OPENAI_MODEL`, and `NEXT_PUBLIC_SITE_URL` variables are configured in Vercel Production, and the result badge reads `OpenAI + controlled retrieval`.
 
 ## Main paths
 
@@ -128,5 +128,6 @@ The production environment currently runs in controlled demo mode. Add the serve
 - Production build: passed locally and on Vercel.
 - Online smoke test: homepage and all three controlled scenarios returned HTTP 200.
 - Scenario routing: `fee-collection`, `budget-variance`, and `public-revenue` returned the expected evidence packs.
-- OpenAI online mode: not yet verified because the Vercel project does not currently have `OPENAI_API_KEY` configured.
-- Honest fallback: verified; production returns `mode: "demo"` and discloses Controlled Demo Mode.
+- OpenAI online mode: verified on production; all three controlled scenarios returned `mode: "openai"`.
+- Actual OpenAI model observed in Responses logs: `gpt-5.6-sol`.
+- Honest fallback remains available if the OpenAI request is unavailable.
