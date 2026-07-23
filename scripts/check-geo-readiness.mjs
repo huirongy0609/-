@@ -31,7 +31,7 @@ for (const token of ['alternates', 'canonical', 'openGraph', 'twitter', 'applica
 }
 
 const robotsSource = await readFile(resolve(root, 'app/robots.ts'), 'utf8');
-for (const crawler of ['Googlebot', 'OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot']) {
+for (const crawler of ['Googlebot', 'Bingbot', 'OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot']) {
   checks.push({status: robotsSource.includes(crawler) ? 'PASS' : 'FAIL', check: `robots 声明 ${crawler}`});
 }
 
@@ -40,6 +40,21 @@ checks.push({
   status: !siteSource.includes('dev.judao.club') && siteSource.includes('https://judao.club') ? 'PASS' : 'FAIL',
   check: '生产 Site URL 不回退 dev 域名',
 });
+checks.push({
+  status: siteSource.includes("siteName = '信托制物业'") ? 'PASS' : 'FAIL',
+  check: '平台主品牌统一为信托制物业',
+});
+
+const middlewareSource = await readFile(resolve(root, 'middleware.ts'), 'utf8');
+checks.push({
+  status: middlewareSource.includes('/admin/:path*') && middlewareSource.includes('/api/knowledge-objects/:path*') ? 'PASS' : 'FAIL',
+  check: '管理页面与知识对象 API 受服务端鉴权保护',
+});
+
+const nextConfigSource = await readFile(resolve(root, 'next.config.mjs'), 'utf8');
+for (const header of ['Content-Security-Policy', 'Strict-Transport-Security', 'X-Content-Type-Options', 'Referrer-Policy', 'Permissions-Policy', 'X-Frame-Options']) {
+  checks.push({status: nextConfigSource.includes(header) ? 'PASS' : 'FAIL', check: `安全响应头 ${header}`});
+}
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
 checks.push({

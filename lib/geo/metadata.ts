@@ -10,7 +10,7 @@ export function buildGeoMetadata(object: PublishedGeoObject): Metadata {
   const canonicalPath = getGeoObjectPath(object);
   const description = normalizeDescription(object.summary);
   return {
-    title: object.title,
+    title: {absolute: `${object.title}｜${siteName}`},
     description,
     alternates: {canonical: canonicalPath},
     keywords: object.tags,
@@ -87,7 +87,8 @@ export const rootJsonLd = [
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': `${absoluteUrl('/')}#organization`,
-    name: siteName,
+    name: '聚道',
+    alternateName: '聚道研究院',
     url: absoluteUrl('/'),
   },
   {

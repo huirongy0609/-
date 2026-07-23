@@ -18,6 +18,9 @@ jobs:
     timeout-minutes: 30
     env:
       NEXT_PUBLIC_SITE_URL: https://judao.club
+      ADMIN_USERNAME: ci-admin
+      ADMIN_PASSWORD: ci-only-validation-password
+      KNOWLEDGE_WRITES_ENABLED: "false"
 
     steps:
       - name: Checkout
@@ -46,6 +49,9 @@ jobs:
 
       - name: Site URL policy tests
         run: npm run geo:site:test
+
+      - name: Authentication security tests
+        run: npm run security:test
 
       - name: Production build
         run: npm run build

@@ -3,16 +3,16 @@ import {JsonLd} from '@/components/geo/JsonLd';
 import {Footer} from '@/components/platform/Footer';
 import {Header} from '@/components/platform/Header';
 import {rootJsonLd} from '@/lib/geo/metadata';
-import {getSiteUrl, siteName} from '@/lib/geo/site';
+import {getSiteUrl, siteDescription, siteName} from '@/lib/geo/site';
 import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
-    default: '中国信托制物业发展平台',
-    template: '%s｜中国信托制物业发展平台',
+    default: siteName,
+    template: `%s｜${siteName}`,
   },
-  description: '面向社区治理、信托制物业和资金治理的公共知识基础设施。',
+  description: siteDescription,
   applicationName: siteName,
   alternates: {
     canonical: '/',
@@ -23,17 +23,17 @@ export const metadata: Metadata = {
     apple: '/brand/judao-logo-seal.png',
   },
   openGraph: {
-    title: '中国信托制物业发展平台',
-    description: '可信、开放、可引用的信托制物业知识平台。',
+    title: siteName,
+    description: siteDescription,
     type: 'website',
     url: '/',
-    siteName: '中国信托制物业发展平台',
+    siteName,
     images: [{url: '/brand/judao-logo-seal.png', alt: siteName}],
   },
   twitter: {
     card: 'summary',
-    title: '中国信托制物业发展平台',
-    description: '可信、开放、可引用的信托制物业知识平台。',
+    title: siteName,
+    description: siteDescription,
     images: ['/brand/judao-logo-seal.png'],
   },
 };

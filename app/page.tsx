@@ -7,17 +7,18 @@ import {WebsiteObjectCard} from '@/components/website/WebsiteObjectCard';
 import {topic001MvpContent} from '@/lib/content/topic001-mvp';
 import {getTopicProvider} from '@/lib/repositories/topics';
 import {getPublicWebsiteObjects} from '@/lib/repositories/website-foundation';
+import {siteDescription, siteName} from '@/lib/geo/site';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: topic001MvpContent.title,
-  description: topic001MvpContent.seoDescription,
+  title: siteName,
+  description: siteDescription,
   keywords: [...topic001MvpContent.keywords],
   alternates: {canonical: '/'},
   openGraph: {
-    title: topic001MvpContent.title,
-    description: topic001MvpContent.seoDescription,
+    title: siteName,
+    description: siteDescription,
     type: 'website',
     url: '/',
   },
@@ -38,7 +39,7 @@ export default async function HomePage() {
       <section className="border-b border-[var(--line)] bg-white">
         <div className="mx-auto w-[min(1120px,calc(100vw-40px))]">
           <div className="mx-auto flex max-w-4xl flex-col items-center pb-20 pt-16 text-center md:pb-24 md:pt-24">
-            <p className="text-sm font-semibold tracking-[0.08em] text-[var(--primary-dark)]">中国信托制物业发展平台</p>
+            <p className="text-sm font-semibold tracking-[0.08em] text-[var(--primary-dark)]">信托制物业</p>
             <h1 className="mt-5 text-4xl font-semibold leading-[1.18] tracking-[-0.02em] text-[var(--ink)] md:text-6xl">
               {topic001MvpContent.homeCard.subtitle}
             </h1>

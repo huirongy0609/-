@@ -17,7 +17,8 @@ export function Header() {
   return (
     <header className="platformHeader">
       <Link className="platformBrand" href="/">
-        <img alt="聚道物业研究院" className="platformBrandLogo" src="/brand/judao-logo-horizontal.png" />
+        <img alt="" aria-hidden="true" className="platformBrandLogo" src="/brand/judao-logo-seal.png" />
+        <strong>信托制物业</strong>
       </Link>
       <nav aria-label="主导航" className="platformNav">
         {navItems.map((item) => (

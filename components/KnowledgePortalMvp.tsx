@@ -68,7 +68,7 @@ export function HeroSection() {
     <section className="rounded-lg border border-[#2a3431] bg-[#151c1a]/78 p-6 md:p-8">
       <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6fafa2]">China Trust-Based Property Knowledge Platform</p>
       <h1 className="mt-4 text-5xl font-semibold leading-tight md:text-7xl">聚道智库</h1>
-      <p className="mt-5 text-2xl font-semibold text-[#f3f6f4]">中国信托制物业知识平台</p>
+      <p className="mt-5 text-2xl font-semibold text-[#f3f6f4]">信托制物业</p>
       <p className="mt-5 max-w-3xl text-base leading-8 text-[#b8c4bf]">
         持续研究、持续实践、持续共创，建设 AI 时代信托制物业知识基础设施。
       </p>

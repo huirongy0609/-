@@ -1,4 +1,5 @@
-export const siteName = '中国信托制物业发展平台';
+export const siteName = '信托制物业';
+export const siteDescription = '信托制物业的专业知识与实践平台，持续发布治理词典、标准、问答、案例与研究内容。';
 export const productionSiteUrl = 'https://judao.club';
 export const localSiteUrl = 'http://localhost:3000';
 
