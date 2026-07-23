@@ -17,7 +17,7 @@ export default async function KnowledgeAdminPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6fafa2]">MVP Admin</p>
           <h1 className="mt-4 text-4xl font-semibold md:text-6xl">知识对象后台</h1>
           <p className="mt-5 max-w-3xl text-base leading-8 text-[#b8c4bf]">
-            当前后台不含登录权限，仅用于 MVP 阶段验证 Knowledge Object 的新增、修改和删除能力。
+            当前后台由服务端管理员鉴权保护；写入能力默认关闭，仅在明确配置的受控环境中启用。
           </p>
         </div>
         <KnowledgeAdminClient initialItems={items} />

@@ -12,6 +12,7 @@ export function Footer() {
     <footer className="platformFooter" id="platform-footer">
       <div className="platformFooterIntro">
         <p className="platformFooterSlogan">从共同决定，到专业履职</p>
+        <p className="platformFooterText">信托制物业</p>
         <p className="platformFooterText">中国信托制物业发展平台</p>
         <p className="platformFooterText">第一次公开发布（MVP）</p>
       </div>

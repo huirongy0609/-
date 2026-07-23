@@ -36,10 +36,10 @@ export default function AdminHomePage() {
     <main className="min-h-screen bg-[#0b1110] px-5 py-10 text-[#f3f6f4] sm:px-8">
       <section className="mx-auto max-w-6xl">
         <header className="rounded-lg border border-[#2a3431] bg-[#151c1a]/78 p-6 md:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6fafa2]">Internal MVP</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6fafa2]">Authenticated Internal MVP</p>
           <h1 className="mt-4 text-4xl font-semibold md:text-6xl">内部后台入口</h1>
           <p className="mt-5 max-w-3xl text-base leading-8 text-[#b8c4bf]">
-            V0.2 仅验证四类入口，不建设通用后台、登录或权限系统。正式知识仍由 Foundation 与既有治理流程管理。
+            此入口仅对已配置的管理员开放，不建设通用用户或复杂权限系统。正式知识仍由 Foundation 与既有治理流程管理。
           </p>
         </header>
 

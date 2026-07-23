@@ -5,7 +5,7 @@ import {PageTitle} from '@/components/platform/PageTitle';
 
 export const metadata: Metadata = {
   title: '关于平台',
-  description: '了解中国信托制物业发展平台的定位、发布方式与 Beta 数据边界。',
+  description: '了解信托制物业专业知识与实践平台的定位、发布方式与数据边界。',
   alternates: {canonical: '/about'},
 };
 
@@ -17,14 +17,14 @@ export default function AboutPage() {
         <Breadcrumb items={[{href: '/', label: '首页'}, {label: '关于平台'}]} />
         <PageTitle
           description="建设可运行、可维护、可扩展的信托制物业知识发布平台。"
-          eyebrow="About judao.club"
-          title="中国信托制物业发展平台"
+          eyebrow="ABOUT"
+          title="信托制物业"
         />
 
         <div className="grid gap-6 pt-8">
           <section className="articleBody">
             <h2>平台定位</h2>
-            <p>judao.club 面向物业企业、街道社区、业委会、研究者与公共治理参与者，持续发布信托制物业相关知识、治理标准、案例、法律依据、常见问题与研究成果。</p>
+            <p>信托制物业是面向物业企业、街道社区、业委会、研究者与公共治理参与者的专业知识与实践平台，持续发布治理标准、案例、法律依据、常见问题与研究成果。中国信托制物业发展平台是本项目的正式项目名称。</p>
           </section>
           <section className="articleBody">
             <h2>为什么使用 Topic</h2>
