@@ -59,6 +59,7 @@ export function buildContentJsonLd(object: PublishedGeoObject): Record<string, u
     mainEntityOfPage: {'@id': url},
     keywords: object.tags.join(', '),
     dateModified: validDate(object.updatedAt) || undefined,
+    datePublished: validDate(object.publishedAt) || undefined,
     version: object.version || undefined,
   };
 

@@ -64,9 +64,14 @@ export type KnowledgeObject = {
   metadata_schema_version: string | null;
   status: string | null;
   version: string | null;
+  definition: string | null;
   summary: string | null;
   keywords: string[];
   category: string | null;
+  chapter: string | null;
+  legal_basis: string[];
+  published_at: string | null;
+  questions: string[];
   source: string[];
   created_at: string | null;
   updated_at: string | null;

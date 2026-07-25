@@ -3,6 +3,8 @@ import 'server-only';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {parseMarkdownMetadata} from '@/lib/foundation/metadata-parser';
+import {extractKnowledgeCenterFields} from '@/lib/knowledge-center/markdown';
+import {resolvePublishedRelatedTopics} from '@/lib/knowledge-center/relationships';
 import {getKnowledgeObjects} from '@/lib/repositories/knowledge-objects';
 import {getPublicWebsiteObjects} from '@/lib/repositories/website-foundation';
 import type {WebsiteFoundationObject, WebsiteObjectType} from '@/lib/website/foundation-view-model';
@@ -14,12 +16,17 @@ export type PublishedGeoObject = {
   id: string;
   type: GeoContentType;
   title: string;
+  definition: string;
   summary: string;
   body: string;
   category: string;
+  chapter: string;
   tags: string[];
   version: string | null;
+  publishedAt: string | null;
   updatedAt: string | null;
+  legalBasis: string[];
+  questions: string[];
   sources: string[];
   relatedIds: string[];
 };
@@ -92,26 +99,61 @@ export function getRelatedGeoContent(
   ])) as RelatedGeoContent;
 }
 
+export function getRelatedTopics(
+  current: PublishedGeoObject,
+  objects: PublishedGeoObject[],
+): PublishedGeoObject[] {
+  return resolvePublishedRelatedTopics(current, objects);
+}
+
 async function toPublishedObject(
   object: WebsiteFoundationObject,
   type: GeoContentType,
   local?: Awaited<ReturnType<typeof getKnowledgeObjects>>[number],
 ): Promise<PublishedGeoObject> {
   const source = local?.body ?? await readRegisteredBody(object.filePath);
-  const body = parseMarkdownMetadata(source).body.trim();
+  const parsed = parseMarkdownMetadata(source);
+  const extracted = extractKnowledgeCenterFields(source);
+  const body = parsed.body.trim();
   const inferredTags = deriveTags(object.title, body, type);
+  const summary = object.summary?.trim()
+    || object.definition?.trim()
+    || local?.summary
+    || extracted.definition
+    || extractSummary(body, object.title);
   return {
     id: object.id,
     type,
     title: object.title,
-    summary: object.summary?.trim() || local?.summary || extractSummary(body, object.title),
+    definition: object.definition?.trim()
+      || local?.definition
+      || extracted.definition
+      || summary,
+    summary,
     body,
     category: object.category?.trim() || local?.category || inferCategory(body, type),
+    chapter: object.chapter?.trim()
+      || local?.chapter
+      || extracted.chapter
+      || object.category?.trim()
+      || local?.category
+      || inferCategory(body, type),
     tags: unique([...(object.keywords ?? []), ...(local?.tags ?? []), ...inferredTags]),
     version: object.version,
+    publishedAt: object.publishedAt || local?.publishedAt || extracted.publishedAt,
     updatedAt: object.updatedAt,
+    legalBasis: unique([
+      ...(object.legalBasis ?? []),
+      ...(local?.legalBasis ?? []),
+      ...extracted.legalBasis,
+    ]),
+    questions: unique([
+      ...(object.questions ?? []),
+      ...(local?.questions ?? []),
+      ...extracted.questions,
+    ]),
     sources: unique(object.sources),
-    relatedIds: unique([...(object.relatedIds ?? []), ...(local?.references ?? [])]),
+    relatedIds: unique([...(object.relatedIds ?? []), ...(local?.relatedIds ?? [])]),
   };
 }
 

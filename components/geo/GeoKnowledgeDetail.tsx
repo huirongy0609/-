@@ -13,6 +13,7 @@ import {
   geoTypeLabels,
   getGeoObjectPath,
   getRelatedGeoContent,
+  getRelatedTopics,
   type PublishedGeoObject,
 } from '@/lib/geo/publication';
 
@@ -24,6 +25,7 @@ export function GeoKnowledgeDetail({
   allObjects: PublishedGeoObject[];
 }) {
   const related = getRelatedGeoContent(object, allObjects);
+  const relatedTopics = getRelatedTopics(object, allObjects);
   const sameType = allObjects.filter((item) => item.type === object.type);
   const currentIndex = sameType.findIndex((item) => item.id === object.id);
   const previous = currentIndex > 0 ? sameType[currentIndex - 1] : undefined;
@@ -65,6 +67,7 @@ export function GeoKnowledgeDetail({
             <a href="#summary">摘要</a>
             <a href="#body">正文</a>
             <a href="#related-content">相关内容</a>
+            <a href="#related-topics">关联词条</a>
             <Link href={geoCollectionPaths[object.type]}>返回{geoTypeLabels[object.type]}</Link>
           </aside>
 
@@ -96,6 +99,19 @@ export function GeoKnowledgeDetail({
                 ))}
               </div>
             </section>
+            <section className="articleBody" id="related-topics">
+              <h2>关联词条</h2>
+              <p>仅展示 Foundation 已登记且已公开发布的治理辞典关系。</p>
+              <div className="mt-6 grid gap-3">
+                {relatedTopics.length ? relatedTopics.map((item) => (
+                  <Link className="platformTextLink" href={getGeoObjectPath(item)} key={item.id}>
+                    {item.id} · {item.title}
+                  </Link>
+                )) : (
+                  <p className="text-sm leading-7 text-[var(--muted)]">暂无可公开的关联词条。</p>
+                )}
+              </div>
+            </section>
           </div>
 
           <Sidebar title="引用信息">
@@ -106,6 +122,7 @@ export function GeoKnowledgeDetail({
                 {label: '类型', value: geoTypeLabels[object.type]},
                 {label: '状态', value: '已批准'},
                 {label: '版本', value: object.version || '未标注'},
+                {label: '发布日期', value: object.publishedAt || '未登记'},
                 {label: '更新时间', value: object.updatedAt || '未登记'},
                 {label: '来源', value: object.sources.join('、') || '未登记'},
               ]}
