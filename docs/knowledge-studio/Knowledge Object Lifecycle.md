@@ -3,6 +3,8 @@
 版本：V1.0
 状态：Design
 
+> V2 兼容说明：统一生命周期继续有效，但其治理单元调整为完整 Knowledge Object Version。Definition、Questions、Canonical Answer 和 Evidence Binding 可有组件级工作状态，不再拥有彼此独立的正式生命周期；Approval Record 仍绑定完整版本校验值。
+
 ## 1. 统一生命周期
 
 所有正式知识对象采用同一主流程：

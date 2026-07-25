@@ -3,6 +3,8 @@
 版本：V1.0
 状态：Design
 
+> V2 调整说明：本文件保留为 Knowledge Studio 总体架构基线。关于 Question、Answer、Evidence 的聚合边界，以《Knowledge Object Model V2.0》及《Knowledge Studio V2 调整建议》为最新设计提案；V2 保留本文件的生命周期、版本、发布、回执和 Read Model 架构，不代表运行时已经迁移。
+
 ## 1. 产品定义
 
 Knowledge Studio 是信托制物业知识资产的生产控制台，不是普通 CMS。

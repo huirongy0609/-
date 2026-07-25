@@ -3,6 +3,8 @@
 版本：V1.0
 状态：Design
 
+> V2 调整说明：路线阶段和迁移纪律继续有效；第一阶段对象契约调整为 Knowledge Object 聚合模型，不再以独立 Question / Answer 权威对象为目标。详见《Knowledge Studio V2 调整建议》。
+
 ## 1. 路线原则
 
 1. 先稳定对象、版本和生命周期，再开发复杂 UI。
