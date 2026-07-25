@@ -2,7 +2,7 @@
 
 版本：V2.0
 
-状态：Design Proposal
+状态：Approved / Governed by Knowledge Studio V2 Baseline
 
 前置文档：《Knowledge Object Model V2.0》
 
@@ -265,7 +265,7 @@ Studio 成为 V2 Draft 的唯一写入面；发布继续生成 Foundation 兼容
 
 ## 10. 与 V1 文档的关系
 
-若 V2 获批，下列 V1 设计需要被 V2 决策替代：
+V2 已获批准，下列 V1 设计由 V2 决策正式替代：
 
 | V1 设计 | V2 决策 |
 | --- | --- |
@@ -326,6 +326,6 @@ Studio 成为 V2 Draft 的唯一写入面；发布继续生成 Foundation 兼容
 
 ## 14. 调整建议结论
 
-建议在保持 Knowledge Studio V1 基础设施不变的前提下，批准 V2 的聚合边界调整。
+V2 聚合边界已在保持 Knowledge Studio V1 基础设施不变的前提下正式批准。
 
 这是一项模型收敛，而不是架构推倒重来：Studio 继续管理对象、版本、审核和发布，只是不再让 Question 与 Answer 演化成平行知识库。该调整应在正式 Question / Answer 数据尚为零时完成，迁移成本最低、SSOT 风险最小。

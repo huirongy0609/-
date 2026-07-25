@@ -2,9 +2,9 @@
 
 版本：V2.0
 
-状态：Architecture Analysis
+状态：Approved Architecture Reference
 
-结论：建议采用方案 B（Knowledge Object 聚合模型）
+结论：方案 B（Knowledge Object 聚合模型）已正式采用
 
 ## 1. 分析问题
 
@@ -383,7 +383,7 @@ W3C 的 Web 架构强调稳定 URI 用于标识资源，并允许同一资源具
 
 ## 14. 最终结论
 
-建议采用方案 B，并将 Knowledge Object V2 作为 Knowledge Studio 下一阶段标准。
+方案 B 已正式采用，Knowledge Object V2 成为 Knowledge Studio 下一阶段标准。
 
 方案 B 能证明：
 
@@ -393,4 +393,4 @@ W3C 的 Web 架构强调稳定 URI 用于标识资源，并允许同一资源具
 - 它不破坏现有生命周期、版本、关系、Release Manifest 和 Foundation Adapter；
 - 它可以通过逻辑聚合、物理分块支持大规模扩展。
 
-建议尽快在正式 Question、Answer、Evidence 对象仍为零的窗口完成设计批准。批准后再另立实施 Sprint；本设计本身不修改任何运行时系统。
+设计批准已在正式 Question、Answer、Evidence 独立对象仍为零的窗口完成。后续实施必须另立 Sprint；本设计批准本身不修改任何运行时系统。

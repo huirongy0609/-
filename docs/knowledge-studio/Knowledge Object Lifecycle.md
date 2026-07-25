@@ -1,7 +1,7 @@
 # Knowledge Object Lifecycle
 
-版本：V1.0
-状态：Design
+版本：V2.0
+状态：Approved / Governed by Knowledge Studio V2 Baseline
 
 > V2 兼容说明：统一生命周期继续有效，但其治理单元调整为完整 Knowledge Object Version。Definition、Questions、Canonical Answer 和 Evidence Binding 可有组件级工作状态，不再拥有彼此独立的正式生命周期；Approval Record 仍绑定完整版本校验值。
 
@@ -134,10 +134,10 @@ Object Version
 
 | 类型 | Approved 前的附加门槛 |
 | --- | --- |
-| JD | 理论归属、批准原件、Foundation 与 Book Traceability |
-| Question | 主 JD 已批准；问题可由指定 JD 回答；真实来源与去重 |
-| Answer | QID、主 JD 与 JD 版本明确；不创造新理论 |
-| Evidence | 来源、精确定位、验证状态、有效期可核验 |
+| Knowledge Object | 理论归属、批准原件、Foundation 与 Book Traceability；必需组件完整 |
+| Questions 组件 | 问题可由父对象回答；真实来源、去重和回答范围明确 |
+| Canonical Answer 组件 | 与 Definition 一致；claim blocks、适用边界和来源明确 |
+| Evidence Binding | claim、来源精确定位、验证状态、有效期可核验 |
 | Case | 事实来源、时间、主体匿名化或授权、关联 JD/GT |
 | Law | 发布机关、效力层级、现行状态、条款定位 |
 | GT | 节点、边、依赖 JD 和关系完整性 |
@@ -229,7 +229,7 @@ draft → in_review → approved → pending_revision / archived
 2. 为当前公开且有真实发布证据的 `approved` 版本补建 Release Record；
 3. 只有对账成功的对象才迁移为 `published`；
 4. 未公开的 `approved` 对象保持 `approved`；
-5. Question Schema 中现有 `published` 映射到统一 V2 状态；
+5. 旧 Question Schema 不再实施独立生命周期；既有兼容数据如出现，只能迁移为 Knowledge Object 内 Questions 组件；
 6. 更新 Schema、Lifecycle Engine 和 Read Model 必须作为后续独立实施 Sprint；
 7. 迁移完成前继续以 approved + Foundation Ready 作为当前运行时公开边界。
 

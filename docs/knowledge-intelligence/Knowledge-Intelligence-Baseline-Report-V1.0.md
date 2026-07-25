@@ -1,5 +1,7 @@
 # Knowledge Intelligence Baseline Report V1.0
 
+> 历史状态说明：本报告记录 V1 基线时点事实。其中关于建立独立 Question Registry、Answer Layer 的下一步建议已由 Knowledge Studio V2 Baseline 正式取代，不得继续作为实施依据。资产数量和当时测试结果仍保留审计价值。
+
 审计日期：2026-07-25
 审计任务：Codex No.028
 结论：PASS

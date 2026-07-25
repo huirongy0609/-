@@ -1,8 +1,10 @@
 # AI Question Schema
 
 版本：V1.0
-状态：Design
+状态：Historical / Superseded by Knowledge Studio V2 Baseline
 适用范围：AI Question Layer、站内搜索、GEO、FAQ、培训与后续 AI 读取
+
+> 冻结声明：本文件保留为历史设计记录，不再是实施规范。Question 已调整为 Knowledge Object 内部 Questions 组件；禁止建立独立 Question Registry、独立 Q 生命周期或第二套 SSOT。现行规范见 `docs/knowledge-studio/Knowledge Studio V2 Baseline.md`。
 
 ## 1. 目标与边界
 
