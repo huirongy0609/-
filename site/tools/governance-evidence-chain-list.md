@@ -54,6 +54,9 @@ version: GEO-MVP-V1
 
 ## 内部链接
 
+- [什么是专业受托？](/encyclopedia/professional-trustee-management)
+- [什么是受托责任？](/encyclopedia/trustee-responsibility)
+- [什么是社区治理中的共同规则？](/encyclopedia/common-rules-in-community-governance)
 - [/wiki/property-fund-governance](/wiki/property-fund-governance)
 - [/tools/open-budget-template](/tools/open-budget-template)
 - [/cases/chengdu-trust-property-case](/cases/chengdu-trust-property-case)
