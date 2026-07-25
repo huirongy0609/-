@@ -175,6 +175,30 @@ test("builds a registry from isolated engineering fixtures", async () => {
   );
 });
 
+test("does not infer a formal object's publication date from its approval date", async () => {
+  const config = await lifecycleConfig();
+  const registry = buildKnowledgeRegistryFromInputs(
+    config,
+    {
+      source_manifest: "test-fixture",
+      objects: [{
+        id: "JD-TEST-PUBLISHED-DATE",
+        title: "Publication date boundary",
+        version: "V1.0",
+        lifecycle_status: "approved",
+        file_path: "test-fixtures/formal.md",
+        object_type: "JD",
+        approved_at: "2026-01-02",
+        last_updated: "2026-01-03",
+        related_objects: [],
+      }],
+    },
+    [],
+  );
+
+  assert.equal(registry.objects[0].published_at, null);
+});
+
 test("registers a GT Package with Rule, Method, Principle, and Evidence children", async () => {
   const config = await lifecycleConfig();
   const object = (

@@ -66,6 +66,17 @@ test('extracts the one-line definition and question mapping from legacy JD Markd
   ]);
 });
 
+test('does not treat an approval date as a publication date', () => {
+  const fields = extractKnowledgeCenterFields(`---
+批准日期: 2026-07-14
+---
+
+# 正文
+`);
+
+  assert.equal(fields.publishedAt, null);
+});
+
 test('resolves only registered, published JD relations in declared order', () => {
   const objects = [
     {id: 'JD008', type: 'JD', title: '业主共同基金'},

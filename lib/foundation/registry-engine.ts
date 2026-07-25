@@ -203,7 +203,7 @@ function formalObject(
     category: null,
     chapter: null,
     legal_basis: [],
-    published_at: object.approved_at,
+    published_at: null,
     questions: [],
     source: [sourceManifest],
     created_at: null,

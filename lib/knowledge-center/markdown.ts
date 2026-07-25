@@ -44,7 +44,6 @@ export function extractKnowledgeCenterFields(
       'published_at',
       'publishedAt',
       '发布日期',
-      '批准日期',
     ),
     questions: unique([
       ...metadataList(
