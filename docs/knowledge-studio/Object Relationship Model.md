@@ -3,6 +3,8 @@
 版本：V1.0
 状态：Design
 
+> V2 调整说明：本文件保留独立对象关系模型的历史设计。最新提案将 Definition、Questions、Canonical Answer 和 Evidence Binding 聚合到同一 Knowledge Object；对象之间的 Law、Case、GT、Standard 等关系及 Edge / Graph Projection 原则继续有效。详见《Knowledge Object Model V2.0》。
+
 ## 1. 目标
 
 关系模型用于表达知识对象之间可审计、可版本化的语义连接，并为搜索、Related Content、GEO、AI 检索和未来知识图谱提供统一底座。
