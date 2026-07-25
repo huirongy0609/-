@@ -2,7 +2,7 @@
 
 版本：V2.0
 
-状态：Design Proposal
+状态：Approved / Frozen by Knowledge Studio V2 Baseline
 
 适用范围：Knowledge Studio、Knowledge Center、Foundation Engine、Search、GEO、AI Read Model
 
@@ -10,7 +10,7 @@
 
 ## 1. 决策摘要
 
-建议采用 Knowledge Object V2 模型。
+Knowledge Object V2 模型已获项目组正式采用。
 
 V2 不再把 Definition、Question、Answer 当作三个彼此独立的正式知识对象，而是把它们定义为同一个 Knowledge Object 的受治理组成部分：
 
@@ -506,6 +506,6 @@ V2 进入实施前必须确认：
 
 ## 12. 最终建议
 
-建议将 Knowledge Object V2 作为 Knowledge Studio 下一阶段的标准知识对象模型。
+Knowledge Object V2 正式成为 Knowledge Studio 下一阶段的标准知识对象模型。
 
 理由不是“把字段放在一起更方便”，而是 V2 把同一主题的身份、语义、问法、答案、证据和发布责任固定在同一个版本边界内。它减少跨对象同步和版本漂移，更适合 AI 检索、GEO 多视图、长期审计及十万级知识资产治理，同时完整保留 V1 已建立的生命周期、版本、关系和发布架构。

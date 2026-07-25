@@ -1,9 +1,9 @@
 # Knowledge Studio Architecture
 
-版本：V1.0
-状态：Design
+版本：V2.0
+状态：Approved / Governed by Knowledge Studio V2 Baseline
 
-> V2 调整说明：本文件保留为 Knowledge Studio 总体架构基线。关于 Question、Answer、Evidence 的聚合边界，以《Knowledge Object Model V2.0》及《Knowledge Studio V2 调整建议》为最新设计提案；V2 保留本文件的生命周期、版本、发布、回执和 Read Model 架构，不代表运行时已经迁移。
+> V2 基线说明：Knowledge Object 是唯一 SSOT。Definition、Questions、Canonical Answer 和 Evidence Bindings 属于完整 Object Version；Website、AI、GEO 和 Search 是可重建视图。本文中与此冲突的 V1 分类方式不再有效。
 
 ## 1. 产品定义
 
@@ -11,7 +11,7 @@ Knowledge Studio 是信托制物业知识资产的生产控制台，不是普通
 
 普通 CMS 主要管理页面和文章；Knowledge Studio 管理的是具有永久身份、生命周期、版本、审批证据、关系和发布责任的知识对象。网站、搜索、GEO、AI、培训及后续数字治理产品只消费其发布结果，不在各自系统内另建正式知识副本。
 
-治理辞典（JD）始终是信托制物业理论的唯一正式来源（SSOT）。Question、Answer、Evidence、Case、Law、GT、Standard、Product 和 Course 均通过引用 JD 或其他已批准对象形成应用层、证据层和传播层，不能覆盖或改写 JD 理论。
+Knowledge Object 是信托制物业知识的唯一正式来源（SSOT）。现有 JD ID 继续作为 Knowledge Object 永久身份；Definition、Questions、Canonical Answer 和 Evidence Bindings 均属于对象版本。Case、Law、GT、Standard、Product 和 Course 只有在具备独立知识主题、生命周期和永久身份时才建立为 Knowledge Object，否则作为对象组件或关系引用。
 
 ## 2. 设计目标
 
@@ -42,10 +42,10 @@ Knowledge Studio 是信托制物业知识资产的生产控制台，不是普通
 | 模块 | 页面目的 | 主实体 | 必需数据 | 空状态 | 导航入口 | 筛选是否进入 URL | MVP |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Dashboard | 查看生产与发布健康度 | Registry Snapshot | 类型计数、状态计数、最近更新、发布健康 | 明确显示尚无对象或指标未接入 | 一级 | 时间、类型可进入 URL | 是 |
-| 知识对象 | 管理 JD 及通用对象 | Knowledge Object | ID、类型、标题、版本、状态、负责人 | 引导创建 Draft，不生成示例内容 | 一级 | 类型、状态、负责人进入 URL | 是 |
-| AI 问题 | 管理 Q 与 JD 映射 | Question | QID、问题、主 JD、类型、受众、状态 | 无问题时显示真实采集流程 | 一级 | 状态、类型、受众、JD 进入 URL | 第二阶段 |
-| 标准答案 | 管理 A 版本 | Answer | AID、QID、JD 版本、证据、状态 | 无 Answer 时引导回主 JD | 一级 | 状态、QID、JD 进入 URL | 第二阶段 |
-| 证据 | 管理可核验来源 | Evidence | 来源、定位、验证状态、有效期 | 不创建占位证据 | 一级 | 类型、验证状态、有效性进入 URL | 第二阶段 |
+| 知识对象 | 管理完整 Knowledge Object | Knowledge Object Version | ID、标题、组件、版本、状态、负责人 | 引导创建 Draft，不生成示例内容 | 一级 | 类型、状态、负责人进入 URL | 是 |
+| Questions 组件 | 维护对象内真实用户问法 | Knowledge Object Version | 问题、意图、受众、来源、回答范围 | 显示真实采集流程，不生成问题 | 对象内 | 组件筛选可进入内部 URL | 第二阶段 |
+| Canonical Answer 组件 | 维护对象内唯一标准解释 | Knowledge Object Version | short/full answer、claim blocks、证据绑定 | 标记未完成，不自动生成 | 对象内 | 不建立独立公开列表 | 第二阶段 |
+| Evidence | 管理对象内 Evidence Bindings 和共享 Source Records | Knowledge Object Version / Source Record | claim、来源、定位、验证状态、有效期 | 不创建占位证据 | 对象内 / 二级 | 类型、验证状态、有效性进入 URL | 第二阶段 |
 | 案例 | 管理实践案例 | Case | 时间、地点、来源、关联 JD/GT、状态 | 提示仅录入可核验案例 | 一级 | 状态、主题、地区可进入 URL；地区不是关系键 | 后续 |
 | 法律法规 | 管理 Law 与效力 | Law | 法规身份、机关、效力、版本、定位 | 提示完成来源核验 | 一级 | 效力、层级、发布机关进入 URL | 后续 |
 | 治理地图 | 组织 GT 节点与关系 | GT | GT ID、节点、边、关联 JD | 不自动生成关系图 | 一级 | 状态、主题进入 URL | 后续 |
@@ -170,9 +170,9 @@ Knowledge Studio
 | 指标 | 口径 |
 | --- | --- |
 | JD 数量 | Registry 中 `object_type=JD` 的唯一对象数 |
-| Question 数量 | Question Registry 中唯一 QID 数 |
-| Answer 数量 | Answer Registry 中唯一 AID 数 |
-| Evidence 数量 | Evidence Registry 中唯一 EID 数 |
+| Questions 覆盖 | 具备已审核 Questions 组件的 Knowledge Object 比例 |
+| Canonical Answer 覆盖 | 具备已批准 Canonical Answer 的 Knowledge Object 比例 |
+| Evidence 覆盖 | 关键声明满足 Evidence Policy 的 Knowledge Object 比例 |
 | Draft 数量 | 当前工作版本处于 `draft` 的对象数 |
 | Published 数量 | 存在有效 `current_published_version_id` 的对象数 |
 | 最近更新 | 按最新版本 `updated_at` 排序，不使用文件 mtime |
@@ -183,8 +183,8 @@ Knowledge Studio
 
 ### 质量与发布健康
 
-- 无主 JD 的 Published Question；
-- 无证据的需证据 Answer；
+- 无父对象的 Question 投影；
+- 无证据的需证据 Canonical Answer claim；
 - 失效关系；
 - 待审核时间；
 - 已批准未发布数量；
@@ -196,9 +196,9 @@ Knowledge Studio
 
 1. Knowledge Studio 是唯一内部知识写入控制面。
 2. Foundation / Authority Layer 是正式知识 SSOT；Read Model 可重建。
-3. JD 是唯一理论 SSOT，其他对象只能引用、解释、举证或应用。
+3. Knowledge Object 是唯一 SSOT；Definition、Questions、Canonical Answer 和 Evidence Bindings 属于同一版本边界。
 4. 对象身份、版本、审核、批准、发布和渠道回执分开记录。
-5. 统一编辑框架由 Common Envelope + Type-specific Payload 组成。
+5. 统一编辑框架由 Object Envelope + Governed Components + Relationships 组成。
 6. 统一生命周期的主路径为 `draft → in_review → approved → published → archived`。
 7. `pending_revision` 是异常修订状态，不与正常主路径混淆。
 8. 关系使用显式 Edge Object，为未来知识图谱预留。

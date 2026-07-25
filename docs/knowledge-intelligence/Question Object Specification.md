@@ -1,7 +1,9 @@
 # Question Object Specification
 
 版本：V1.0
-状态：Design
+状态：Historical / Superseded by Knowledge Studio V2 Baseline
+
+> 冻结声明：独立 Question Object、QID Registry 和独立 Question 页面路线不再实施。Questions 属于父 Knowledge Object，并通过可重建 Search / Website / GEO / AI Views 使用。本文件仅保留历史审计价值。
 
 ## 1. 对象定义
 

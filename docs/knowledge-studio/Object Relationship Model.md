@@ -1,9 +1,9 @@
 # Object Relationship Model
 
 版本：V1.0
-状态：Design
+状态：Historical / Partially Superseded by Knowledge Studio V2 Baseline
 
-> V2 调整说明：本文件保留独立对象关系模型的历史设计。最新提案将 Definition、Questions、Canonical Answer 和 Evidence Binding 聚合到同一 Knowledge Object；对象之间的 Law、Case、GT、Standard 等关系及 Edge / Graph Projection 原则继续有效。详见《Knowledge Object Model V2.0》。
+> 冻结说明：本文件中的独立 Question、Answer、Evidence 对象链仅作历史记录，禁止据此建立 Registry 或生命周期。现行模型将 Definition、Questions、Canonical Answer 和 Evidence Binding 聚合到同一 Knowledge Object；对象之间的 Law、Case、GT、Standard 等关系及 Edge / Graph Projection 原则继续有效。
 
 ## 1. 目标
 

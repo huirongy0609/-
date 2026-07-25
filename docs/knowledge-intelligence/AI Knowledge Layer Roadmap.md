@@ -1,7 +1,10 @@
 # AI Knowledge Layer Roadmap
 
 版本：V1.0
+状态：Historical / Superseded by Knowledge Studio V2 Baseline
 目标规模：1,000+ Question、1,000+ Answer，并由网站、搜索、GEO、培训和 AI 统一消费
+
+> 冻结声明：本文件所述独立 Question Registry、Answer Layer 和 Q → A 独立对象链不再执行。现行路线以 Knowledge Object 为唯一 SSOT，Questions、Canonical Answer 和 Evidence Bindings 属于同一 Object Version；AI 只消费可重建 AI View。
 
 ## 1. 总体路线
 
