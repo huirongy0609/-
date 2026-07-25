@@ -22,9 +22,14 @@ export type WebsiteFoundationObject = {
   updatedAt: string | null;
   relationshipCount: number;
   packageMemberCount: number;
+  definition?: string | null;
   summary?: string | null;
   keywords?: string[];
   category?: string | null;
+  chapter?: string | null;
+  legalBasis?: string[];
+  publishedAt?: string | null;
+  questions?: string[];
   filePath?: string | null;
   relatedIds?: string[];
 };
@@ -100,7 +105,19 @@ export function filterWebsiteObjects(
     .filter((object) => !query.source || object.sources.includes(query.source))
     .filter((object) => {
       if (!normalizedQuery) return true;
-      return [object.id, object.title, object.type, ...object.sources]
+      return [
+        object.id,
+        object.title,
+        object.type,
+        object.definition,
+        object.summary,
+        object.category,
+        object.chapter,
+        ...(object.keywords ?? []),
+        ...(object.questions ?? []),
+        ...object.sources,
+      ]
+        .filter((value): value is string => Boolean(value))
         .join(' ')
         .toLocaleLowerCase('zh-CN')
         .includes(normalizedQuery);

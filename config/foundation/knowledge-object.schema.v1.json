@@ -23,9 +23,28 @@
       "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$"
     },
     "object_type": {
-      "enum": ["JD", "GT", "CASE", "LAW", "QA", "FAQ", "TOOL", "PRODUCT", "COURSE"]
+      "enum": [
+        "JD",
+        "GT",
+        "GT_PACKAGE",
+        "CASE",
+        "LAW",
+        "QA",
+        "FAQ",
+        "TOOL",
+        "PRODUCT",
+        "COURSE",
+        "RESEARCH",
+        "ARTICLE",
+        "STANDARD"
+      ]
     },
     "title": {"type": "string", "minLength": 1},
+    "definition": {
+      "type": "string",
+      "minLength": 1,
+      "description": "面向检索、引用和 AI 回答的一句话定义。"
+    },
     "summary": {"type": "string", "minLength": 1},
     "keywords": {
       "type": "array",
@@ -33,6 +52,11 @@
       "uniqueItems": true
     },
     "category": {"type": "string", "minLength": 1},
+    "chapter": {
+      "type": "string",
+      "minLength": 1,
+      "description": "知识对象在治理辞典或知识体系中的稳定章节名称。"
+    },
     "version": {"type": "string", "pattern": "^V?[0-9]+\\.[0-9]+$"},
     "status": {
       "enum": ["draft", "in_review", "approved", "pending_revision", "archived"]
@@ -44,6 +68,22 @@
       "uniqueItems": true
     },
     "updated_at": {"type": "string", "format": "date"},
+    "published_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "legal_basis": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true,
+      "default": []
+    },
+    "questions": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true,
+      "default": []
+    },
     "relations": {
       "type": "array",
       "items": {

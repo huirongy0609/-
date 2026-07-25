@@ -18,6 +18,7 @@
     "geo:stability-check": "node scripts/geo-stability-check.mjs",
     "geo:readiness-check": "node scripts/check-geo-readiness.mjs",
     "geo:site:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/geo-site.test.ts",
+    "knowledge-center:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/knowledge-center.test.ts",
     "security:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/security-auth.test.ts",
     "production:verify-current": "node scripts/verify-production-activation.mjs --target https://judao-club.vercel.app --expected-origin https://judao.club --skip-dns --skip-aliases",
     "production:verify-domain": "node scripts/verify-production-activation.mjs --target https://xintuozhiwuye.com --expected-origin https://xintuozhiwuye.com",

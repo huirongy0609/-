@@ -128,9 +128,14 @@ test("builds a registry from isolated engineering fixtures", async () => {
         "status: in_review",
         "version: V1.0",
         "schema_version: 1.0",
+        "definition: Test definition",
         "summary: Test summary",
         "keywords: [test, fixture]",
         "category: test-category",
+        "chapter: Test chapter",
+        "legal_basis: [LAW-001]",
+        "published_at: 2026-01-02",
+        "questions: [What is the test fixture?, How is it used?]",
         "source: [SOURCE-001, SOURCE-002]",
         "created_at: 2026-01-01",
         "updated_at: 2026-01-01",
@@ -149,9 +154,14 @@ test("builds a registry from isolated engineering fixtures", async () => {
   assert.equal(registry.objects[0].parent_object, null);
   assert.deepEqual(registry.objects[0].children, []);
   assert.equal(registry.objects[0].metadata_schema_version, "1.0");
+  assert.equal(registry.objects[0].definition, "Test definition");
   assert.equal(registry.objects[0].summary, "Test summary");
   assert.deepEqual(registry.objects[0].keywords, ["test", "fixture"]);
   assert.equal(registry.objects[0].category, "test-category");
+  assert.equal(registry.objects[0].chapter, "Test chapter");
+  assert.deepEqual(registry.objects[0].legal_basis, ["LAW-001"]);
+  assert.equal(registry.objects[0].published_at, "2026-01-02");
+  assert.deepEqual(registry.objects[0].questions, ["What is the test fixture?", "How is it used?"]);
   assert.deepEqual(registry.objects[0].source, ["SOURCE-001", "SOURCE-002"]);
   assert.equal(
     registry.objects.every((object) => object.status === "approved" || !object.foundation_ready),

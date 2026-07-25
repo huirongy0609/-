@@ -11,9 +11,10 @@ import {
 import {
   loadTopicManifestCatalog,
 } from '@/lib/foundation/topic-manifest-loader';
-import {getFoundationKnowledgeObjects} from '@/lib/repositories/foundation';
+import {getPublishedGeoObjects} from '@/lib/geo/publication';
 import {getPublicWebsiteObjects} from '@/lib/repositories/website-foundation';
 import {getWebsiteObjectHref} from '@/lib/website/foundation-view-model';
+import type {WebsiteObjectType} from '@/lib/website/foundation-view-model';
 import type {
   BetaFallbackCatalog,
   BetaSearchResult,
@@ -113,16 +114,32 @@ export async function searchTopicRepository(
   }
 
   if (scope !== 'topics') {
-    const [publicViews, foundationObjects] = await Promise.all([
+    const [publicViews, publishedObjects] = await Promise.all([
       getPublicWebsiteObjects(),
-      getFoundationKnowledgeObjects(),
+      getPublishedGeoObjects(),
     ]);
-    const publicIds = new Set(publicViews.map((item) => item.id));
-    results.push(...foundationObjects
-      .filter((item) => publicIds.has(item.id))
+    const publishedByIdentity = new Map(
+      publishedObjects.map((item) => [`${item.type}:${item.id}`, item]),
+    );
+    results.push(...publicViews
       .filter((item) => {
-        const fields = [item.id, item.title, item.summary, item.category, ...item.tags];
-        if (options.includeFullText) fields.push(item.body);
+        const published = publishedByIdentity.get(`${toPublishedType(item.type)}:${item.id}`);
+        const fields = [
+          item.id,
+          item.title,
+          item.definition,
+          item.summary,
+          item.category,
+          item.chapter,
+          ...(item.keywords ?? []),
+          ...(item.questions ?? []),
+          published?.definition,
+          published?.summary,
+          published?.chapter,
+          ...(published?.tags ?? []),
+          ...(published?.questions ?? []),
+        ].filter((value): value is string => Boolean(value));
+        if (options.includeFullText && published?.body) fields.push(published.body);
         return fields.join(' ').toLocaleLowerCase('zh-CN').includes(normalized);
       })
       .map((item) => ({
@@ -130,14 +147,26 @@ export async function searchTopicRepository(
         kind: 'knowledge' as const,
         typeLabel: item.type,
         title: item.title,
-        excerpt: plainText(item.summary),
-        href: `/knowledge/${item.id.toLocaleLowerCase('en')}`,
+        excerpt: plainText(
+          publishedByIdentity.get(`${toPublishedType(item.type)}:${item.id}`)?.definition
+          || item.definition
+          || item.summary
+          || `${item.title}的权威知识说明。`,
+        ),
+        href: getWebsiteObjectHref(item),
         statusLabel: 'Foundation Ready',
       })));
   }
 
   return results.sort((left, right) => exactMatchRank(left, normalized) - exactMatchRank(right, normalized)
     || left.id.localeCompare(right.id, 'en', {numeric: true}));
+}
+
+function toPublishedType(type: WebsiteObjectType): string {
+  if (type === 'FAQ') return 'QA';
+  if (type === 'ARTICLE') return 'Article';
+  if (type === 'GT_PACKAGE') return 'GT';
+  return type;
 }
 
 async function readAndValidateRegistry() {
