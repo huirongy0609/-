@@ -1,0 +1,98 @@
+.introPanel {
+  margin-bottom: 28px;
+  border-left: 4px solid var(--primary-dark);
+  background: #fff;
+  padding: clamp(24px, 5vw, 40px);
+}
+
+.introPanel h1,
+.adminIntro h1 {
+  margin: 12px 0 0;
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.introPanel > p:last-of-type,
+.adminIntro > p:last-child {
+  margin: 16px 0 0;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.scopeNote {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.scopeNote strong { flex: 0 0 auto; color: var(--primary-dark); }
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.successDisclaimer { font-size: 13px; }
+.returnLink { margin-top: 26px; }
+
+.adminIntro { max-width: 760px; }
+
+.accessPanel,
+.recordsSection {
+  margin-top: 30px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 24px;
+}
+
+.accessPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px 32px;
+}
+
+.accessHeading { display: flex; align-items: center; gap: 14px; }
+.accessHeading h2 { margin: 0; font-size: 20px; }
+.accessHeading p { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
+.icon { display: grid; width: 42px; height: 42px; flex: 0 0 auto; place-items: center; border-radius: 8px; background: var(--primary-soft); color: var(--primary-dark); }
+.accessControls { display: flex; gap: 10px; }
+.accessControls input { min-width: 230px; }
+.message { grid-column: 1 / -1; margin: 0; border-top: 1px solid var(--line); padding-top: 16px; color: var(--muted); font-size: 14px; }
+
+.recordsSection { padding: 0; overflow: hidden; }
+.tableWrap { overflow-x: auto; }
+.table { width: 100%; min-width: 940px; border-collapse: collapse; font-size: 13px; }
+.table th { background: var(--surface-soft); color: var(--muted); font-size: 12px; letter-spacing: 0.06em; text-align: left; }
+.table th,
+.table td { border-bottom: 1px solid var(--line); padding: 16px; vertical-align: top; }
+.table tbody tr:last-child td { border-bottom: 0; }
+.table td { min-width: 180px; }
+.table td > strong,
+.table td > span,
+.table td > a { display: block; margin-bottom: 7px; }
+.table td > a { color: var(--primary-dark); text-decoration: underline; text-underline-offset: 3px; }
+.table ul { margin: 8px 0; padding-left: 18px; color: var(--muted); }
+.table li + li { margin-top: 5px; }
+.mono { color: var(--primary-dark); font-family: ui-monospace, monospace; }
+.empty { padding: 52px 24px; text-align: center; }
+.empty h2 { margin: 0; font-size: 22px; }
+.empty p { margin: 10px 0 0; color: var(--muted); }
+
+@media (max-width: 760px) {
+  .scopeNote,
+  .accessControls { flex-direction: column; }
+  .accessPanel { grid-template-columns: 1fr; }
+  .accessControls input { min-width: 0; }
+}
