@@ -25,7 +25,10 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  const authorization = authorizeCooperationAdmin(request, 'lead:read');
+  const requestId = request.headers.get('x-vercel-id') || crypto.randomUUID();
+  const authorization = await authorizeCooperationAdmin('lead:read', {
+    action: 'lead.list', resourceType: 'cooperation_registration', requestId,
+  });
   if (authorization.status === 'missing_configuration') {
     return NextResponse.json({error: '后台查看功能尚未配置。'}, {status: 503});
   }
@@ -33,7 +36,22 @@ export async function GET(request: Request) {
     return NextResponse.json({error: '无权查看合作线索记录。'}, {status: 401});
   }
 
-  return NextResponse.json({records: await listCooperationLeads()}, {
+  if (authorization.status === 'forbidden') {
+    return NextResponse.json({error: '当前账号没有查看权限。'}, {status: 403});
+  }
+
+  const records = await listCooperationLeads();
+  const {appendCooperationAuditLog} = await import('@/lib/cooperation/database');
+  await appendCooperationAuditLog({
+    actorSubject: authorization.identity.sub,
+    actorRole: authorization.identity.role,
+    action: 'lead.list',
+    resourceType: 'cooperation_registration',
+    outcome: 'success',
+    requestId,
+    detail: {recordCount: records.length},
+  });
+  return NextResponse.json({records}, {
     headers: {'Cache-Control': 'no-store'},
   });
 }

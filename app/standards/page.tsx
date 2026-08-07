@@ -10,7 +10,8 @@ export const metadata: Metadata = {
   alternates: {canonical: '/standards'},
 };
 
-export default function StandardsPage({searchParams}: {searchParams: WebsiteObjectQuery & {page?: string}}) {
+export default async function StandardsPage(props: {searchParams: Promise<WebsiteObjectQuery & {page?: string}>}) {
+  const searchParams = await props.searchParams;
   return (
     <FoundationCollectionPage
       allowedTypes={['GT', 'GT_PACKAGE']}

@@ -6,7 +6,8 @@ import styles from '../cooperation.module.css';
 
 export const metadata: Metadata = {title: '合作共建登记提交成功', robots: {index: false, follow: false}};
 
-export default function CooperationSuccessPage({searchParams}: {searchParams: {lead?: string}}) {
+export default async function CooperationSuccessPage(props: {searchParams: Promise<{lead?: string}>}) {
+  const searchParams = await props.searchParams;
   const leadNumber = /^COL-\d{4}-\d{4,}$/.test(searchParams.lead || '') ? searchParams.lead : '';
   return (
     <main className={partnerStyles.page}>

@@ -74,3 +74,14 @@ CREATE TABLE IF NOT EXISTS cooperation_audit_log (
 CREATE INDEX IF NOT EXISTS cooperation_audit_log_occurred_idx
   ON cooperation_audit_log (occurred_at DESC);
 
+CREATE OR REPLACE FUNCTION cooperation_reject_audit_mutation()
+RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+  RAISE EXCEPTION 'cooperation_audit_log is append-only';
+END;
+$$;
+
+DROP TRIGGER IF EXISTS cooperation_audit_log_immutable ON cooperation_audit_log;
+CREATE TRIGGER cooperation_audit_log_immutable
+  BEFORE UPDATE OR DELETE ON cooperation_audit_log
+  FOR EACH ROW EXECUTE FUNCTION cooperation_reject_audit_mutation();

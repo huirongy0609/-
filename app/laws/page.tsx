@@ -10,7 +10,8 @@ export const metadata: Metadata = {
   alternates: {canonical: '/laws'},
 };
 
-export default function LawsPage({searchParams}: {searchParams: WebsiteObjectQuery & {page?: string}}) {
+export default async function LawsPage(props: {searchParams: Promise<WebsiteObjectQuery & {page?: string}>}) {
+  const searchParams = await props.searchParams;
   return (
     <FoundationCollectionPage
       allowedTypes={['LAW']}

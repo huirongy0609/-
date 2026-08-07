@@ -13,7 +13,8 @@ export const metadata: Metadata = {
   alternates: {canonical: '/search'},
 };
 
-export default async function SearchPage({searchParams}: {searchParams: {q?: string; scope?: string}}) {
+export default async function SearchPage(props: {searchParams: Promise<{q?: string; scope?: string}>}) {
+  const searchParams = await props.searchParams;
   const query = searchParams.q?.trim() ?? '';
   const scope = isSearchScope(searchParams.scope) ? searchParams.scope : 'all';
   const results = await searchTopicRepository(query, {scope});

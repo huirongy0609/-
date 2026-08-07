@@ -10,7 +10,8 @@ import type {TopicSection} from '@/lib/beta/types';
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({params}: {params: {slug: string}}): Promise<Metadata> {
+export async function generateMetadata(props: {params: Promise<{slug: string}>}): Promise<Metadata> {
+  const params = await props.params;
   const topic = await getTopicProvider().getTopicBySlug(params.slug);
   if (!topic) return {title: 'Topic 未找到'};
   const isTopic001 = topic.slug === topic001MvpContent.slug;
@@ -31,7 +32,8 @@ export async function generateMetadata({params}: {params: {slug: string}}): Prom
   };
 }
 
-export default async function TopicDetailPage({params}: {params: {slug: string}}) {
+export default async function TopicDetailPage(props: {params: Promise<{slug: string}>}) {
+  const params = await props.params;
   const provider = getTopicProvider();
   const [catalog, topic] = await Promise.all([provider.getCatalog(), provider.getTopicBySlug(params.slug)]);
   if (!topic || topic.slug !== topic001MvpContent.slug) notFound();

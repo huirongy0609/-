@@ -10,7 +10,8 @@ export const metadata: Metadata = {
   alternates: {canonical: '/cases'},
 };
 
-export default function CasesPage({searchParams}: {searchParams: WebsiteObjectQuery & {page?: string}}) {
+export default async function CasesPage(props: {searchParams: Promise<WebsiteObjectQuery & {page?: string}>}) {
+  const searchParams = await props.searchParams;
   return (
     <FoundationCollectionPage
       allowedTypes={['CASE']}

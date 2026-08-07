@@ -12,7 +12,11 @@ export type CooperationLeadRecord = Omit<CooperationLeadInput, 'websiteConfirmat
 let pool: Pool | undefined;
 
 function databasePool() {
-  const connectionString = process.env.COOPERATION_DATABASE_URL?.trim();
+  const connectionString = (
+    process.env.COOPERATION_DATABASE_URL
+    || process.env.POSTGRES_URL
+    || process.env.POSTGRES_URL_NON_POOLING
+  )?.trim();
   if (!connectionString) throw new Error('COOPERATION_DATABASE_URL is not configured');
   pool ??= new Pool({
     connectionString,
@@ -20,6 +24,36 @@ function databasePool() {
     ssl: process.env.COOPERATION_DATABASE_SSL === 'disable' ? false : {rejectUnauthorized: true},
   });
   return pool;
+}
+
+export type AdminRole = 'super_admin' | 'cooperation_reviewer' | 'data_admin';
+
+export async function getCooperationAdminRole(subjectId: string): Promise<AdminRole | null> {
+  const result = await databasePool().query<{role: AdminRole}>(`
+    SELECT role FROM cooperation_admin_user
+    WHERE subject_id = $1 AND enabled = true
+  `, [subjectId]);
+  return result.rows[0]?.role || null;
+}
+
+export async function appendCooperationAuditLog(entry: {
+  actorSubject: string;
+  actorRole: string;
+  action: string;
+  resourceType: string;
+  resourceId?: string;
+  outcome: 'success' | 'denied' | 'failure';
+  requestId?: string;
+  detail?: Record<string, unknown>;
+}) {
+  await databasePool().query(`
+    INSERT INTO cooperation_audit_log
+      (id, actor_subject, actor_role, action, resource_type, resource_id,
+       outcome, request_id, detail)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::jsonb)
+  `, [randomUUID(), entry.actorSubject, entry.actorRole, entry.action,
+    entry.resourceType, entry.resourceId || null, entry.outcome,
+    entry.requestId || null, JSON.stringify(entry.detail || {})]);
 }
 
 async function nextLeadNumber(client: PoolClient, year: number) {
@@ -103,4 +137,3 @@ export async function listCooperationLeads(): Promise<CooperationLeadRecord[]> {
     consentDataUse: row.consent_data_use,
   })) as CooperationLeadRecord[];
 }
-

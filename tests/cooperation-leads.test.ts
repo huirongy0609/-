@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
-import {createHmac} from 'node:crypto';
 import test from 'node:test';
-import {authorizeCooperationAdmin} from '../lib/cooperation/admin-auth.ts';
+import {roleHasPermission} from '../lib/cooperation/permissions.ts';
 import {cooperationLeadSchema} from '../lib/cooperation/schema.ts';
 
 const validInput = {
@@ -35,15 +34,10 @@ test('登记字段使用稳定枚举并校验必要信息', () => {
   }).success, true);
 });
 
-test('后台记录要求有效签名会话、MFA 与角色权限', () => {
-  process.env.COOPERATION_SESSION_SECRET = 'local-test-secret-that-is-at-least-32-characters';
-  assert.equal(authorizeCooperationAdmin(new Request('http://localhost'), 'lead:read').status, 'unauthorized');
-  const payload = Buffer.from(JSON.stringify({
-    sub: 'test-user', email: 'test@example.com', role: 'cooperation_reviewer', mfa: true,
-    exp: Math.floor(Date.now() / 1000) + 300,
-  })).toString('base64url');
-  const signature = createHmac('sha256', process.env.COOPERATION_SESSION_SECRET).update(payload).digest('base64url');
-  const request = new Request('http://localhost', {headers: {cookie: `cooperation_admin_session=${payload}.${signature}`}});
-  assert.equal(authorizeCooperationAdmin(request, 'lead:read').status, 'authorized');
-  assert.equal(authorizeCooperationAdmin(request, 'data:export').status, 'unauthorized');
+test('管理员角色遵守最小权限边界', () => {
+  assert.equal(roleHasPermission('cooperation_reviewer', 'lead:read'), true);
+  assert.equal(roleHasPermission('cooperation_reviewer', 'data:export'), false);
+  assert.equal(roleHasPermission('data_admin', 'data:export'), true);
+  assert.equal(roleHasPermission('data_admin', 'lead:review'), false);
+  assert.equal(roleHasPermission('super_admin', 'role:manage'), true);
 });

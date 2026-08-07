@@ -3,7 +3,8 @@ import {knowledgeObjectInputSchema} from '@/lib/domain/knowledge-object';
 import {deleteKnowledgeObject, getKnowledgeObjectById, updateKnowledgeObject} from '@/lib/repositories/knowledge-objects';
 import {requireAdmin, requireKnowledgeWrites} from '@/lib/security/admin-response';
 
-export async function GET(request: Request, {params}: {params: {id: string}}) {
+export async function GET(request: Request, props: {params: Promise<{id: string}>}) {
+  const params = await props.params;
   const unauthorized = requireAdmin(request);
   if (unauthorized) return unauthorized;
   const item = await getKnowledgeObjectById(params.id);
@@ -15,7 +16,8 @@ export async function GET(request: Request, {params}: {params: {id: string}}) {
   return NextResponse.json({item});
 }
 
-export async function PUT(request: Request, {params}: {params: {id: string}}) {
+export async function PUT(request: Request, props: {params: Promise<{id: string}>}) {
+  const params = await props.params;
   const blocked = requireKnowledgeWrites(request);
   if (blocked) return blocked;
   const body = await request.json();
@@ -33,7 +35,8 @@ export async function PUT(request: Request, {params}: {params: {id: string}}) {
   return NextResponse.json({item});
 }
 
-export async function DELETE(request: Request, {params}: {params: {id: string}}) {
+export async function DELETE(request: Request, props: {params: Promise<{id: string}>}) {
+  const params = await props.params;
   const blocked = requireKnowledgeWrites(request);
   if (blocked) return blocked;
   const deleted = await deleteKnowledgeObject(params.id);

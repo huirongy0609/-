@@ -18,14 +18,12 @@ const nextConfig = {
       ],
     }];
   },
-  experimental: {
-    outputFileTracingIncludes: {
-      "/*": [
-        "./config/foundation/**/*",
-        "./foundation/**/*",
-        "./knowledge/foundation/**/*",
-      ],
-    },
+  outputFileTracingIncludes: {
+    "/*": [
+      "./config/foundation/**/*",
+      "./foundation/**/*",
+      "./knowledge/foundation/**/*",
+    ],
   },
 };
 

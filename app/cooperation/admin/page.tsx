@@ -1,5 +1,4 @@
 import type {Metadata} from 'next';
-import {cookies} from 'next/headers';
 import {redirect} from 'next/navigation';
 import {CooperationAdminRecords} from '@/components/cooperation/CooperationAdminRecords';
 import {authorizeCooperationAdmin} from '@/lib/cooperation/admin-auth';
@@ -11,9 +10,10 @@ export const metadata: Metadata = {
   robots: {index: false, follow: false, nocache: true},
 };
 
-export default function CooperationAdminPage() {
-  const cookieHeader = cookies().toString();
-  const authorization = authorizeCooperationAdmin(new Request('http://internal/cooperation/admin', {headers: {cookie: cookieHeader}}), 'lead:read');
+export default async function CooperationAdminPage() {
+  const authorization = await authorizeCooperationAdmin('lead:read', {
+    action: 'admin.page.view', resourceType: 'cooperation_admin',
+  });
   if (authorization.status !== 'authorized') redirect('/cooperation/admin/login?next=%2Fcooperation%2Fadmin');
   return (
     <main className={partnerStyles.page}>

@@ -10,7 +10,8 @@ export const metadata: Metadata = {
   alternates: {canonical: '/faq'},
 };
 
-export default function FaqPage({searchParams}: {searchParams: WebsiteObjectQuery & {page?: string}}) {
+export default async function FaqPage(props: {searchParams: Promise<WebsiteObjectQuery & {page?: string}>}) {
+  const searchParams = await props.searchParams;
   return (
     <FoundationCollectionPage
       allowedTypes={['FAQ']}

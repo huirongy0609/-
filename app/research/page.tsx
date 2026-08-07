@@ -10,7 +10,8 @@ export const metadata: Metadata = {
   alternates: {canonical: '/research'},
 };
 
-export default function ResearchPage({searchParams}: {searchParams: WebsiteObjectQuery & {page?: string}}) {
+export default async function ResearchPage(props: {searchParams: Promise<WebsiteObjectQuery & {page?: string}>}) {
+  const searchParams = await props.searchParams;
   return (
     <FoundationCollectionPage
       allowedTypes={['RESEARCH']}

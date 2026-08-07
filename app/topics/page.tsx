@@ -16,7 +16,8 @@ export const metadata: Metadata = {
   alternates: {canonical: '/topics'},
 };
 
-export default async function TopicsPage({searchParams}: {searchParams: TopicQuery}) {
+export default async function TopicsPage(props: {searchParams: Promise<TopicQuery>}) {
+  const searchParams = await props.searchParams;
   const provider = getTopicProvider();
   const [catalog, topics] = await Promise.all([provider.getCatalog(), provider.getTopics(searchParams)]);
   const hasFilters = Boolean(searchParams.q || searchParams.category || searchParams.tag);

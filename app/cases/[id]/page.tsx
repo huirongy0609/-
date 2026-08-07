@@ -15,7 +15,8 @@ export async function generateStaticParams() {
   return publicObjects.filter((item) => item.type === 'CASE').map((item) => ({id: item.id.toLowerCase()}));
 }
 
-export async function generateMetadata({params}: {params: {id: string}}): Promise<Metadata> {
+export async function generateMetadata(props: {params: Promise<{id: string}>}): Promise<Metadata> {
+  const params = await props.params;
   const publicObjects = await getPublicWebsiteObjects();
   const isPublic = publicObjects.some((object) => object.type === 'CASE' && object.id.toLowerCase() === params.id.toLowerCase());
   if (!isPublic) return {title: '案例未找到'};
@@ -34,7 +35,8 @@ export async function generateMetadata({params}: {params: {id: string}}): Promis
   };
 }
 
-export default async function CaseDetailPage({params}: {params: {id: string}}) {
+export default async function CaseDetailPage(props: {params: Promise<{id: string}>}) {
+  const params = await props.params;
   const publicObjects = await getPublicWebsiteObjects();
   const isPublic = publicObjects.some((object) => object.type === 'CASE' && object.id.toLowerCase() === params.id.toLowerCase());
   if (!isPublic) notFound();

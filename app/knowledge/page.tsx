@@ -21,7 +21,8 @@ export const metadata: Metadata = {
   alternates: {canonical: '/knowledge'},
 };
 
-export default async function KnowledgePage({searchParams}: {searchParams: WebsiteObjectQuery & {page?: string}}) {
+export default async function KnowledgePage(props: {searchParams: Promise<WebsiteObjectQuery & {page?: string}>}) {
+  const searchParams = await props.searchParams;
   const objects = await getPublicWebsiteObjects();
   const counts = countWebsiteObjectsByType(objects);
 
