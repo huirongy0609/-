@@ -21,10 +21,21 @@ if (!sourcePath || !backupPath || !reportPath || confirmation !== expectedConfir
 }
 if (!connectionString) throw new Error('Staging PostgreSQL connection is not configured');
 
+function postgresConnectionOptions(value) {
+  const url = new URL(value);
+  url.searchParams.delete('sslmode');
+  url.searchParams.delete('sslrootcert');
+  const certificate = process.env.SUPABASE_DB_CA_CERT?.replace(/\\n/g, '\n').trim();
+  return {
+    connectionString: url.toString(),
+    ssl: certificate ? {ca: certificate, rejectUnauthorized: true} : {rejectUnauthorized: true},
+  };
+}
+
 const schema = await fs.readFile(new URL('../../db/cooperation/001_initial.sql', import.meta.url), 'utf8');
 const source = JSON.parse(await fs.readFile(sourcePath, 'utf8'));
 const sourceRecords = Array.isArray(source.records) ? source.records : [];
-const client = new Client({connectionString, ssl: {rejectUnauthorized: true}});
+const client = new Client(postgresConnectionOptions(connectionString));
 
 const tables = [
   'cooperation_organization',

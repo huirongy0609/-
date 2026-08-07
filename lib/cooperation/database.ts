@@ -1,6 +1,7 @@
 import {randomUUID} from 'node:crypto';
 import {Pool, type PoolClient} from 'pg';
 import type {CooperationLeadInput} from './schema';
+import {postgresConnectionOptions} from './database-ssl';
 
 export type CooperationLeadRecord = Omit<CooperationLeadInput, 'websiteConfirmation'> & {
   id: string;
@@ -19,9 +20,8 @@ function databasePool() {
   )?.trim();
   if (!connectionString) throw new Error('COOPERATION_DATABASE_URL is not configured');
   pool ??= new Pool({
-    connectionString,
+    ...postgresConnectionOptions(connectionString),
     max: Number(process.env.COOPERATION_DATABASE_POOL_SIZE || 5),
-    ssl: process.env.COOPERATION_DATABASE_SSL === 'disable' ? false : {rejectUnauthorized: true},
   });
   return pool;
 }
