@@ -6,7 +6,7 @@
 branch_ready = true
 staging_ready = false
 database_ready = false
-migration_verified = true
+migration_verified = false
 admin_security_defined = true
 pre_release_ready = false
 ```
@@ -33,3 +33,4 @@ pre_release_ready = false
 
 当前已经建立真实 Staging 应用，但“环境就绪”必须包含可用数据层和身份链路，因此仍为 `CONDITIONAL READY`。不得进入 Codex No.030，不得部署生产。
 
+注：No.029 的本地真实样本迁移演练仍然有效，但 No.029.1 将验收口径提升为远程迁移、备份与恢复两轮验证；该新口径尚未满足，因此本报告记为 `migration_verified = false`。
