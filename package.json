@@ -33,7 +33,9 @@
     "foundation:refresh": "npm run foundation:index && npm run foundation:sync && npm run foundation:validate && npm run foundation:engine:validate",
     "cooperation:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/cooperation-leads.test.ts",
     "cooperation:staging:check": "node scripts/cooperation/validate-staging-env.mjs",
-    "cooperation:staging:recovery": "node scripts/cooperation/staging-recovery.mjs"
+    "cooperation:staging:recovery": "node scripts/cooperation/staging-recovery.mjs",
+    "cooperation:candidate:env-check": "node scripts/cooperation/validate-production-candidate-env.mjs",
+    "cooperation:candidate:database-check": "node scripts/cooperation/candidate-database-validation.mjs"
   },
   "dependencies": {
     "@remotion/bundler": "^4.0.448",
@@ -43,6 +45,7 @@
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.57.4",
     "framer-motion": "^12.40.0",
+    "jose": "6.2.4",
     "lucide-react": "^0.468.0",
     "next": "15.5.23",
     "pg": "^8.22.0",

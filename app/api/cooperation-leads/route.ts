@@ -25,7 +25,9 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  const requestId = request.headers.get('x-vercel-id') || crypto.randomUUID();
+  const requestId = request.headers.get('x-request-id')
+    || request.headers.get('x-vercel-id')
+    || crypto.randomUUID();
   const authorization = await authorizeCooperationAdmin('lead:read', {
     action: 'lead.list', resourceType: 'cooperation_registration', requestId,
   });

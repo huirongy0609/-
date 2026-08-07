@@ -6,7 +6,7 @@ import styles from '@/app/cooperation/cooperation.module.css';
 
 type Step = 'credentials' | 'mfa' | 'enroll';
 
-export function CooperationAdminLogin() {
+export function CooperationAdminLogin({identityProvider}: {identityProvider: 'supabase' | 'oidc'}) {
   const [step, setStep] = useState<Step>('credentials');
   const [factorId, setFactorId] = useState('');
   const [qrCode, setQrCode] = useState('');
@@ -60,6 +60,16 @@ export function CooperationAdminLogin() {
       setLoading(false);
     }
   }
+
+  if (identityProvider === 'oidc') return (
+    <div className={styles.accessPanel}>
+      <div>
+        <strong>组织身份登录</strong>
+        <p>将跳转至经批准的身份服务，并强制执行多因素认证。</p>
+      </div>
+      <a className={partnerStyles.primaryButton} href="/api/cooperation-auth/oidc/login">使用组织身份登录</a>
+    </div>
+  );
 
   if (step === 'credentials') return (
     <form className={partnerStyles.form} onSubmit={login}>

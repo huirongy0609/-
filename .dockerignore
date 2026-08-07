@@ -1,0 +1,14 @@
+.git
+.next
+node_modules
+npm-debug.log*
+.env
+.env.*
+!.env.example
+.DS_Store
+.tmp
+out
+video_build
+video_review
+section1_hyperframes_style
+hyperframes_trust_budget

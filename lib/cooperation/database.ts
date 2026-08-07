@@ -26,6 +26,11 @@ function databasePool() {
   return pool;
 }
 
+export async function checkCooperationDatabase() {
+  const result = await databasePool().query<{ready: number}>('SELECT 1 AS ready');
+  return result.rows[0]?.ready === 1;
+}
+
 export type AdminRole = 'super_admin' | 'cooperation_reviewer' | 'data_admin';
 
 export async function getCooperationAdminRole(subjectId: string): Promise<AdminRole | null> {

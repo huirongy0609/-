@@ -1,6 +1,7 @@
 import {appendCooperationAuditLog, getCooperationAdminRole} from './database';
 import {createSupabaseServerClient} from '@/lib/supabase/server';
 import {roleHasPermission, type CooperationPermission, type CooperationRole} from './permissions';
+import {cooperationIdentityProvider, currentOidcIdentity} from './oidc-auth';
 
 export {cooperationRoles, roleHasPermission} from './permissions';
 export type {CooperationPermission, CooperationRole} from './permissions';
@@ -30,6 +31,27 @@ export async function authorizeCooperationAdmin(
   required: CooperationPermission,
   context: {action: string; resourceType: string; requestId?: string},
 ): Promise<AuthorizationResult> {
+  if (cooperationIdentityProvider() === 'oidc') {
+    let user;
+    try {
+      user = await currentOidcIdentity();
+    } catch {
+      await safeAudit({actorSubject: 'anonymous', actorRole: 'none', action: context.action,
+        resourceType: context.resourceType, outcome: 'denied', requestId: context.requestId,
+        detail: {reason: 'oidc_session_invalid_or_mfa_missing'}});
+      return {status: 'unauthorized', reason: 'oidc_session_invalid_or_mfa_missing'};
+    }
+    if (!user) return {status: 'unauthorized', reason: 'session_missing_or_invalid'};
+    const role = await getCooperationAdminRole(user.sub);
+    if (!role || !roleHasPermission(role, required)) {
+      await safeAudit({actorSubject: user.sub, actorRole: role || 'none', action: context.action,
+        resourceType: context.resourceType, outcome: 'denied', requestId: context.requestId,
+        detail: {reason: role ? 'permission_denied' : 'admin_not_provisioned'}});
+      return {status: 'forbidden', reason: role ? 'permission_denied' : 'admin_not_provisioned'};
+    }
+    return {status: 'authorized', identity: {sub: user.sub, email: user.email, role, mfa: true}};
+  }
+
   let supabase;
   try {
     supabase = await createSupabaseServerClient();

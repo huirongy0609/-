@@ -44,6 +44,7 @@
 
 .successDisclaimer { font-size: 13px; }
 .returnLink { margin-top: 26px; }
+.entryLink { display: inline-flex; margin-top: 26px; }
 
 .adminIntro { max-width: 760px; }
 
