@@ -1,6 +1,5 @@
 const required = [
   'NEXT_PUBLIC_SITE_URL',
-  'COOPERATION_DATABASE_URL',
   'COOPERATION_OIDC_ISSUER',
   'COOPERATION_OIDC_CLIENT_ID',
   'COOPERATION_OIDC_CLIENT_SECRET',
@@ -27,8 +26,16 @@ for (const name of ['NEXT_PUBLIC_SITE_URL', 'COOPERATION_OIDC_ISSUER',
 }
 
 const databaseUrl = process.env.COOPERATION_DATABASE_URL?.trim() || '';
+const databaseHost = process.env.COOPERATION_DATABASE_HOST?.trim() || '';
+if (!databaseUrl) {
+  for (const name of ['COOPERATION_DATABASE_HOST', 'COOPERATION_DATABASE_NAME',
+    'COOPERATION_DATABASE_USER', 'COOPERATION_DATABASE_PASSWORD']) {
+    if (!process.env[name]?.trim()) errors.push(`${name}:missing`);
+  }
+}
 if (databaseUrl && !/^postgres(ql)?:\/\//.test(databaseUrl)) errors.push('COOPERATION_DATABASE_URL:invalid_scheme');
 if (databaseUrl && /(localhost|127\.0\.0\.1|supabase)/i.test(databaseUrl)) errors.push('COOPERATION_DATABASE_URL:not_domestic_candidate');
+if (databaseHost && /(localhost|127\.0\.0\.1|supabase)/i.test(databaseHost)) errors.push('COOPERATION_DATABASE_HOST:not_domestic_candidate');
 
 if (errors.length) {
   console.error(`FAIL Production Candidate environment: ${errors.join(', ')}`);

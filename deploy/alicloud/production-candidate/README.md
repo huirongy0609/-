@@ -2,6 +2,40 @@
 
 本目录只描述候选环境，不授权生产域名或真实数据。
 
+## 本次候选资源
+
+- ECS：`i-2ze3pfv8exzmja2z3djk`，华北 2（北京）；
+- RDS：`pgm-2zeq84bw32bwouou`，PostgreSQL 16；
+- 数据库：`trust_property`；
+- 应用账号：`trust_app`；迁移账号：`trust_admin`。
+
+任何密码、OIDC Client Secret 和证书私钥均不得进入 Git 或命令回显。
+
+## Workbench 部署
+
+部署人在 ECS Workbench 中执行，Codex 根据脱敏回显验收。正式 DNS、正式数据、`main` 分支和 Staging 均不在本操作范围内。
+
+```bash
+cd /opt/trust-property-cooperation
+cp deploy/alicloud/production-candidate/.env.candidate.example \
+  deploy/alicloud/production-candidate/.env.candidate
+chmod 600 deploy/alicloud/production-candidate/.env.candidate
+mkdir -p deploy/alicloud/production-candidate/secrets
+chmod 700 deploy/alicloud/production-candidate/secrets
+```
+
+部署人须在 Workbench 内编辑 `.env.candidate`，不得将其内容粘贴到工单或聊天。RDS 根证书保存为 `secrets/rds-ca.pem`，权限为 `600`。
+
+所有 Compose 命令均显式指定候选环境文件：
+
+```bash
+cd /opt/trust-property-cooperation/deploy/alicloud/production-candidate
+docker compose --env-file .env.candidate -f docker-compose.yml config --quiet
+docker compose --env-file .env.candidate -f docker-compose.yml --profile tools run --rm migrate
+docker compose --env-file .env.candidate -f docker-compose.yml build app
+docker compose --env-file .env.candidate -f docker-compose.yml up -d app
+```
+
 ## 构建
 
 ```bash
@@ -21,6 +55,7 @@ docker build \
 - IDaaS 使用 OIDC 授权码 + PKCE；管理员必须完成 MFA，`sub` 再映射到数据库角色；
 - Candidate 使用专用 VPC、RDS、IDaaS 应用、KMS Secret、SLS Project 和 RAM 角色；
 - 不导入真实数据，不创建正式业务账号，不绑定正式域名。
+- Candidate HTTP 端口只绑定 `127.0.0.1`，使用 Workbench 或 SSH 隧道验收，不开放公网安全组端口。
 
 ## 部署前静态检查
 

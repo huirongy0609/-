@@ -1,0 +1,56 @@
+name: trust-property-cooperation-candidate
+
+services:
+  app:
+    image: trust-property-cooperation:${CANDIDATE_IMAGE_TAG:?set CANDIDATE_IMAGE_TAG}
+    build:
+      context: ../../..
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:?set NEXT_PUBLIC_SITE_URL}
+    env_file:
+      - .env.candidate
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      COOPERATION_DATABASE_CA_CERT_FILE: /run/secrets/rds-ca.pem
+      KNOWLEDGE_WRITES_ENABLED: "false"
+    ports:
+      - "127.0.0.1:${CANDIDATE_HTTP_PORT:-3000}:3000"
+    volumes:
+      - ./secrets/rds-ca.pem:/run/secrets/rds-ca.pem:ro
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - candidate
+
+  migrate:
+    image: postgres:16-alpine
+    profiles: ["tools"]
+    env_file:
+      - .env.candidate
+    environment:
+      PGHOST: ${COOPERATION_DATABASE_HOST:?set COOPERATION_DATABASE_HOST}
+      PGPORT: ${COOPERATION_DATABASE_PORT:-5432}
+      PGDATABASE: ${COOPERATION_DATABASE_NAME:?set COOPERATION_DATABASE_NAME}
+      PGUSER: ${COOPERATION_MIGRATION_DATABASE_USER:?set COOPERATION_MIGRATION_DATABASE_USER}
+      PGPASSWORD: ${COOPERATION_MIGRATION_DATABASE_PASSWORD:?set COOPERATION_MIGRATION_DATABASE_PASSWORD}
+      PGSSLMODE: verify-full
+      PGSSLROOTCERT: /run/secrets/rds-ca.pem
+    command: ["psql", "-v", "ON_ERROR_STOP=1", "--file=/migrations/001_initial.sql"]
+    volumes:
+      - ../../../db/cooperation:/migrations:ro
+      - ./secrets/rds-ca.pem:/run/secrets/rds-ca.pem:ro
+    networks:
+      - candidate
+
+networks:
+  candidate:
+    driver: bridge

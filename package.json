@@ -35,7 +35,8 @@
     "cooperation:staging:check": "node scripts/cooperation/validate-staging-env.mjs",
     "cooperation:staging:recovery": "node scripts/cooperation/staging-recovery.mjs",
     "cooperation:candidate:env-check": "node scripts/cooperation/validate-production-candidate-env.mjs",
-    "cooperation:candidate:database-check": "node scripts/cooperation/candidate-database-validation.mjs"
+    "cooperation:candidate:database-check": "node scripts/cooperation/candidate-database-validation.mjs",
+    "cooperation:candidate:config-test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/cooperation-database-config.test.ts"
   },
   "dependencies": {
     "@remotion/bundler": "^4.0.448",
