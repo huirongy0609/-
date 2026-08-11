@@ -1,0 +1,72 @@
+name: Build cooperation candidate image
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cooperation-candidate-image
+  cancel-in-progress: false
+
+env:
+  ACR_REGISTRY: crpi-0ep3wo3rdsxm1qlj.cn-beijing.personal.cr.aliyuncs.com
+  ACR_IMAGE: crpi-0ep3wo3rdsxm1qlj.cn-beijing.personal.cr.aliyuncs.com/trust-property/cooperation-candidate
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out candidate source
+        uses: actions/checkout@v4
+
+      - name: Enforce candidate branch
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF_NAME}" != "codex/no030a-production-governance" ]]; then
+            echo "This workflow may run only from codex/no030a-production-governance."
+            exit 1
+          fi
+
+      - name: Define immutable image tag
+        id: image
+        shell: bash
+        run: echo "tag=candidate-$(git rev-parse --short=7 HEAD)" >> "${GITHUB_OUTPUT}"
+
+      - name: Log in to candidate ACR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.ACR_REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push linux/amd64 candidate
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: true
+          no-cache: true
+          provenance: false
+          sbom: false
+          build-args: |
+            NEXT_PUBLIC_SITE_URL=https://candidate.example.invalid
+          tags: ${{ env.ACR_IMAGE }}:${{ steps.image.outputs.tag }}
+
+      - name: Record candidate image
+        shell: bash
+        run: |
+          {
+            echo "### Cooperation candidate image"
+            echo "- Branch: ${GITHUB_REF_NAME}"
+            echo "- Commit: ${GITHUB_SHA}"
+            echo "- Image: ${ACR_IMAGE}:${{ steps.image.outputs.tag }}"
+            echo "- Digest: ${{ steps.build.outputs.digest }}"
+            echo "- Platform: linux/amd64"
+          } >> "${GITHUB_STEP_SUMMARY}"
