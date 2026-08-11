@@ -2,6 +2,9 @@ name: Build cooperation candidate image
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - cooperation-candidate-*
 
 permissions:
   contents: read
@@ -21,11 +24,14 @@ jobs:
       - name: Check out candidate source
         uses: actions/checkout@v4
 
-      - name: Enforce candidate branch
+      - name: Enforce candidate source
         shell: bash
         run: |
-          if [[ "${GITHUB_REF_NAME}" != "codex/no030a-production-governance" ]]; then
-            echo "This workflow may run only from codex/no030a-production-governance."
+          git fetch --no-tags --depth=1 origin \
+            codex/no030a-production-governance:refs/remotes/origin/codex/no030a-production-governance
+          candidate_sha="$(git rev-parse refs/remotes/origin/codex/no030a-production-governance)"
+          if [[ "${GITHUB_SHA}" != "${candidate_sha}" ]]; then
+            echo "The trigger must point to the current candidate branch head."
             exit 1
           fi
 
