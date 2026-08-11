@@ -17,7 +17,7 @@
 
 ```bash
 cd /opt/trust-property-cooperation
-cp deploy/alicloud/production-candidate/.env.candidate.example \
+cp deploy/alicloud/production-candidate/environment.example \
   deploy/alicloud/production-candidate/.env.candidate
 chmod 600 deploy/alicloud/production-candidate/.env.candidate
 mkdir -p deploy/alicloud/production-candidate/secrets
