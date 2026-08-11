@@ -2,7 +2,7 @@ name: trust-property-cooperation-candidate
 
 services:
   app:
-    image: trust-property-cooperation:${CANDIDATE_IMAGE_TAG:?set CANDIDATE_IMAGE_TAG}
+    image: ${CANDIDATE_IMAGE_REPOSITORY:-trust-property-cooperation}:${CANDIDATE_IMAGE_TAG:?set CANDIDATE_IMAGE_TAG}
     build:
       context: ../../..
       dockerfile: Dockerfile
@@ -32,22 +32,25 @@ services:
       - candidate
 
   migrate:
-    image: postgres:16-alpine
+    image: ${CANDIDATE_IMAGE_REPOSITORY:-trust-property-cooperation}:${CANDIDATE_IMAGE_TAG:?set CANDIDATE_IMAGE_TAG}
     profiles: ["tools"]
     env_file:
       - .env.candidate
     environment:
-      PGHOST: ${COOPERATION_DATABASE_HOST:?set COOPERATION_DATABASE_HOST}
-      PGPORT: ${COOPERATION_DATABASE_PORT:-5432}
-      PGDATABASE: ${COOPERATION_DATABASE_NAME:?set COOPERATION_DATABASE_NAME}
-      PGUSER: ${COOPERATION_MIGRATION_DATABASE_USER:?set COOPERATION_MIGRATION_DATABASE_USER}
-      PGPASSWORD: ${COOPERATION_MIGRATION_DATABASE_PASSWORD:?set COOPERATION_MIGRATION_DATABASE_PASSWORD}
-      PGSSLMODE: verify-full
-      PGSSLROOTCERT: /run/secrets/rds-ca.pem
-    command: ["psql", "-v", "ON_ERROR_STOP=1", "--file=/migrations/001_initial.sql"]
+      NODE_ENV: production
+      COOPERATION_DATABASE_USER: ${COOPERATION_MIGRATION_DATABASE_USER:?set COOPERATION_MIGRATION_DATABASE_USER}
+      COOPERATION_DATABASE_PASSWORD: ${COOPERATION_MIGRATION_DATABASE_PASSWORD:?set COOPERATION_MIGRATION_DATABASE_PASSWORD}
+      COOPERATION_DATABASE_CA_CERT_FILE: /run/secrets/rds-ca.pem
+    command: ["node", "scripts/cooperation/apply-candidate-schema.mjs"]
     volumes:
-      - ../../../db/cooperation:/migrations:ro
       - ./secrets/rds-ca.pem:/run/secrets/rds-ca.pem:ro
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
     networks:
       - candidate
 
