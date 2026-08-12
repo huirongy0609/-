@@ -23,8 +23,24 @@ function databasePool() {
 }
 
 export async function checkCooperationDatabase() {
-  const result = await databasePool().query<{ready: number}>('SELECT 1 AS ready');
-  return result.rows[0]?.ready === 1;
+  const result = await databasePool().query<{ready: boolean}>(`
+    SELECT
+      to_regclass('public.cooperation_registration') IS NOT NULL
+      AND to_regclass('public.cooperation_audit_log') IS NOT NULL
+      AND has_table_privilege(
+        current_user, 'public.cooperation_registration', 'SELECT'
+      )
+      AND has_table_privilege(
+        current_user, 'public.cooperation_registration', 'INSERT'
+      )
+      AND has_table_privilege(
+        current_user, 'public.cooperation_audit_log', 'INSERT'
+      )
+      AND NOT has_table_privilege(
+        current_user, 'public.cooperation_audit_log', 'SELECT'
+      ) AS ready
+  `);
+  return result.rows[0]?.ready === true;
 }
 
 export type AdminRole = 'super_admin' | 'cooperation_reviewer' | 'data_admin';

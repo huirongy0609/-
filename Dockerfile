@@ -25,6 +25,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/db/cooperation/001_initial.sql ./db/cooperation/001_initial.sql
+COPY --from=builder --chown=nextjs:nodejs /app/db/cooperation/002_runtime_grants.sql ./db/cooperation/002_runtime_grants.sql
 COPY --from=builder --chown=nextjs:nodejs /app/scripts/cooperation/apply-candidate-schema.mjs ./scripts/cooperation/apply-candidate-schema.mjs
 USER nextjs
 EXPOSE 3000
