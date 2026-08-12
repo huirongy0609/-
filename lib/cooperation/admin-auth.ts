@@ -41,7 +41,12 @@ export async function authorizeCooperationAdmin(
         detail: {reason: 'oidc_session_invalid_or_mfa_missing'}});
       return {status: 'unauthorized', reason: 'oidc_session_invalid_or_mfa_missing'};
     }
-    if (!user) return {status: 'unauthorized', reason: 'session_missing_or_invalid'};
+    if (!user) {
+      await safeAudit({actorSubject: 'anonymous', actorRole: 'none', action: context.action,
+        resourceType: context.resourceType, outcome: 'denied', requestId: context.requestId,
+        detail: {reason: 'session_missing_or_invalid'}});
+      return {status: 'unauthorized', reason: 'session_missing_or_invalid'};
+    }
     const role = await getCooperationAdminRole(user.sub);
     if (!role || !roleHasPermission(role, required)) {
       await safeAudit({actorSubject: user.sub, actorRole: role || 'none', action: context.action,
