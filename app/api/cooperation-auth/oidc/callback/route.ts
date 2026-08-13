@@ -3,6 +3,7 @@ import {NextResponse} from 'next/server';
 import {appendCooperationAuditLog, getCooperationAdminRole} from '@/lib/cooperation/database';
 import {
   oidcConfiguration,
+  oidcApplicationUrl,
   oidcCookieOptions,
   oidcNonceCookie,
   oidcSessionCookie,
@@ -13,10 +14,20 @@ import {
 
 export const runtime = 'nodejs';
 
-function loginRedirect(request: Request, error: string) {
-  const url = new URL('/cooperation/admin/login', request.url);
+function loginRedirect(error: string) {
+  const url = oidcApplicationUrl('/cooperation/admin/login');
   url.searchParams.set('error', error);
   return NextResponse.redirect(url, {status: 303});
+}
+
+async function auditDenied(reason: string) {
+  try {
+    await appendCooperationAuditLog({actorSubject: 'anonymous', actorRole: 'none',
+      action: 'auth.oidc', resourceType: 'cooperation_admin', outcome: 'denied',
+      detail: {reason}});
+  } catch (error) {
+    console.error('OIDC failure audit write failed', error);
+  }
 }
 
 export async function GET(request: Request) {
@@ -28,7 +39,8 @@ export async function GET(request: Request) {
   const nonce = cookieStore.get(oidcNonceCookie)?.value;
   const verifier = cookieStore.get(oidcVerifierCookie)?.value;
   if (!code || !state || !expectedState || state !== expectedState || !nonce || !verifier) {
-    return loginRedirect(request, 'invalid_callback');
+    await auditDenied('invalid_callback');
+    return loginRedirect('invalid_callback');
   }
 
   try {
@@ -54,13 +66,13 @@ export async function GET(request: Request) {
       await appendCooperationAuditLog({actorSubject: payload.sub as string, actorRole: 'none',
         action: 'auth.oidc', resourceType: 'cooperation_admin', outcome: 'denied',
         detail: {reason: 'admin_not_provisioned'}});
-      return loginRedirect(request, 'not_authorized');
+      return loginRedirect('not_authorized');
     }
 
     await appendCooperationAuditLog({actorSubject: payload.sub as string, actorRole: role,
       action: 'auth.oidc', resourceType: 'cooperation_admin', outcome: 'success',
       detail: {mfaVerified: true}});
-    const response = NextResponse.redirect(new URL('/cooperation/admin', request.url), {status: 303});
+    const response = NextResponse.redirect(oidcApplicationUrl('/cooperation/admin'), {status: 303});
     const maxAge = Math.max(60, Math.min(28800, (payload.exp || 0) - Math.floor(Date.now() / 1000)));
     response.cookies.set(oidcSessionCookie, token.id_token, {...oidcCookieOptions, maxAge});
     response.cookies.delete(oidcStateCookie);
@@ -69,6 +81,7 @@ export async function GET(request: Request) {
     return response;
   } catch (error) {
     console.error('OIDC callback failed', error);
-    return loginRedirect(request, 'authentication_failed');
+    await auditDenied('authentication_failed');
+    return loginRedirect('authentication_failed');
   }
 }

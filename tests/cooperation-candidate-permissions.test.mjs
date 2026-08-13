@@ -19,6 +19,10 @@ const adminAuth = await readFile(
   new URL('../lib/cooperation/admin-auth.ts', import.meta.url),
   'utf8',
 );
+const oidcCallback = await readFile(
+  new URL('../app/api/cooperation-auth/oidc/callback/route.ts', import.meta.url),
+  'utf8',
+);
 
 test('runtime grants permit business access but keep audit reads isolated', () => {
   assert.match(grants, /GRANT SELECT, INSERT\s+ON TABLE cooperation_registration/);
@@ -47,4 +51,16 @@ test('OIDC requests without a session create a denied audit record', () => {
   assert.match(missingSessionBranch, /await safeAudit/);
   assert.match(missingSessionBranch, /actorSubject: 'anonymous'/);
   assert.match(missingSessionBranch, /outcome: 'denied'/);
+});
+
+test('OIDC callback redirects use the configured public application origin', () => {
+  assert.match(oidcCallback, /oidcApplicationUrl\('\/cooperation\/admin\/login'\)/);
+  assert.match(oidcCallback, /oidcApplicationUrl\('\/cooperation\/admin'\)/);
+  assert.doesNotMatch(oidcCallback, /new URL\('\/cooperation\/admin[^']*', request\.url\)/);
+});
+
+test('OIDC callback failures are recorded without unverified subject data', () => {
+  assert.match(oidcCallback, /actorSubject: 'anonymous'/);
+  assert.match(oidcCallback, /outcome: 'denied'/);
+  assert.match(oidcCallback, /await auditDenied\('authentication_failed'\)/);
 });

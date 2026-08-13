@@ -53,6 +53,10 @@ docker build \
 - RDS 仅接受应用安全组的私网 TLS 连接；
 - 环境变量实际值从 KMS/Secrets 注入，不从本文件或镜像注入；
 - IDaaS 使用 OIDC 授权码 + PKCE；管理员必须完成 MFA，`sub` 再映射到数据库角色；
+- Candidate 专用条件访问策略必须限定候选应用与候选管理员，强制 OTP 动态口令并关闭二次认证会话复用；
+- 当 IDaaS 不签发标准 `acr`/`amr` 时，OIDC 应用须在已签名 ID Token 中固定返回
+  `candidate_mfa_policy=ia_totp_required`，应用端同时配置同名、同值校验；该声明只在上述条件访问策略
+  已启用并留存证据时有效，任一侧变更都必须重新验收；
 - Candidate 使用专用 VPC、RDS、IDaaS 应用、KMS Secret、SLS Project 和 RAM 角色；
 - 不导入真实数据，不创建正式业务账号，不绑定正式域名。
 - Candidate HTTP 端口只绑定 `127.0.0.1`，使用 Workbench 或 SSH 隧道验收，不开放公网安全组端口。

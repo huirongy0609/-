@@ -31,7 +31,7 @@
     "foundation:topic:validate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/validate-topic-registry.ts",
     "topic-manifest:validate": "npm run foundation:topic:validate",
     "foundation:refresh": "npm run foundation:index && npm run foundation:sync && npm run foundation:validate && npm run foundation:engine:validate",
-    "cooperation:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/cooperation-leads.test.ts",
+    "cooperation:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/cooperation-leads.test.ts tests/cooperation-oidc.test.ts tests/cooperation-candidate-permissions.test.mjs",
     "cooperation:staging:check": "node scripts/cooperation/validate-staging-env.mjs",
     "cooperation:staging:recovery": "node scripts/cooperation/staging-recovery.mjs",
     "cooperation:candidate:env-check": "node scripts/cooperation/validate-production-candidate-env.mjs",

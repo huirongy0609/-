@@ -6,7 +6,6 @@ const required = [
   'COOPERATION_OIDC_AUTHORIZATION_ENDPOINT',
   'COOPERATION_OIDC_TOKEN_ENDPOINT',
   'COOPERATION_OIDC_JWKS_URI',
-  'COOPERATION_OIDC_MFA_ACR_VALUES',
 ];
 
 const errors = [];
@@ -18,6 +17,19 @@ for (const name of required) {
 
 if (process.env.COOPERATION_IDENTITY_PROVIDER !== 'oidc') errors.push('COOPERATION_IDENTITY_PROVIDER:must_be_oidc');
 if (process.env.COOPERATION_DATABASE_SSL === 'disable') errors.push('COOPERATION_DATABASE_SSL:must_verify_tls');
+
+const mfaAcrValues = process.env.COOPERATION_OIDC_MFA_ACR_VALUES?.trim() || '';
+const mfaPolicyClaimName = process.env.COOPERATION_OIDC_MFA_POLICY_CLAIM_NAME?.trim() || '';
+const mfaPolicyClaimValue = process.env.COOPERATION_OIDC_MFA_POLICY_CLAIM_VALUE?.trim() || '';
+if (!mfaAcrValues && !(mfaPolicyClaimName && mfaPolicyClaimValue)) {
+  errors.push('COOPERATION_OIDC_MFA_EVIDENCE:missing');
+}
+if (Boolean(mfaPolicyClaimName) !== Boolean(mfaPolicyClaimValue)) {
+  errors.push('COOPERATION_OIDC_MFA_POLICY_CLAIM:incomplete');
+}
+if (mfaPolicyClaimName && !/^[A-Za-z_][A-Za-z0-9_.-]{0,63}$/.test(mfaPolicyClaimName)) {
+  errors.push('COOPERATION_OIDC_MFA_POLICY_CLAIM_NAME:invalid');
+}
 
 for (const name of ['NEXT_PUBLIC_SITE_URL', 'COOPERATION_OIDC_ISSUER',
   'COOPERATION_OIDC_AUTHORIZATION_ENDPOINT', 'COOPERATION_OIDC_TOKEN_ENDPOINT', 'COOPERATION_OIDC_JWKS_URI']) {

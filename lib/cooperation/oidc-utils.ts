@@ -9,8 +9,13 @@ export function pkceChallenge(verifier: string) {
   return createHash('sha256').update(verifier).digest('base64url');
 }
 
-export function oidcPayloadHasMfa(payload: JWTPayload, acceptedAcrValues: string[]) {
+export function oidcPayloadHasMfa(
+  payload: JWTPayload,
+  acceptedAcrValues: string[],
+  policyClaim?: {name: string; value: string},
+) {
   if (typeof payload.acr === 'string' && acceptedAcrValues.includes(payload.acr)) return true;
   const methods = Array.isArray(payload.amr) ? payload.amr.filter((value): value is string => typeof value === 'string') : [];
-  return methods.some((value) => ['mfa', 'otp', 'totp'].includes(value.toLowerCase()));
+  if (methods.some((value) => ['mfa', 'otp', 'totp'].includes(value.toLowerCase()))) return true;
+  return Boolean(policyClaim && payload[policyClaim.name] === policyClaim.value);
 }

@@ -18,6 +18,7 @@ type OidcConfiguration = {
   jwksUri: string;
   redirectUri: string;
   mfaAcrValues: string[];
+  mfaPolicyClaim?: {name: string; value: string};
 };
 
 const jwksCache = new Map<string, ReturnType<typeof createRemoteJWKSet>>();
@@ -40,6 +41,14 @@ export function cooperationIdentityProvider() {
 
 export function oidcConfiguration(): OidcConfiguration {
   const siteOrigin = requiredEnvironment('NEXT_PUBLIC_SITE_URL').replace(/\/$/, '');
+  const mfaPolicyClaimName = process.env.COOPERATION_OIDC_MFA_POLICY_CLAIM_NAME?.trim() || '';
+  const mfaPolicyClaimValue = process.env.COOPERATION_OIDC_MFA_POLICY_CLAIM_VALUE?.trim() || '';
+  if (Boolean(mfaPolicyClaimName) !== Boolean(mfaPolicyClaimValue)) {
+    throw new Error('OIDC MFA policy claim name and value must be configured together');
+  }
+  if (mfaPolicyClaimName && !/^[A-Za-z_][A-Za-z0-9_.-]{0,63}$/.test(mfaPolicyClaimName)) {
+    throw new Error('OIDC MFA policy claim name is invalid');
+  }
   return {
     issuer: httpsUrl('COOPERATION_OIDC_ISSUER', requiredEnvironment('COOPERATION_OIDC_ISSUER')).replace(/\/$/, ''),
     clientId: requiredEnvironment('COOPERATION_OIDC_CLIENT_ID'),
@@ -51,7 +60,16 @@ export function oidcConfiguration(): OidcConfiguration {
       || `${siteOrigin}/api/cooperation-auth/oidc/callback`,
     mfaAcrValues: (process.env.COOPERATION_OIDC_MFA_ACR_VALUES || '')
       .split(',').map((value) => value.trim()).filter(Boolean),
+    mfaPolicyClaim: mfaPolicyClaimName
+      ? {name: mfaPolicyClaimName, value: mfaPolicyClaimValue}
+      : undefined,
   };
+}
+
+export function oidcApplicationUrl(path: string) {
+  const siteOrigin = httpsUrl('NEXT_PUBLIC_SITE_URL', requiredEnvironment('NEXT_PUBLIC_SITE_URL'))
+    .replace(/\/$/, '');
+  return new URL(path, `${siteOrigin}/`);
 }
 
 function jwks(uri: string) {
@@ -73,7 +91,9 @@ export async function verifyOidcIdToken(token: string, expectedNonce?: string) {
   });
   if (expectedNonce && result.payload.nonce !== expectedNonce) throw new Error('OIDC nonce mismatch');
   if (!result.payload.sub) throw new Error('OIDC subject is missing');
-  if (!oidcPayloadHasMfa(result.payload, config.mfaAcrValues)) throw new Error('OIDC MFA claim is missing');
+  if (!oidcPayloadHasMfa(result.payload, config.mfaAcrValues, config.mfaPolicyClaim)) {
+    throw new Error('OIDC MFA evidence is missing');
+  }
   return result.payload;
 }
 

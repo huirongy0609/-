@@ -40,6 +40,14 @@ jobs:
         shell: bash
         run: echo "tag=candidate-$(git rev-parse --short=7 HEAD)" >> "${GITHUB_OUTPUT}"
 
+      - name: Verify candidate identity and permission controls
+        shell: bash
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run cooperation:test
+          npm run security:test
+          npx tsc --noEmit
+
       - name: Log in to candidate ACR
         uses: docker/login-action@v3
         with:
