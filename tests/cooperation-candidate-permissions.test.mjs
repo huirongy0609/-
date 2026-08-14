@@ -23,6 +23,14 @@ const oidcCallback = await readFile(
   new URL('../app/api/cooperation-auth/oidc/callback/route.ts', import.meta.url),
   'utf8',
 );
+const adminRecords = await readFile(
+  new URL('../components/cooperation/CooperationAdminRecords.tsx', import.meta.url),
+  'utf8',
+);
+const logoutRoute = await readFile(
+  new URL('../app/api/cooperation-auth/logout/route.ts', import.meta.url),
+  'utf8',
+);
 
 test('runtime grants permit business access but keep audit reads isolated', () => {
   assert.match(grants, /GRANT SELECT, INSERT\s+ON TABLE cooperation_registration/);
@@ -63,4 +71,19 @@ test('OIDC callback failures are recorded without unverified subject data', () =
   assert.match(oidcCallback, /actorSubject: 'anonymous'/);
   assert.match(oidcCallback, /outcome: 'denied'/);
   assert.match(oidcCallback, /await auditDenied\('authentication_failed'\)/);
+});
+
+test('candidate admin exposes a POST logout control', () => {
+  assert.match(adminRecords, /action="\/api\/cooperation-auth\/logout"/);
+  assert.match(adminRecords, /method="post"/);
+  assert.match(adminRecords, /> 退出登录<\/button>/);
+});
+
+test('OIDC logout clears the session cookie and redirects to the public application origin', () => {
+  const oidcLogoutBranch = logoutRoute.match(
+    /if \(cooperationIdentityProvider\(\) === 'oidc'\) \{([\s\S]*?)\n  \}/,
+  )?.[1] || '';
+  assert.match(oidcLogoutBranch, /response\.cookies\.delete\(oidcSessionCookie\)/);
+  assert.match(oidcLogoutBranch, /oidcApplicationUrl\('\/cooperation\/admin\/login'\)/);
+  assert.doesNotMatch(oidcLogoutBranch, /new URL\([^;]+request\.url/);
 });

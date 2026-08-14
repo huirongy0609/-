@@ -1,7 +1,7 @@
 'use client';
 
 import {useEffect, useState} from 'react';
-import {LoaderCircle, RefreshCw} from 'lucide-react';
+import {LoaderCircle, LogOut, RefreshCw} from 'lucide-react';
 import type {CooperationLeadRecord} from '@/lib/cooperation/database';
 import {cooperationLabels} from '@/lib/cooperation/schema';
 import partnerStyles from '@/app/partners/partners.module.css';
@@ -40,6 +40,9 @@ export function CooperationAdminRecords() {
         <div className={styles.accessHeading}><div><h2>已通过组织身份验证</h2><p>本页面仅使用服务端会话，不接收或保存共享查看口令。</p></div></div>
         <div className={styles.accessControls}>
           <button className={`${partnerStyles.primaryButton} ${partnerStyles.submitButton}`} disabled={loading} onClick={loadRecords} type="button">{loading ? <LoaderCircle aria-hidden="true" className="animate-spin" size={17} /> : <RefreshCw aria-hidden="true" size={17} />} 查看记录</button>
+          <form action="/api/cooperation-auth/logout" className={styles.logoutForm} method="post">
+            <button className={partnerStyles.secondaryButton} type="submit"><LogOut aria-hidden="true" size={17} /> 退出登录</button>
+          </form>
         </div>
         {message ? <p aria-live="polite" className={styles.message}>{message}</p> : null}
       </section>

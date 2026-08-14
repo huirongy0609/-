@@ -1,10 +1,14 @@
 import {NextResponse} from 'next/server';
 import {createSupabaseServerClient} from '@/lib/supabase/server';
-import {cooperationIdentityProvider, oidcSessionCookie} from '@/lib/cooperation/oidc-auth';
+import {
+  cooperationIdentityProvider,
+  oidcApplicationUrl,
+  oidcSessionCookie,
+} from '@/lib/cooperation/oidc-auth';
 
 export async function POST(request: Request) {
   if (cooperationIdentityProvider() === 'oidc') {
-    const response = NextResponse.redirect(new URL('/cooperation/admin/login', request.url), {status: 303});
+    const response = NextResponse.redirect(oidcApplicationUrl('/cooperation/admin/login'), {status: 303});
     response.cookies.delete(oidcSessionCookie);
     return response;
   }

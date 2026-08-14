@@ -69,6 +69,7 @@
 .accessHeading p { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
 .icon { display: grid; width: 42px; height: 42px; flex: 0 0 auto; place-items: center; border-radius: 8px; background: var(--primary-soft); color: var(--primary-dark); }
 .accessControls { display: flex; gap: 10px; }
+.logoutForm { margin: 0; }
 .accessControls input { min-width: 230px; }
 .message { grid-column: 1 / -1; margin: 0; border-top: 1px solid var(--line); padding-top: 16px; color: var(--muted); font-size: 14px; }
 
@@ -95,5 +96,7 @@
   .scopeNote,
   .accessControls { flex-direction: column; }
   .accessPanel { grid-template-columns: 1fr; }
+  .logoutForm,
+  .logoutForm button { width: 100%; }
   .accessControls input { min-width: 0; }
 }
