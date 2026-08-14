@@ -3,13 +3,18 @@ import {createSupabaseServerClient} from '@/lib/supabase/server';
 import {
   cooperationIdentityProvider,
   oidcApplicationUrl,
+  oidcCookieOptions,
   oidcSessionCookie,
 } from '@/lib/cooperation/oidc-auth';
 
 export async function POST(request: Request) {
   if (cooperationIdentityProvider() === 'oidc') {
     const response = NextResponse.redirect(oidcApplicationUrl('/cooperation/admin/login'), {status: 303});
-    response.cookies.delete(oidcSessionCookie);
+    response.cookies.set(oidcSessionCookie, '', {
+      ...oidcCookieOptions,
+      expires: new Date(0),
+      maxAge: 0,
+    });
     return response;
   }
   try {

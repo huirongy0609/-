@@ -79,11 +79,14 @@ test('candidate admin exposes a POST logout control', () => {
   assert.match(adminRecords, /> 退出登录<\/button>/);
 });
 
-test('OIDC logout clears the session cookie and redirects to the public application origin', () => {
+test('OIDC logout expires the secure host session cookie and redirects to the public application origin', () => {
   const oidcLogoutBranch = logoutRoute.match(
     /if \(cooperationIdentityProvider\(\) === 'oidc'\) \{([\s\S]*?)\n  \}/,
   )?.[1] || '';
-  assert.match(oidcLogoutBranch, /response\.cookies\.delete\(oidcSessionCookie\)/);
+  assert.match(oidcLogoutBranch, /response\.cookies\.set\(oidcSessionCookie, '', \{/);
+  assert.match(oidcLogoutBranch, /\.\.\.oidcCookieOptions/);
+  assert.match(oidcLogoutBranch, /expires: new Date\(0\)/);
+  assert.match(oidcLogoutBranch, /maxAge: 0/);
   assert.match(oidcLogoutBranch, /oidcApplicationUrl\('\/cooperation\/admin\/login'\)/);
   assert.doesNotMatch(oidcLogoutBranch, /new URL\([^;]+request\.url/);
 });
